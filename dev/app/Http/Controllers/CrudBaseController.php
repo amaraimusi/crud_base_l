@@ -14,8 +14,6 @@ use CrudBase\CrudBase;
  */
 class CrudBaseController extends Controller{
 	
-    
-	
     /**
      * 初期化
      * @param [] crudBaseData

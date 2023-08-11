@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Consts\crud_base_function;
 use Illuminate\Http\Request;
 use App\Models\Neko;
 use CrudBase\CrudBase;
-use \App\Consts\ConstCrudBase;
+use App\Consts\ConstCrudBase;
 
 
 class NekoController extends CrudBaseController{
@@ -22,7 +23,7 @@ class NekoController extends CrudBaseController{
 	public function index(Request $request){
 
 		// ログアウトになっていたらログイン画面にリダイレクト
-		if(\Auth::id() == null) return redirect('login');
+		//if(\Auth::id() == null) return redirect('login');
 		
 		// 検索データのバリデーション
 		$validated = $request->validate([
