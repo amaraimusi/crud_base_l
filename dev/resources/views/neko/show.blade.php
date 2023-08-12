@@ -1,4 +1,6 @@
-<?php 
+<?php
+use App\Helpers\CrudBaseHelper;
+
 $ver_str = '?v=' . $this_page_version;
 
 $cbh = new CrudBaseHelper($crudBaseData);
