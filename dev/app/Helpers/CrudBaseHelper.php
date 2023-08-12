@@ -174,7 +174,15 @@ class CrudBaseHelper
         $fp = $ent->$field ?? null;
         
         if(empty($fp)){
-            return "<img src='img/icon/none.gif' />";
+            $none_fp = 'img/icon/none.gif';
+            return "
+				<div class='js_td_img_div'>
+		            <a href='{$none_fp}' class='js_show_modal_big_img'>
+		                <img src='{$none_fp}' />
+		            </a>
+					<input type='hidden' class='js_original_value' value='' >
+				</div>
+			";
         }
         
         // サニタイズ

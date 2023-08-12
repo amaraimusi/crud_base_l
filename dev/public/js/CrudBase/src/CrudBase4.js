@@ -8,8 +8,8 @@
  * 他のJavaScriptライブラリとの競合問題を考え、ベースとなるライブラリはVue.jsではなくjQueryを採用しています。
  * 
  * @license MIT
- * @since 2016-9-21 | 2023-8-12
- * @version 4.0.0
+ * @since 2016-9-21 | 2023-8-13
+ * @version 4.0.1
  * @histroy
  * 2024-4-17 v4.0.0 保守性の問題解決のため、大幅なリニューアルをする。
  * 2019-6-28 v2.8.3 CSVフィールドデータ補助クラス | CsvFieldDataSupport.js
@@ -23,7 +23,6 @@
  * 
  */
 class CrudBase4{
-	
 	
 	/**
 	* コンストラクタ
@@ -392,12 +391,6 @@ class CrudBase4{
 		
 		// 要素がjQueryオブジェクトでなければ、jQueryオブジェクトに変換。
 		if(!(inp instanceof jQuery)) inp = jQuery(inp);
-		
-//		// オプションの初期化
-//		if(options == null) options = {};
-//		if(options.xss == undefined) options.xss = 1;
-
-		//let xss = options.xss; // サニタイズフラグ■■■□□□■■■□□□
 
 		// 入力要素のタグ名を取得する
 		let tag_name = inp.get(0).tagName; 
@@ -410,7 +403,7 @@ class CrudBase4{
 
 			// チェックボックス要素へのセット
 			if(typ=='checkbox'){
-				if(val1 ==　0 || val1　==　null || val1　==　''){
+				if(val1 == 0 || val1 == null || val1 == ''){
 					inp.prop("checked",false);
 				}else{
 					inp.prop("checked",true);
@@ -759,7 +752,7 @@ class CrudBase4{
 	* @return object 入力要素オブジェクト
 	*/	
 	regAction(ent, ajax_url, options){
-		
+
 		if(options == null) options = {};
 		if(options.csrf_token == null) options.csrf_token = this._getCsrfToken();
 		let csrf_token = options.csrf_token
@@ -1049,13 +1042,19 @@ class CrudBase4{
 		let public_url = this.crudBaseData.paths.public_url;
 
 		let value = ent[field];
-		let orig_fp = value;
-		let thum_fp = orig_fp.replace('/orig/', '/thum/');
+		let orig_fp = '';
+		let thum_fp = '';	
 		
-		orig_fp = public_url + '/' + orig_fp;
-		thum_fp = public_url + '/' + thum_fp;
-		console.log(orig_fp);//■■■□□□■■■□□□
-		console.log(thum_fp);//■■■□□□■■■□□□
+		if(value == '' || value == null){
+			value = '';
+			orig_fp = 'img/icon/none.gif';
+			thum_fp = orig_fp;
+		}else{
+			orig_fp = value;
+			thum_fp = orig_fp.replace('/orig/', '/thum/');
+			orig_fp = public_url + '/' + orig_fp;
+			thum_fp = public_url + '/' + thum_fp;
+		}
 		
 		let jqImgA = tdImgDivElm.find('.js_show_modal_big_img');
 		let jqThumImg = jqImgA.find('img');

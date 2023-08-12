@@ -6,7 +6,6 @@ let data; // 一覧データ
 let searches; // 検索データ
 let csrf_token; // CSRFトークン
 let baseXHelper; // 基本X
-//let formModalCat; // 入力フォームのモーダル制御オブジェクト//■■■□□□■■■□□□
 let jqMain; // メインコンテンツ
 let jqMainTbl; // 一覧テーブルのjQueryオブジェクト
 let jqForm; // SPA型入力フォームのjQueryオブジェクト

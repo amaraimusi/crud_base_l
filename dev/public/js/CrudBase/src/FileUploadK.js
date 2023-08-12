@@ -1438,6 +1438,10 @@ class FileUploadK{
 				fns.push(fEnt.fn);
 			}
 		}else{
+
+			let existFnElm = this._getElement(fue_id,'exist_fn');
+			fns.push(existFnElm.val()); 
+			/*
 			var bData = this.box[fue_id]['bData'];
 			if(bData){
 				for(var i in bData){
@@ -1445,7 +1449,9 @@ class FileUploadK{
 					fns.push(fn);
 				}
 			}
+			*/
 		}
+
 		return fns;
 	}
 	
