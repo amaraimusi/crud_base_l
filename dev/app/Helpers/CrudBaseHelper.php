@@ -183,10 +183,12 @@ class CrudBaseHelper
         $thum_fp = CrudBase::toThumnailPath($fp);
 
         $html = "
-            <a href='{$fp}' class='js_show_modal_big_img'>
-                <img src='{$thum_fp}' />
-            </a>
-			<input type='hidden' class='js_original_value' value='{$fp}' >
+			<div class='js_td_img_div'>
+	            <a href='{$fp}' class='js_show_modal_big_img'>
+	                <img src='{$thum_fp}' />
+	            </a>
+				<input type='hidden' class='js_original_value' value='{$fp}' >
+			</div>
         ";
         return $html;
     }

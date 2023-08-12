@@ -8,8 +8,8 @@
  * 他のJavaScriptライブラリとの競合問題を考え、ベースとなるライブラリはVue.jsではなくjQueryを採用しています。
  * 
  * @license MIT
- * @since 2016-9-21 | 2023-4-17
- * @version 3.3.2
+ * @since 2016-9-21 | 2023-8-12
+ * @version 4.0.0
  * @histroy
  * 2024-4-17 v4.0.0 保守性の問題解決のため、大幅なリニューアルをする。
  * 2019-6-28 v2.8.3 CSVフィールドデータ補助クラス | CsvFieldDataSupport.js
@@ -393,11 +393,11 @@ class CrudBase4{
 		// 要素がjQueryオブジェクトでなければ、jQueryオブジェクトに変換。
 		if(!(inp instanceof jQuery)) inp = jQuery(inp);
 		
-		// オプションの初期化
-		if(options == null) options = {};
-		if(options.xss == undefined) options.xss = 1;
+//		// オプションの初期化
+//		if(options == null) options = {};
+//		if(options.xss == undefined) options.xss = 1;
 
-		let xss = options.xss; // サニタイズフラグ
+		//let xss = options.xss; // サニタイズフラグ■■■□□□■■■□□□
 
 		// 入力要素のタグ名を取得する
 		let tag_name = inp.get(0).tagName; 
@@ -586,10 +586,7 @@ class CrudBase4{
 			else if(typ=='file'){
 				let fileUploadK = this.fileUploadKList[field];
 				let fileNameList = fileUploadK.getFileNames(field);
-				
-				console.log('field=' + field);//■■■□□□■■■□□□
-				console.log(fileNameList);//■■■□□□■■■□□□
-				
+
 				if(fileNameList[0]){
 					return fileNameList[0];
 				}
@@ -1000,6 +997,13 @@ class CrudBase4{
 		let clm_index = fieldInfo.clm_index; // 列インデックス
 		let jqTd = jqTr.find('td').eq(clm_index); // 列インデックスに紐づくTD要素を取得
 		
+		// TD要素内は画像系である場合
+		let tdImgDivElm = jqTd.find('.js_td_img_div');
+		if(tdImgDivElm[0]){
+			this._setValueToTdImg(tdImgDivElm, ent, field); // TD画像系要素に画像パスをセットする。
+			return;
+		}
+		
 		let value = ent[field] ?? '';
 		let value2 = this._xssSanitize(value); // XSSサイニタイズ
 		
@@ -1013,7 +1017,7 @@ class CrudBase4{
 		if(displayElm[0] == null && originalElm[0] == null){
 			jqTd.html(value2);
 		}
-		
+
 		// 表示要素が存在している場合
 		if(displayElm[0]){
 			// フィールド情報と値から表示値を作成する。
@@ -1024,6 +1028,7 @@ class CrudBase4{
 			this._changeDisplayElmColor(displayElm, value);
 			
 			
+			
 		}
 			
 		// 元値要素が存在している場合
@@ -1031,6 +1036,35 @@ class CrudBase4{
 			originalElm.val(value);// 元値要素に値をセットする。
 		}
 
+	}
+	
+	/**
+	* TD画像系要素に画像パスをセットする
+	* @param jQuery tdImgDivElm TD画像系要素のラッパー要素
+	* @param {} ent 
+	* @param string field フィールド
+	*/	
+	_setValueToTdImg(tdImgDivElm, ent, field){
+
+		let public_url = this.crudBaseData.paths.public_url;
+
+		let value = ent[field];
+		let orig_fp = value;
+		let thum_fp = orig_fp.replace('/orig/', '/thum/');
+		
+		orig_fp = public_url + '/' + orig_fp;
+		thum_fp = public_url + '/' + thum_fp;
+		console.log(orig_fp);//■■■□□□■■■□□□
+		console.log(thum_fp);//■■■□□□■■■□□□
+		
+		let jqImgA = tdImgDivElm.find('.js_show_modal_big_img');
+		let jqThumImg = jqImgA.find('img');
+		let jqOrig = tdImgDivElm.find('.js_original_value');
+		
+		jqImgA.attr('href', orig_fp);
+		jqThumImg.attr('src', thum_fp);
+		jqOrig.val(value);
+		
 	}
 	
 	
