@@ -13,11 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::get('/', function () {return view('welcome');});
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/', 'App\Http\Controllers\DashboardController@index');
 Route::get('dashboard', 'App\Http\Controllers\DashboardController@index');
-Route::get('/home', 'App\Http\Controllers\DashboardController@index');
+Route::get('home', 'App\Http\Controllers\DashboardController@index');
 Route::get('logout', 'App\Http\Controllers\DashboardController@logout');
 
 Auth::routes(); // 認証関連
@@ -105,4 +103,3 @@ Route::post('user_mng/disabled', 'App\Http\Controllers\UserMngController@disable
 Route::post('user_mng/destroy', 'App\Http\Controllers\UserMngController@destroy');
 Route::get('user_mng/csv_download', 'App\Http\Controllers\UserMngController@csv_download');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

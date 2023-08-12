@@ -21,9 +21,9 @@ class NekoController extends CrudBaseController{
 	 * @return \Illuminate\View\View
 	 */
 	public function index(Request $request){
-
+		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		//if(\Auth::id() == null) return redirect('login');
+		if(\Auth::id() == null) return redirect('login');
 		
 		// 検索データのバリデーション
 		$validated = $request->validate([
