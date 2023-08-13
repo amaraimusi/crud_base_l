@@ -12,7 +12,7 @@ use App\Consts\ConstCrudBase;
 class NekoController extends CrudBaseController{
 	
 	// 画面のバージョン → 開発者はこの画面を修正したらバージョンを変更すること。バージョンを変更するとキャッシュやセッションのクリアが自動的に行われます。
-	public $this_page_version = '1.0.1';
+	public $this_page_version = '1.0.0';
 	
 	/**
 	 * indexページのアクション
@@ -95,6 +95,7 @@ class NekoController extends CrudBaseController{
 				'paths'=>$paths,
 				'fieldData'=>$fieldData,
 				'this_page_version'=>$this->this_page_version,
+				'new_version' => $new_version,
 				
 				// CBBXS-3020B
 				'nekoTypeList'=>$nekoTypeList,

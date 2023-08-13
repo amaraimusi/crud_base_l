@@ -14,75 +14,134 @@ use CrudBase\CrudBase;
  */
 class CrudBaseController extends Controller{
 	
-    /**
-     * 初期化
-     * @param [] crudBaseData
-     * @return [] crudBaseData
-     */
-    protected function init($crudBaseData = []){
-        
-        global $crudBaseConfig;
-        if(!empty($crudBaseConfig)){
-            foreach($crudBaseConfig as $config_key => $config_value){
-                $crudBaseData[$config_key] = $config_value;
-            }
-        }
-        
-        $crudBaseData['fw_type'] = $crudBaseData['fw_type'] ?? 'laravel9';
-        
-        // キャメル記法のモデル名をセット
-        $model_name_c = $crudBaseData['model_name_c'] ?? '';
-        $crudBaseData['model_name_c'] = $model_name_c;
-        $crudBaseData['main_model_name_c'] = $model_name_c;
-        $crudBaseData['main_model_name'] = $model_name_c;
-        
-        
-        // スネーク記法のモデル名
-        $main_model_name_s = $crudBaseData['main_model_name_s'] ?? CrudBase::snakize($model_name_c);
-        $crudBaseData['main_model_name_s'] = $main_model_name_s;
-        
-        // DBテーブル名
-        $tbl_name = $crudBaseData['tbl_name'] ?? CrudBase::camelToTableName($model_name_c);
-        $crudBaseData['tbl_name'] = $tbl_name;
-        
-        // デフォルトソートフィールド
-        $crudBaseData['def_sort_feild'] = $crudBaseData['def_sort_feild'] ?? 'sort_no';
-        
-        // デフォルトソートタイプ 0:昇順 1:降順
-        $crudBaseData['def_sort_type'] = $crudBaseData['def_sort_type'] ?? 0;
+	
+//	public $page_code = ''; // ページコード　← 一意な固有コード■■■□□□■■■□□□
+	
+// 	/**■■■□□□■■■□□□
+// 	 * 初期化■■■□□□■■■□□□
+// 	 * @param [] crudBaseData
+// 	 * @return [] crudBaseData
+// 	 */
+// 	protected function init($model_name_c, $crudBaseData = []){
+		
+// 		$this->page_code = config('app.name') . '_' . $model_name_c . '_'; // ページコード
+		
+// 		global $crudBaseConfig;
+// 		if(!empty($crudBaseConfig)){
+// 			foreach($crudBaseConfig as $config_key => $config_value){
+// 				$crudBaseData[$config_key] = $config_value;
+// 			}
+// 		}
+		
+// 		// 新バージョンであるかチェック。新バージョンである場合セッションクリアを行う。２回目のリクエスト（画面表示）から新バージョンではなくなる。
+// 		$new_version_chg = 0; // 新バージョン変更フラグ: 0:通常  ,  1:新バージョンに変更
+// 		$system_version = $this->checkNewPageVersion($this->this_page_version);
+// 		if(!empty($system_version)){
+// 			$new_version_chg = 1;
+// 			$this->sessionClear();
+// 			dump('バージョン変更' . $this->main_model_name_s . ':' . $this->this_page_version);
+// 		}
+		
+// 		$crudBaseData['fw_type'] = $crudBaseData['fw_type'] ?? 'laravel';
+		
+// 		// キャメル記法のモデル名をセット
+// 		//$model_name_c = $crudBaseData['model_name_c'] ?? '';//■■■□□□■■■□□□
+// 		$crudBaseData['model_name_c'] = $model_name_c;
+// 		$crudBaseData['main_model_name_c'] = $model_name_c;
+// 		$crudBaseData['main_model_name'] = $model_name_c;
+		
+		
+// 		// スネーク記法のモデル名
+// 		$main_model_name_s = $crudBaseData['main_model_name_s'] ?? CrudBase::snakize($model_name_c);
+// 		$crudBaseData['main_model_name_s'] = $main_model_name_s;
+		
+// 		// DBテーブル名
+// 		$tbl_name = $crudBaseData['tbl_name'] ?? CrudBase::camelToTableName($model_name_c);
+// 		$crudBaseData['tbl_name'] = $tbl_name;
+		
+// 		// デフォルトソートフィールド
+// 		$crudBaseData['def_sort_feild'] = $crudBaseData['def_sort_feild'] ?? 'sort_no';
+		
+// 		// デフォルトソートタイプ 0:昇順 1:降順
+// 		$crudBaseData['def_sort_type'] = $crudBaseData['def_sort_type'] ?? 0;
 
-        // デフォルトページ情報を取得する
-        $crudBaseData['defPages'] = $this->getDefPages($crudBaseData); // デフォルトページ情報を取得する
+// 		// デフォルトページ情報を取得する
+// 		$crudBaseData['defPages'] = $this->getDefPages($crudBaseData); // デフォルトページ情報を取得する
 
-        
+		
 
-        return $crudBaseData;
-    }
-    
-    /**
-     * デフォルトページ情報を取得する
-     * @param [] $crudBaseData
-     * @return [] デフォルトページ情報
-     */
-    private function getDefPages(&$crudBaseData){
-        
-        $defPages = [];
-        if(!empty($crudBaseData['defPages'])){
-            $defPages = $crudBaseData['defPages'];
-        }
-        
-        if(empty($defPages['page_no'])) $defPages['page_no'] = 0;
-        if(empty($defPages['row_limit'])) $defPages['row_limit'] = 50;
-        
-        $def_sort_feild =  $crudBaseData['def_sort_feild']; // デフォルトソートフィールド
-        $def_sort_type =  $crudBaseData['def_sort_type']; // デフォルトソートタイプ 0:昇順 1:降順
-        if(empty($defPages['sort_field'])) $defPages['sort_field'] = $def_sort_feild;
-        if(empty($defPages['sort_desc'])) $defPages['sort_desc'] = $def_sort_type;
-        
-        return $defPages;
-    }
-    
-    
+		
+		
+		
+		
+
+// 		return $crudBaseData;
+// 	}
+	
+	
+	
+// 	/**■■■□□□■■■□□□
+// 	 * 新バージョンであるかチェックする。
+// 	 * @param string $this_page_version 当ページバージョン
+// 	 * @return int 新バージョンフラグ  0:バージョン変更なし   1:新バージョンに変更されている
+// 	 */
+// 	private function checkNewPageVersion($this_page_version){
+		
+		
+// 		$sesKey = $this->page_code . '_ses_page_version_cb';
+		
+// 		// セッションページバージョンを取得する
+// 		$ses_page_version = session($sesKey);
+		
+// 		// セッションページバージョンがセッションに存在しない場合
+// 		if(empty($ses_page_version)){
+// 			// 当ページバージョンを新たにセッションに保存し、バージョン変更なしを表す"0"を返す。
+// 			session([$sesKey => $this_page_version]);
+// 			return 0;
+// 		}
+		
+// 		// セッションページバージョンがセッションに存在する場合
+// 		else{
+			
+// 			// セッションページバージョンと当ページバージョンが一致する場合、バージョン変更なしを表す"0"を返す。
+// 			if($this_page_version == $ses_page_version){
+// 				return 0;
+// 			}
+			
+// 			// セッションページバージョンと当ページバージョンが異なる場合、新バージョンによる変更を表す"1"を返す。
+// 			else{
+// 				session([$sesKey => $this_page_version]);
+// 				return 1;
+// 			}
+// 		}
+		
+// 	}
+	
+	
+	/**
+	 * デフォルトページ情報を取得する
+	 * @param [] $crudBaseData
+	 * @return [] デフォルトページ情報
+	 */
+	private function getDefPages(&$crudBaseData){
+		
+		$defPages = [];
+		if(!empty($crudBaseData['defPages'])){
+			$defPages = $crudBaseData['defPages'];
+		}
+		
+		if(empty($defPages['page_no'])) $defPages['page_no'] = 0;
+		if(empty($defPages['row_limit'])) $defPages['row_limit'] = 50;
+		
+		$def_sort_feild =  $crudBaseData['def_sort_feild']; // デフォルトソートフィールド
+		$def_sort_type =  $crudBaseData['def_sort_type']; // デフォルトソートタイプ 0:昇順 1:降順
+		if(empty($defPages['sort_field'])) $defPages['sort_field'] = $def_sort_feild;
+		if(empty($defPages['sort_desc'])) $defPages['sort_desc'] = $def_sort_type;
+		
+		return $defPages;
+	}
+	
+	
 	/**
 	 * ユーザー情報を取得する
 	 *
@@ -94,19 +153,19 @@ class CrudBaseController extends Controller{
 		$userInfo = [
 			'id'=> 0,
 			'user_id'=> 0,
-		    'name' => '',
-		    'username' => '',
-		    'user_name' => '',
-		    'update_user' => '',
+			'name' => '',
+			'username' => '',
+			'user_name' => '',
+			'update_user' => '',
 			'ip_addr' => '',
 			'user_agent' => '',
 			'email'=>'',
 			'role' => 'oparator',
 			'delete_flg' => 0,
 			'nickname' => '',
-		    'authority_wamei'=>'',
-		    'authority_name'=>'',
-		    'authority_level'=>0, // 権限レベル(権限が強いほど大きな数値）
+			'authority_wamei'=>'',
+			'authority_name'=>'',
+			'authority_level'=>0, // 権限レベル(権限が強いほど大きな数値）
 		];
 		
 		if(\Auth::id()){// idは未ログインである場合、nullになる。
@@ -155,8 +214,8 @@ class CrudBaseController extends Controller{
 	 * @return [] $userInfo
 	 */
 	public function getUserInfoForReviewMode(){
-	    
-	    $userInfo = $this->getUserInfo();
+		
+		$userInfo = $this->getUserInfo();
 		
 		$userInfo['id'] = -1;
 		$userInfo['user_id'] = $userInfo['id'];
@@ -184,7 +243,7 @@ class CrudBaseController extends Controller{
 	 * @return [] 権限情報
 	 */
 	public function getAuthorityInfo(){
-	    return \App\Consts\ConstCrudBase::AUTHORITY_INFO;
+		return \App\Consts\ConstCrudBase::AUTHORITY_INFO;
 	}
 	
 
@@ -215,13 +274,13 @@ class CrudBaseController extends Controller{
 	 */
 	public function logout(Request $request)
 	{
-	    \Auth::logout();
-	    
-	    $request->session()->invalidate();
-	    
-	    $request->session()->regenerateToken();
-	    
-	    return redirect('/');
+		\Auth::logout();
+		
+		$request->session()->invalidate();
+		
+		$request->session()->regenerateToken();
+		
+		return redirect('/');
 	}
 	
 	
@@ -235,13 +294,13 @@ class CrudBaseController extends Controller{
 	 * @return int 新バージョンフラグ  0:バージョン変更なし（通常）, 1:新しいバージョン
 	 */
 	public function judgeNewVersion($sesSearches, $this_page_version){
-	    
-	    $old_page_version = $sesSearches['this_page_version'] ?? '';
-	    $new_version = 0;
-	    if($old_page_version != $this_page_version){
-	        $new_version = 1;
-	    }
-	    return $new_version;
+		
+		$old_page_version = $sesSearches['this_page_version'] ?? '';
+		$new_version = 0;
+		if($old_page_version != $this_page_version){
+			$new_version = 1;
+		}
+		return $new_version;
 	}
 	
 	/**
@@ -252,32 +311,32 @@ class CrudBaseController extends Controller{
 	 * @param bool $bom_flg BOMフラグ  0:BOMなし（デフォ）,  1:BOM有
 	 */
 	protected function csvOutput($csv_file, $data, $bom_flg=0){
-	    
-	    $buf = "";
-	    
-	    // BOM付きutf-8のファイルである場合
-	    if(!empty($bom_flg)){
-	        $buf = "¥xEF¥xBB¥xBF";
-	    }
-	    
-	    // CSVデータの作成
-	    if(!empty($data)){
-	        $i=0;
-	        foreach($data as $ent){
-	            foreach($ent as $v){
-	                $cell[$i][] = $v;
-	            }
-	            $buf .= implode(",",$cell[$i])."\n";
-	            $i++;
-	        }
-	    }
-	    
-	    // CSVファイルのヘッダーを書き出す
-	    header ("Content-disposition: attachment; filename=" . $csv_file);
-	    header ("Content-type: application/octet-stream; name=" . $csv_file);
-	    
-	    print($buf); // CSVデータの書き出し
-	    
+		
+		$buf = "";
+		
+		// BOM付きutf-8のファイルである場合
+		if(!empty($bom_flg)){
+			$buf = "¥xEF¥xBB¥xBF";
+		}
+		
+		// CSVデータの作成
+		if(!empty($data)){
+			$i=0;
+			foreach($data as $ent){
+				foreach($ent as $v){
+					$cell[$i][] = $v;
+				}
+				$buf .= implode(",",$cell[$i])."\n";
+				$i++;
+			}
+		}
+		
+		// CSVファイルのヘッダーを書き出す
+		header ("Content-disposition: attachment; filename=" . $csv_file);
+		header ("Content-type: application/octet-stream; name=" . $csv_file);
+		
+		print($buf); // CSVデータの書き出し
+		
 	}
 	
 	

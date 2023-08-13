@@ -89,6 +89,12 @@ $(()=>{
 			{'slt':'.row_exc_btn','wamei':'行入替ボタン(↑↓ボタン)','visible':true ,'def_size':'btn-sm','size':'btn-sm'},
 			{'slt':'.row_enabled_btn','wamei':'削除取消ボタン','visible':true ,'def_size':'btn-sm','size':'btn-sm'},
 		]);
+	
+	// 新バージョンフラグがONならモジュール群のクリア処理を施す
+	if(crudBaseData.new_version	){
+		_clearOfModules(); // モジュール群のクリア
+	}
+		
     
     jqMain =  $('main'); // メインコンテンツ
 	jqMainTbl = $('#main_tbl'); // 一覧テーブル
@@ -398,13 +404,21 @@ function regAction(){
 */
 function clearA(){
 	
+	_clearOfModules(); // モジュール群のクリア
+
+	location.href = 'neko?clear=1';
+}
+
+/**
+* モジュール群のクリア
+*/
+function _clearOfModules(){
+	
 	// 列表示切替機能を初期化
 	csh.reset();
 	
 	// CrudBase設定をリセット
 	crudBaseConfig.reset();
-
-	location.href = 'neko?clear=1';
 }
 
 
