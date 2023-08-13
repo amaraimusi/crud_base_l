@@ -39,11 +39,6 @@ function init(){
 	
 	// 自動保存機能(CrudBaseAutoSave.js)のAjax通信先URL。 このURLはLaravel側のアクションを指します。
 	crudBaseData['auto_save_url'] = 'big_cat/auto_save';
-	
-	console.log(crudBaseData);//■■■□□□■■■□□□
-//
-//	crudBaseData['ni_tr_place'] = 1; // 新規入力追加場所フラグ 0:末尾(デフォルト） , 1:先頭
-//	crudBaseData['configData'] = {delete_alert_flg:1} // 削除アラートフラグ    1:一覧行の削除ボタンを押したときアラートを表示する
 
 	// フック。特定のイベントが実行されたタイミングで実行されるコールバック関数をセットします。
 	$hooks = {
@@ -154,7 +149,7 @@ function init(){
  * 
  */
 function afterRowRxchange(){
-	console.log('■■■□□□■■■□□□afterRowExchange');//■■■□□□■■■□□□
+
 }
 
 
@@ -168,7 +163,7 @@ function afterRowRxchange(){
  * 
  */
 function afterAutoSave(){
-	console.log('■■■□□□■■■□□□afterAutoSave');//■■■□□□■■■□□□
+
 	location.reload(true); // ブラウザをリロードする
 }
 

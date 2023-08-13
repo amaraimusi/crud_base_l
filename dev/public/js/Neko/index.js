@@ -6,6 +6,9 @@ let data; // 一覧データ
 let searches; // 検索データ
 let csrf_token; // CSRFトークン
 let baseXHelper; // 基本X
+let crudBaseConfig; // CrudBase設定クラス
+let cbBtnSizeChanger; // ボタンサイズ変更コンポーネント
+let autoSave; // 自動保存
 let jqMain; // メインコンテンツ
 let jqMainTbl; // 一覧テーブルのjQueryオブジェクト
 let jqForm; // SPA型入力フォームのjQueryオブジェクト
@@ -14,7 +17,6 @@ let jqRegistMsg; // 登録成功メッセージ要素	←「登録中」、「�
 let jqCreateMode; // 新規入力モード ←新規入力モードのみ表示するセレクタ
 let jqEditMode; // 編集モード ←編集モードのみ表示するセレクタ
 
-var autoSave;
 $(()=>{
     
 	
@@ -69,6 +71,24 @@ $(()=>{
 	
     // 一覧中のサムネイル画像をクリックしたら画像をモーダル化しつつ大きく表示する。
     let showModalBigImg = new ShowModalBigImg('.js_show_modal_big_img');
+	
+	// CrudBase設定クラス
+	crudBaseConfig = new CrudBaseConfig();
+	crudBaseConfig.init(null, crudBaseData);
+	
+	// ボタンサイズ変更コンポーネント
+	cbBtnSizeChanger = crudBaseConfig.cbBtnSizeChanger;
+	
+	// ボタン設定: 表示切替とボタンサイズ
+	cbBtnSizeChanger.setCnfData([
+			{'slt':'.row_detail_btn','wamei':'詳細ボタン','visible':true ,'def_size':'btn-sm','size':'btn-sm'},
+			{'slt':'.row_edit_btn','wamei':'編集ボタン','visible':true ,'def_size':'btn-sm','size':'btn-sm'},
+			{'slt':'.row_copy_btn','wamei':'複製ボタン','visible':true ,'def_size':'btn-sm','size':'btn-sm'},
+			{'slt':'.row_delete_btn','wamei':'削除ボタン','visible':true ,'def_size':'btn-sm','size':'btn-sm'},
+			{'slt':'.row_eliminate_btn','wamei':'抹消ボタン','visible':true ,'def_size':'btn-sm','size':'btn-sm'},
+			{'slt':'.row_exc_btn','wamei':'行入替ボタン(↑↓ボタン)','visible':true ,'def_size':'btn-sm','size':'btn-sm'},
+			{'slt':'.row_enabled_btn','wamei':'削除取消ボタン','visible':true ,'def_size':'btn-sm','size':'btn-sm'},
+		]);
     
     jqMain =  $('main'); // メインコンテンツ
 	jqMainTbl = $('#main_tbl'); // 一覧テーブル
@@ -77,8 +97,6 @@ $(()=>{
 	jqRegistMsg = $('.js_registering_msg'); // 登録成功メッセージ要素	←「登録中」、「登録しました」などのメッセージを表示する。
 	jqCreateMode = $('.js_create_mode'); // 新規入力モードのみ表示する要素
 	jqEditMode = $('.js_edit_mode'); // 編集モードのみ表示する要素
-	//■■■□□□■■■□□□
-	//let clmInfo = g_getColumnInfo('main_tbl');
 
     
 });
@@ -114,7 +132,7 @@ function initClmShowHide(){
 		-1 // ボタン列
 	];
 	
-	let csh = new ClmShowHide();
+	csh = new ClmShowHide();
 	
 	csh.init('main_tbl', 'csh_div', iniClmData);
 	
@@ -373,6 +391,20 @@ function regAction(){
 	});
 	
 	
+}
+
+/**
+* クリアボタン押下処理
+*/
+function clearA(){
+	
+	// 列表示切替機能を初期化
+	csh.reset();
+	
+	// CrudBase設定をリセット
+	crudBaseConfig.reset();
+
+	location.href = 'neko?clear=1';
 }
 
 

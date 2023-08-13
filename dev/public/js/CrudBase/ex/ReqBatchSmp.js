@@ -31,7 +31,6 @@ class ReqBatchSmp{
 		
 		param = this._setParamIfEmpty(param);
 		
-		console.log('param.csrf_token=' + param.csrf_token);//■■■□□□■■■□□□
 		this.callbacks = callbacks;
 		this.tDiv = jQuery('#' + param.div_xid); //  This division
 		

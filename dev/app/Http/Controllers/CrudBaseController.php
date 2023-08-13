@@ -34,6 +34,8 @@ class CrudBaseController extends Controller{
         $model_name_c = $crudBaseData['model_name_c'] ?? '';
         $crudBaseData['model_name_c'] = $model_name_c;
         $crudBaseData['main_model_name_c'] = $model_name_c;
+        $crudBaseData['main_model_name'] = $model_name_c;
+        
         
         // スネーク記法のモデル名
         $main_model_name_s = $crudBaseData['main_model_name_s'] ?? CrudBase::snakize($model_name_c);

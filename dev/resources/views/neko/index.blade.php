@@ -99,12 +99,17 @@ $cbh = new CrudBaseHelper($crudBaseData);
 	<div style="display:inline-block;">
 		<button type="submit" class ="btn btn-outline-primary">検索</button>
 		<button type="button" class ="btn btn-outline-secondary" onclick="$('#search_dtl_div').toggle(300);">詳細</button>
-		 <a href="neko?clear=1" class="btn btn-outline-secondary">クリア</a>
+		<button type="button" class="btn btn-outline-secondary" onclick="clearA()">クリア</button>
 
 	</div>
 </form>
 
 <div style="margin-top:0.4em;">
+
+	<!-- CrudBase設定 -->
+	<div class="tool_btn_w">
+		<div id="crud_base_config"></div>
+	</div>
 
 	<div class="tool_btn_w">
 		<a href="neko/csv_download" class="btn btn-secondary">CSV</a>
@@ -172,13 +177,13 @@ $cbh = new CrudBaseHelper($crudBaseData);
 
 				<!-- CBBXE -->
 				<td>
-					
+
 					{!! $cbh->rowExchangeBtn($searches) !!}<!-- 行入替ボタン -->
-					<a href="neko/show?id={{$ent->id}}" class="btn btn-info btn-sm text-light">詳細</a>
-					<button type="button" class="btn btn-primary btn-sm" onclick="clickEditBtn(this)">編集</button>
-					<button type="button" class="btn btn-success btn-sm" onclick="clickCopyBtn(this)">複製</button>
-					<a href="neko/edit?id={{$ent->id}}" class="btn btn-primary btn-sm">編集・MPA型</a>
-					<a href="neko/create?id={{$ent->id}}" class="btn btn-success btn-sm">複製・MPA型</a>
+					<a href="neko/show?id={{$ent->id}}" class="row_detail_btn btn btn-info btn-sm text-light ">詳細</a>
+					<button type="button" class="row_edit_btn btn btn-primary btn-sm" onclick="clickEditBtn(this)">編集</button>
+					<button type="button" class="row_copy_btn btn btn-success btn-sm" onclick="clickCopyBtn(this)">複製</button>
+					<a href="neko/edit?id={{$ent->id}}" class="row_edit_btn btn btn-primary btn-sm">編集・MPA型</a>
+					<a href="neko/create?id={{$ent->id}}" class="row_copy_btn btn btn-success btn-sm">複製・MPA型</a>
 					{!! $cbh->disabledBtn($searches, $ent->id) !!}<!-- 削除/削除取消ボタン（無効/有効ボタン） -->
 					{!! $cbh->destroyBtn($searches, $ent->id) !!}<!-- 抹消ボタン -->
 					

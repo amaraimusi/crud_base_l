@@ -240,11 +240,10 @@ class CrudBaseHelper
         
         if(empty($searches['delete_flg'])){
             // 削除ボタンを作成
-            $html = "<input type='button' data-id='{$id}' onclick='disabledBtn(this, 1)' class='btn btn-danger btn-sm text-light'  value='削除'>";
+            $html = "<input type='button' data-id='{$id}' onclick='disabledBtn(this, 1)' class='row_delete_btn btn btn-danger btn-sm text-light'  value='削除'>";
         }else{
             // 削除取消ボタンを作成
-            //$html = "<buttton type='button' data-id='{$id}' onclick='disabledBtn(this, 0)' class='btn btn-success btn-sm text-light' >削除取消</button>";
-            $html = "<input type='button' data-id='{$id}' onclick='disabledBtn(this, 0)' class='btn btn-success btn-sm text-light' value='削除取消'>";
+            $html = "<input type='button' data-id='{$id}' onclick='disabledBtn(this, 0)' class='row_enabled_btn btn btn-success btn-sm text-light' value='削除取消'>";
         }
         return $html;
     }
@@ -260,7 +259,7 @@ class CrudBaseHelper
         // 削除フラグONの時のみ、抹消ボタンを表示する
         if(!empty($searches['delete_flg'])){
             // 抹消ボタンを作成
-            $html = "<input type='button' data-id='{$id}' onclick='destroyBtn(this)' class='btn btn-danger btn-sm text-light' value='抹消'>";
+            $html = "<input type='button' data-id='{$id}' onclick='destroyBtn(this)' class='row_eliminate_btn btn btn-danger btn-sm text-light' value='抹消'>";
         }
         return $html;
     }
