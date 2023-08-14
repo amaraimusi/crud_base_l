@@ -138,14 +138,17 @@ class NekoController extends CrudBaseController{
 		// IDフィールドです。 IDが空である場合、 新規入力アクションという扱いになります。なお、複製入力アクションは新規入力アクションに含まれます。
 		$id = !empty($ent['id']) ? $ent['id'] : null;
 		
+		// DBテーブルからDBフィールド情報を取得します。
+		$dbFieldData = $this->getDbFieldData('nekos');
+		
+		// 値が空であればデフォルトをセットします。
+		$ent = $this->setDefalutToEmpty($ent, $dbFieldData);
+		
 		// モデルを生成します。 新規入力アクションは真っ新なモデルを生成しますが、編集更新アクションの場合は、行データが格納されたモデルを生成します。
 		$model = empty($id) ? new Neko() : Neko::find($id);
 		
 		$userInfo = $this->getUserInfo(); // ログインユーザーのユーザー情報を取得する
 
-		if(empty($ent['neko_date'])) $ent['neko_date'] = null;
-		if(empty($ent['neko_dt'])) $ent['neko_dt'] = null;
-		
 		// CBBXS-XXXX
 		$model->neko_val = $ent['neko_val']; // neko_val
 		$model->neko_name = $ent['neko_name']; // neko_name
@@ -164,7 +167,9 @@ class NekoController extends CrudBaseController{
 		
 		
 		if(empty($id)){
+			$model->sort_no =$this->getNextSortNo('nekos', 'asc');
 			$model->save(); // DBへ新規追加: 同時に$modelに新規追加した行のidがセットされる。
+			$ent['id'] = $model->id;
 		}else{
 			$model->update(); // DB更新
 		}

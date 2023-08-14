@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Consts;
-
 use App\Http\Controllers\Controller;
-//use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use CrudBase\CrudBase;
+use App\Consts\ConstCrudBase;
 
 /**
  * 基本コントローラ
@@ -416,7 +417,111 @@ class CrudBaseController extends Controller{
 		return $fp;
 		
 	}
+	
+	/**
+	 * DBテーブルからDBフィールドデータを取得します。
+	 * @param string $tbl_name DBテーブル名
+	 * @return [] 各フィールドの詳細情報
+	 */
+	public function getDbFieldData($tbl_name){
+		
+		$dbFieldData0 = $this->getFieldDataFromDb($tbl_name);
+		$dbFieldData = [];
+		foreach($dbFieldData0 as $ent){
+			$field = $ent->Field;
+			$dbFieldData[$field] = (array)$ent;
+		}
+		
+		// 型長とデータ型を取得する
+		foreach($dbFieldData as &$fEnt){
+			if(empty($fEnt['Type'])) continue;
+			$data_type = $fEnt['Type'];
+			
+			// 型長を取得する
+			$matches = null;
+			preg_match('/\d+/', $data_type, $matches);
+			$fEnt['long'] = $matches[0] ?? null;
+			
+			// データ型を取得する
+			$fEnt['type'] = preg_replace('/\([^)]+\)/', '', $data_type); // カッコとカッコ内の文字列を削除した文字列を取得する
+			
+		}
+		unset($fEnt);
+		
+		return $dbFieldData;
+	}
+	
+	/**
+	 * // 値が空であればデフォルトをセットします。
+	 * @param [] $ent エンティティ
+	 * @param [] $dbFieldData DBフィールドデータ→getDbFieldDataメソッドで取得したフィールドデータ
+	 */
+	public function setDefalutToEmpty($ent, $dbFieldData){
+		foreach($ent as $field=>$value){
+			if(empty($dbFieldData[$field])) continue;
+			$fEnt = $dbFieldData[$field];
+			$type = $fEnt['type'];
+			$default = $fEnt['Default'];
+			if($type == 'int' || $type="float" || $type='double'){
+				if(empty($value)){
+					$ent[$field] = $default;
+				}
+			}
+			
+			if($type == 'date'){
+				if($value=='0000-00-00' || $value == '0000/00/00'){
+					$ent[$field] = $default;
+				}
+			}
+		}
+		
+		return $ent;
+	}
+	
+	
+	/**
+	 * DBテーブルから各フィールドの詳細情報を取得します。
+	 * @param string $tbl_name DBテーブル名
+	 * @return [] 各フィールドの詳細情報
+	 */
+	private function getFieldDataFromDb($tbl_name){
+		$sql="SHOW FULL COLUMNS FROM {$tbl_name}";
+		$res = DB::select($sql);
+		
+		return $res;
+	}
 
+	/**
+	 * 次のソート番号を取得する
+	 * @param string $tbl_name DBテーブル名
+	 * @param string $order 方向タイプ asc:昇順用（最大数値）, desc:降順用（最小数値）
+	 * @return int ソート番号
+	 */
+	public function getNextSortNo($tbl_name, $order = 'asc'){
+		
+		$sort_no = 0;
+		
+		if($order == 'asc'){
+			
+			$sql="SELECT  MAX(sort_no) AS next_sort_no FROM {$tbl_name};";
+			$res = DB::select($sql);
+			
+			if($res){
+				$sort_no = $res[0]->next_sort_no;
+				$sort_no++;
+			}
+		}else{
+			$sql="SELECT  MIN(sort_no) AS next_sort_no FROM {$tbl_name};";
+			$res = DB::select($sql);
+			
+			if($res){
+				$sort_no = $res[0]->next_sort_no;
+				$sort_no--;
+			}
+		}
+		
+		return $sort_no;
+	}
 	
 	
 
