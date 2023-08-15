@@ -131,7 +131,9 @@ $cbh = new CrudBaseHelper($crudBaseData);
 
 <div id="auto_save" class="text-success"></div><!-- 自動保存のメッセージ表示区分 -->
 
-<table id="main_tbl" class="table table-striped table-bordered table-condensed" style="margin-top:20px;">
+<div class="d-flex" style="margin-top:12px;">{{$data->appends(request()->query())->links('layouts.pagenatoin_b5')}} </div><!-- ページネーション -->
+
+<table id="main_tbl" class="table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
 			<!-- CBBXS-3035 -->
@@ -194,8 +196,7 @@ $cbh = new CrudBaseHelper($crudBaseData);
 	</tbody>
 </table>
 
-<div>{{$data->appends(request()->query())->links('pagination::bootstrap-4')}} </div><!-- ページネーション -->
-
+<div class="d-flex" style="margin-top:12px;">{{$data->appends(request()->query())->links('layouts.pagenatoin_b5')}} </div><!-- ページネーション -->
 
 </main>
 

@@ -144,6 +144,7 @@ class Neko extends CrudBase
 			
 			$per_page = $searches['per_page'] ?? 50; // 行制限数(一覧の最大行数) デフォルトは50行まで。
 			$data = $query->paginate($per_page);
+			
 			return $data;
 			
 		}

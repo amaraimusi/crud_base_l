@@ -63,6 +63,7 @@ class NekoController extends CrudBaseController{
 				// CBBXE
 				
 				'update_user' => $request->update_user, // 更新者
+				'page' => $request->sort, // ページ番号
 				'sort' => $request->sort, // 並びフィールド
 				'desc' => $request->desc, // 並び向き
 				'per_page' => $request->per_page, // 行制限数
@@ -83,6 +84,7 @@ class NekoController extends CrudBaseController{
 		$model = new Neko();
 		$fieldData = $model->getFieldData();
 		$data = $model->getData($searches);
+		$data_count = $data->total(); //　LIMIT制限を受けていないデータ件数
 		
 		// CBBXS-3020
 		$nekoTypeList = $model->getNekoTypeList(); // ネコ種別リスト
@@ -90,6 +92,7 @@ class NekoController extends CrudBaseController{
         
 		$crudBaseData = [
 				'list_data'=>$data,
+				'data_count'=>$data_count,
 				'searches'=>$searches,
 				'userInfo'=>$userInfo,
 				'paths'=>$paths,

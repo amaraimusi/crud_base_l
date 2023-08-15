@@ -614,6 +614,8 @@ if (!function_exists('h')) {
 		return htmlspecialchars($text, ENT_QUOTES, ($charset) ? $charset : $defaultCharset, $double);
 	}
 	
+	
+	
 }
 
 
