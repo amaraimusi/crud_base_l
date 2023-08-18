@@ -167,5 +167,43 @@ class CrudBase extends Model{
     	
     }
     
+    /**
+     * 更新ユーザーなど共通フィールドをデータにセットする。
+     * @param [] $data データ（エンティティの配列）
+	 * @param [] $userInfo ユーザー情報
+     * @return [] 共通フィールドセット後のデータ
+     */
+    public function setCommonToData($data, $userInfo){
+
+    	$update_user_id = $userInfo['id'];
+    	
+    	// IPアドレス
+    	$ip_addr = $_SERVER["REMOTE_ADDR"];
+    	
+    	// 本日
+    	$today = date('Y-m-d H:i:s');
+    	
+    	// データにセットする
+    	foreach($data as $i => $ent){
+    		
+    		$ent['update_user_id'] = $update_user_id;
+    		$ent['ip_addr'] = $ip_addr;
+    		
+    		// idが空（新規入力）なら生成日をセットし、空でないなら除去
+    		if(empty($ent['id'])){
+    			$ent['created_at'] = $today;
+    		}else{
+    			unset($ent['created_at']);
+    		}
+    		
+    		$ent['updated_at'] = $today;
+    		
+    		$data[$i] = $ent;
+    	}
+    	
+    	return $data;
+    	
+    }
+    
 
 }

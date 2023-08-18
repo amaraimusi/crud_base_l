@@ -161,7 +161,7 @@ $cbh = new CrudBaseHelper($crudBaseData);
 		@foreach ($data as $ent)
 			<tr>
 				<!-- CBBXS-3005 -->
-				<td>{{$ent->id}}</td>
+				<td>{!! $cbh->tdId($ent->id) !!}</td>
 				<td><span class="js_display_value">{{$ent->neko_val}}</span>cm<span class='js_original_value' style="display:none">{{$ent->neko_val}}</span></td>
 				<td>{{$ent->neko_name}}</td>
 				<td>{!! $cbh->tdDate($ent->neko_date) !!}</td>
@@ -197,6 +197,9 @@ $cbh = new CrudBaseHelper($crudBaseData);
 </table>
 
 <div class="d-flex" style="margin-top:12px;">{{$data->appends(request()->query())->links('layouts.pagenatoin_b5')}} </div><!-- ページネーション -->
+
+<?php $cbh->divPwms($searches['delete_flg']); // 複数有効/削除の区分を表示する ?>
+
 
 </main>
 

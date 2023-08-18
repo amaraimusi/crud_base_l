@@ -73,6 +73,28 @@ class CrudBaseHelper
         return $html;
     }
     
+    
+    /**
+     * ＩＤのTD要素を出力する
+     * @param int $value
+     * @param string $width 横幅（省略可）
+     */
+    public static function tdId($value, $width='80px'){
+    	
+    	$html = "
+			<div style='width:{$width}'>
+				<input type='checkbox' name='pwms' class='form-check-input pwms' />
+				<span class='text-success js_display_value'>{$value}</span>
+				<input type='hidden' class='js_original_value js_pwms_id'  value='{$value}'>
+			<div>
+		";
+    	
+    	return $html;
+
+    	
+    }
+    
+    
     /**
      * フラグを「有効」、「無効」の形式で表記する
      * @param int $flg フラグ
@@ -306,23 +328,31 @@ class CrudBaseHelper
     
     /**
      * 複数有効/削除の区分を表示する
-     * @param [] $option
+     * @param [] $delete_flg 
      * - help_flg string ヘルプフラグ 0:ヘルプ表示しない, 1:ヘルプを表示（デフォルト）$this
      * - help_msg string ヘルプメッセージ
      */
-    public function divPwms($option=[]){
+    public function divPwms($delete_flg){
         
-        $help_flg = $option['help_flg'] ?? 1;
-        $help_msg = $option['help_msg'] ?? "※ID列の左側にあるチェックボックスにチェックを入れてから「削除」ボタンを押すと、まとめて削除されます。<br>削除の復元は画面下側のヘルプボタンを参照してください。<br>";
+        $help_msg = "※ID列の左側にあるチェックボックスにチェックを入れてから「削除」ボタンを押すと、まとめて削除されます。<br>";
         
-        $help_html = '';
-        if($help_flg) $help_html = "<aside>{$help_msg}</aside>";
+  		$help_html = "<aside>{$help_msg}</aside>";
         
+  		$undelete_display = '';
+  		$delete_display = '';
+  		
+  		if($delete_flg ==='0' || $delete_flg ===0){
+  			$undelete_display = 'display:none;';
+  		}else if($delete_flg ==='1' || $delete_flg ===1){
+  			$delete_display = 'display:none;';
+  		}
+  		
+  		
         $html = "
 			<div style='margin-top:10px;margin-bottom:10px'>
-				<label for='pwms_all_select'>すべてチェックする <input type='checkbox' name='pwms_all_select' onclick='crudBase.pwms.switchAllSelection(this);' /></label>
-				<button type='button' onclick='crudBase.pwms.action(10)' class='btn btn-success btn-sm'>有効</button>
-				<button type='button' onclick='crudBase.pwms.action(11)' class='btn btn-danger btn-sm'>削除</button>
+				<label for='pwms_all_select'>すべてチェックする <input type='checkbox' name='pwms_all_select' onclick='pwmsSwitchAll(this);' /></label>
+				<button type='button' onclick='pwmsAction(10)' class='btn btn-success btn-sm' style='{$undelete_display}'>削除取消</button>
+				<button type='button' onclick='pwmsAction(11)' class='btn btn-danger btn-sm' style='{$delete_display}'>削除</button>
 				{$help_html}
 			</div>
 		";

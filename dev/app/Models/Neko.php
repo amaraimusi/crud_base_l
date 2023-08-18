@@ -312,6 +312,37 @@ class Neko extends CrudBase
 		return $data2;
 	}
 	
+	
+	/**
+	 * 削除フラグを切り替える
+	 * @param array $ids IDリスト
+	 * @param int $delete_flg 削除フラグ   0:有効  , 1:削除
+	 * @param [] $userInfo ユーザー情報
+	 */
+	public function switchDeleteFlg($ids, $delete_flg, $userInfo){
+		
+		// IDリストと削除フラグからデータを作成する
+		$data = [];
+		foreach($ids as $id){
+			$ent = [
+					'id' => $id,
+					'delete_flg' => $delete_flg,
+			];
+			$data[] = $ent;
+			
+		}
+		
+		// 更新ユーザーなど共通フィールドをデータにセットする。
+		$data = $this->setCommonToData($data, $userInfo);
+
+		// データを更新する
+		$rs = $this->saveAll($data);
+		
+		return $rs;
+		
+	}
+	
+	
 	// CBBXS-3021
 	/**
 	 *  ネコ種別リストを取得する

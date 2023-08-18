@@ -56,6 +56,7 @@ Route::post('neko/auto_save', 'App\Http\Controllers\NekoController@auto_save');
 Route::post('neko/disabled', 'App\Http\Controllers\NekoController@disabled');
 Route::post('neko/destroy', 'App\Http\Controllers\NekoController@destroy');
 Route::get('neko/csv_download', 'App\Http\Controllers\NekoController@csv_download');
+Route::post('neko/ajax_pwms', 'App\Http\Controllers\NekoController@ajax_pwms');
 
 // ネコ種別管理画面
 Route::get('neko_type', 'App\Http\Controllers\NekoTypeController@index');

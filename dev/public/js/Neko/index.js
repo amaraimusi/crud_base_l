@@ -9,6 +9,7 @@ let baseXHelper; // 基本X
 let crudBaseConfig; // CrudBase設定クラス
 let cbBtnSizeChanger; // ボタンサイズ変更コンポーネント
 let autoSave; // 自動保存
+let pwms; // 一覧のチェックボックス複数選択による一括処理
 let jqMain; // メインコンテンツ
 let jqMainTbl; // 一覧テーブルのjQueryオブジェクト
 let jqForm; // SPA型入力フォームのjQueryオブジェクト
@@ -94,6 +95,14 @@ $(()=>{
 	if(crudBaseData.new_version	){
 		_clearOfModules(); // モジュール群のクリア
 	}
+	
+	// 一覧のチェックボックス複数選択による一括処理
+	pwms = new ProcessWithMultiSelection({
+			tbl_slt:'main_tbl',
+			id_slt:'js_pwms_id',
+			ajax_url:'neko/ajax_pwms',
+			csrf_token:csrf_token,
+	});
 		
     
     jqMain =  $('main'); // メインコンテンツ
@@ -419,6 +428,22 @@ function _clearOfModules(){
 	
 	// CrudBase設定をリセット
 	crudBaseConfig.reset();
+}
+
+/**
+ * 一括選択削除/有効機能：一括アクション
+ * @param kind_no アクション種別番号 10:有効化,  11:無効化
+ */
+function pwmsAction(kind_no){
+	pwms.action(kind_no);
+}
+
+/**
+* 一括選択削除/有効機能：全選択の切替
+* @param object checkbox チェックボックスオブジェクト
+*/
+function pwmsSwitchAll(checkbox){
+	pwms.switchAllSelection(checkbox);
 }
 
 

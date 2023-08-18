@@ -2,11 +2,6 @@
 
 namespace App\CrudBase;
 
-//■■■□□□■■■□□□
-// App::uses('Model', 'Model');
-// App::uses('AppModel', 'Model');
-// App::uses('IDao', 'Vendor/CrudBase');
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\CrudBase\IDao;

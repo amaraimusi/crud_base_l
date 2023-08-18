@@ -615,5 +615,45 @@ class NekoController extends CrudBaseController{
 
 	}
 
+	
+	/**
+	 * AJAX | 一覧のチェックボックス複数選択による一括処理
+	 * @return string
+	 */
+	public function ajax_pwms(){
+		
+		// ログアウトになっていたらログイン画面にリダイレクト
+		if(\Auth::id() == null) return redirect('login');
+		
+		$json_param=$_POST['key1'];
+		
+		$param=json_decode($json_param,true);//JSON文字を配列に戻す
+		
+		// IDリストを取得する
+		$ids = $param['ids'];
+
+		// アクション種別を取得する
+		$kind_no = $param['kind_no'];
+
+		// ユーザー情報を取得する
+		$userInfo = $this->getUserInfo();
+
+		$model = new Neko();
+		
+		// アクション種別ごとに処理を分岐
+		switch ($kind_no){
+			case 10:
+				$model->switchDeleteFlg($ids, 0, $userInfo); // 有効化
+				break;
+			case 11:
+				$model->switchDeleteFlg($ids, 1 ,$userInfo); // 削除化(無効化）
+				break;
+			default:
+				return "'kind_no' is unknown value";
+		}
+		
+		return 'success';
+	}
+
 
 }
