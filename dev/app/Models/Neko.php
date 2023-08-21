@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Models\CrudBase;
 
+
 class Neko extends CrudBase
 {
 	protected $table = 'nekos'; // 紐づけるテーブル名

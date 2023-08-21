@@ -12,7 +12,7 @@ use App\Consts\ConstCrudBase;
 class NekoController extends CrudBaseController{
 	
 	// 画面のバージョン → 開発者はこの画面を修正したらバージョンを変更すること。バージョンを変更するとキャッシュやセッションのクリアが自動的に行われます。
-	public $this_page_version = '1.0.0';
+	public $this_page_version = '1.0.1';
 	
 	/**
 	 * indexページのアクション
@@ -314,7 +314,7 @@ class NekoController extends CrudBaseController{
 		$fileUploadK = CrudBase::factoryFileUploadK();
 		$ent = $model->toArray();
 		$ent['img_fn_exist'] = $request->img_fn_exist; // 既存・画像ファイル名 img_fnの付属パラメータ
-		$model->img_fn = $fileUploadK->uploadForLaravelMpa('neko', $_FILES, 'neko', $ent, 'img_fn', 'img_fn_exist');
+		$model->img_fn = $fileUploadK->uploadForLaravelMpa('neko', $_FILES,  $ent, 'img_fn', 'img_fn_exist');
 
 		$model->update(); // ファイル名をモデルにセットしたのでモデルをDB更新する。
 		
@@ -470,7 +470,7 @@ class NekoController extends CrudBaseController{
 		$fileUploadK = CrudBase::factoryFileUploadK();
 		$ent = $model->toArray();
 		$ent['img_fn_exist'] = $request->img_fn_exist; // 既存・画像ファイル名 img_fnの付属パラメータ
-		$model->img_fn = $fileUploadK->uploadForLaravelMpa('neko', $_FILES, 'neko', $ent, 'img_fn', 'img_fn_exist');
+		$model->img_fn = $fileUploadK->uploadForLaravelMpa('neko', $_FILES,  $ent, 'img_fn', 'img_fn_exist');
 
  		$model->update(); // DB更新
 		
