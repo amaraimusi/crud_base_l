@@ -606,6 +606,185 @@ class CrudBaseHelper
     }
     
     
+    /**
+     * 検索用の生成日時セレクトフォームを作成
+     */
+    public function inputKjCreated($field='created_at', $wamei='生成日時'){
+    	
+    	return $this->inputKjDateTimeA($field, $wamei);
+    }
+    
+    
+    /**
+     * 検索用の更新日時セレクトフォームを作成
+     */
+    public function inputKjModified($field='updated_at', $wamei='更新日時'){
+    	
+    	return $this->inputKjDateTimeA($field, $wamei);
+    }
+    
+    
+    /**
+     * 検索用の日時セレクトフォームを作成
+     *
+     * @param string $field フィールド名
+     * @param string $wamei フィールド和名
+     * @param string $list 選択肢リスト（省略可）
+     * @param int $width 入力フォームの横幅（省略可）
+     * @param string $title ツールチップメッセージ（省略可）
+     * @param [] option
+     *  - string model_name_c モデル名（キャメル記法）■■■□□□■■■□□□
+     */
+    public function inputKjDateTimeA($field, $wamei, $list=[], $width=200 ,$title=null, $option = []){
+    	
+    	$width_style = '';
+    	if(!empty($width)) $width_style="width:{$width}px;";
+    	
+    	if($title===null) $title = $wamei . "で検索";
+    	
+//     	// モデル名を取得■■■□□□■■■□□□
+//     	$model_name_c = $this->crudBaseData['model_name_c'];
+//     	if(!empty($option['model_name_c'])) $model_name_c = $option['model_name_c'];
+    	
+    	if(empty($list)) $list = $this->getDateTimeList();
+    	
+    	$searches = $this->crudBaseData['searches'];
+    	
+    	$d1 = $searches[$field] ?? '';
+    	$u1 = strtotime($d1);
+    	
+    	// option要素群
+    	$options_str = ''; // option要素群文字列
+    	foreach($list as $d2 => $name){
+    		
+    		$selected = '';
+    		$u2 = strtotime($d2);
+    		if(!empty($u1)){
+    			if($u1 == $u2) $selected = 'selected';
+    		}
+    		
+    		$name = h($name); // XSSサニタイズ
+    		$options_str .= "<option value='{$d2}' $selected>{$name}</option>";
+    	}
+    	
+    	$sub_info_str = '';
+    	if(!empty($d1)) $sub_info_str = "<div class='text-danger'>検索対象 ～{$d1}</div>";
+    	
+    	$html = "
+			<div class='kj_div kj_wrap' data-field='{$field}'>
+				<div class='input select'>
+					<select name='{$field}' id='{$field}' style='{$width_style}' class='kjs_inp form-control' title='{$title}'>
+						<option value=''>-- {$wamei} --</option>
+						{$options_str}
+					</select>
+				</div>
+				{$sub_info_str}
+			</div>
+		";
+				
+		return $html;
+				
+    }
+    
+    
+    /**
+     * 日時選択肢リストを取得する
+     *
+     * @return array 日時選択肢リスト
+     */
+    private function getDateTimeList(){
+    	
+    	
+    	if(!empty($this->_dateTimeList)){
+    		return $this->_dateTimeList;
+    	}
+    	
+    	$d1=date('Y-m-d');//本日
+    	$d2=$this->getBeginningWeekDate($d1);//週初め日付を取得する。
+    	$d3 = date('Y-m-d', strtotime("-10 day"));//10日前
+    	$d4 = $this->getBeginningMonthDate($d1);//今月一日を取得する。
+    	$d5 = date('Y-m-d', strtotime("-30 day"));//30日前
+    	$d6 = date('Y-m-d', strtotime("-50 day"));//50日前
+    	$d7 = date('Y-m-d', strtotime("-100 day"));//100日前
+    	$d8 = date('Y-m-d', strtotime("-180 day"));//180日前
+    	$d9 = $this->getBeginningYearDate($d1);//今年元旦を取得する
+    	$d10 = date('Y-m-d', strtotime("-365 day"));//365日前
+    	
+    	$list= [
+    			$d1=>'本日',
+    			$d2=>'今週（日曜日から～）',
+    			$d3=>'10日以内',
+    			$d4=>'今月（今月一日から～）',
+    			$d5=>'30日以内',
+    			$d6=>'50日以内',
+    			$d7=>'100日以内',
+    			$d8=>'半年以内（180日以内）',
+    			$d9=>'今年（今年の元旦から～）',
+    			$d10=>'1年以内（365日以内）',
+    	];
+    	
+    	$this->_dateTimeList = $list;
+    	
+    	return $list;
+    	
+    }
+    
+    /**
+     * 引数日付の週の週初め日付を取得する。
+     * 週初めは日曜日とした場合。
+     * @param $ymd
+     * @return DateTime 週初め
+     */
+    private function getBeginningWeekDate($ymd) {
+    	
+    	$w = date("w",strtotime($ymd));
+    	$bwDate = date('Y-m-d', strtotime("-{$w} day", strtotime($ymd)));
+    	return $bwDate;
+    	
+    }
+    
+    /**
+     * 引数日付から月初めの日付を取得する。
+     * @param $ymd
+     */
+    private function getBeginningMonthDate($ymd) {
+    	
+    	$ym = date("Y-m",strtotime($ymd));
+    	$d=$ym.'-01';
+    	
+    	return $d;
+    	
+    }
+    
+    /**
+     * 引数日付から元旦日を取得する。
+     * @param $ymd
+     */
+    private function getBeginningYearDate($ymd) {
+    	
+    	$y = date("Y",strtotime($ymd));
+    	$d=$y.'-01-01';
+    	
+    	return $d;
+    	
+    }
+    
+    
+    /**
+     * スネークケースにキャメルケースから変換
+     * @param string $str キャメルケース
+     * @return string スネークケース
+     */
+    private function snakize($str) {
+    	$str = preg_replace('/[A-Z]/', '_\0', $str);
+    	$str = strtolower($str);
+    	return ltrim($str, '_');
+    }
+    
+    
+    
+    
+    
 }
 
 

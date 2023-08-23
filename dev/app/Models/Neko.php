@@ -244,12 +244,12 @@ class Neko extends CrudBase
 
 		// 生成日時
 		if(!empty($searches['created_at'])){
-			$query = $query->where('nekos.created_at',$searches['created_at']);
+			$query = $query->where('nekos.created_at', '>=', $searches['created_at']);
 		}
 
 		// 更新日
 		if(!empty($searches['updated_at'])){
-			$query = $query->where('nekos.updated_at',$searches['updated_at']);
+			$query = $query->where('nekos.updated_at', '>=', $searches['updated_at']);
 		}
 
 		// CBBXE

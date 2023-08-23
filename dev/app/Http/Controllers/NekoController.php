@@ -12,7 +12,7 @@ use App\Consts\ConstCrudBase;
 class NekoController extends CrudBaseController{
 	
 	// 画面のバージョン → 開発者はこの画面を修正したらバージョンを変更すること。バージョンを変更するとキャッシュやセッションのクリアが自動的に行われます。
-	public $this_page_version = '1.0.1';
+	public $this_page_version = '1.0.0';
 	
 	/**
 	 * indexページのアクション
@@ -21,6 +21,9 @@ class NekoController extends CrudBaseController{
 	 * @return \Illuminate\View\View
 	 */
 	public function index(Request $request){
+		
+		$test = date('Y-m-d H:i:s');
+		dump($test);//■■■□□□■■■□□□)
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
 		if(\Auth::id() == null) return redirect('login');
@@ -97,6 +100,8 @@ class NekoController extends CrudBaseController{
 				'userInfo'=>$userInfo,
 				'paths'=>$paths,
 				'fieldData'=>$fieldData,
+				'model_name_c'=>'Neko', // モデル名（キャメル記法）
+				'model_name_s'=>'neko', // モデル名（スネーク記法）
 				'this_page_version'=>$this->this_page_version,
 				'new_version' => $new_version,
 				
@@ -151,6 +156,8 @@ class NekoController extends CrudBaseController{
 		$model = empty($id) ? new Neko() : Neko::find($id);
 		
 		$userInfo = $this->getUserInfo(); // ログインユーザーのユーザー情報を取得する
+		
+		
 
 		// CBBXS-XXXX
 		$model->neko_val = $ent['neko_val']; // neko_val
@@ -167,6 +174,7 @@ class NekoController extends CrudBaseController{
 		$model->delete_flg = 0;
 		$model->update_user_id = $userInfo['id'];
 		$model->ip_addr = $userInfo['ip_addr'];
+		$model->updated_at = date('Y-m-d H:i:s');
 		
 		
 		if(empty($id)){

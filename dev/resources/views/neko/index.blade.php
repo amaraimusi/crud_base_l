@@ -91,6 +91,10 @@ $cbh = new CrudBaseHelper($crudBaseData);
 			</select>
 			
 			<input type="search" placeholder="更新者" name="update_user" value="{{ old('update_user', $searches['update_user']) }}" class="form-control search_btn_x">
+			{!! $cbh->inputKjCreated(); !!}
+			{!! $cbh->inputKjModified(); !!}
+		
+		
 			
 			<input type="number" placeholder="一覧の最大行数" name="per_page" value="{{ old('per_page', $searches['per_page']) }}" class="form-control search_btn_x" title="一覧に表示する行数">
 			<button type="button" class ="btn btn-outline-secondary" onclick="$('#search_dtl_div').toggle(300);">＜ 閉じる</button>
