@@ -103,6 +103,11 @@ $(()=>{
 			ajax_url:'neko/ajax_pwms',
 			csrf_token:csrf_token,
 	});
+	
+	
+	// 検索・日時リストギミック
+	let sdgCreatedAt = new SearchDatetimeGimmick('.sdg_created_at');
+	let sdgUpdatedAt = new SearchDatetimeGimmick('.sdg_updated_at');
 		
     
     jqMain =  $('main'); // メインコンテンツ

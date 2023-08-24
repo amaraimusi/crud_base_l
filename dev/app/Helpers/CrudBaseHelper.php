@@ -667,20 +667,41 @@ class CrudBaseHelper
     		$options_str .= "<option value='{$d2}' $selected>{$name}</option>";
     	}
     	
-    	$sub_info_str = '';
-    	if(!empty($d1)) $sub_info_str = "<div class='text-danger'>検索対象 ～{$d1}</div>";
+//     	$sub_info_str = '';■■■□□□■■■□□□
+//     	if(!empty($d1)) $sub_info_str = "<div class='text-danger'>検索対象 ～{$d1}</div>";
+
+		$msg = '';
+		if(!empty($d1)){
+			$msg = "検索対象 ～{$d1}";
+		}
     	
-    	$html = "
-			<div class='kj_div kj_wrap' data-field='{$field}'>
+		//     	$html = "■■■□□□■■■□□□
+// 			<div class='kj_div kj_wrap' data-field='{$field}'>
+// 				<div class='input select'>
+// 					<select name='{$field}' id='{$field}' style='{$width_style}' class='kjs_inp form-control' title='{$title}'>
+// 						<option value=''>-- {$wamei} --</option>
+// 						{$options_str}
+// 					</select>
+// 				</div>
+// 				{$sub_info_str}
+// 			</div>
+// 		";
+				
+		
+		$parent_element_selector = "sdg_{$field}";
+				
+		$html = "
+			<div class='kj_div kj_wrap {$parent_element_selector}' data-field='{$field}'>
 				<div class='input select'>
-					<select name='{$field}' id='{$field}' style='{$width_style}' class='kjs_inp form-control' title='{$title}'>
+					<select name='{$field}' id='{$field}' style='{$width_style}' class='kjs_inp form-control sdg_select' title='{$title}'>
 						<option value=''>-- {$wamei} --</option>
 						{$options_str}
 					</select>
 				</div>
-				{$sub_info_str}
-			</div>
-		";
+				<div class='text-danger sdg_msg'>{$msg}</div>
+				<input type='hidden' class='sdg_value' value='{$d1}' >
+				
+			</div>";
 				
 		return $html;
 				

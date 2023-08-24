@@ -21,10 +21,7 @@ class NekoController extends CrudBaseController{
 	 * @return \Illuminate\View\View
 	 */
 	public function index(Request $request){
-		
-		$test = date('Y-m-d H:i:s');
-		dump($test);//■■■□□□■■■□□□)
-		
+
 		// ログアウトになっていたらログイン画面にリダイレクト
 		if(\Auth::id() == null) return redirect('login');
 		
