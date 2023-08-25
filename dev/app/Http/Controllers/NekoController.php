@@ -80,10 +80,11 @@ class NekoController extends CrudBaseController{
 
 		$userInfo = $this->getUserInfo(); // ログインユーザーのユーザー情報を取得する
 		$paths = $this->getPaths(); // パス情報を取得する
+		$def_per_page = 20; // デフォルト制限行数
 		
 		$model = new Neko();
 		$fieldData = $model->getFieldData();
-		$data = $model->getData($searches);
+		$data = $model->getData($searches, ['def_per_page' => $def_per_page]);
 		$data_count = $data->total(); //　LIMIT制限を受けていないデータ件数
 		
 		// CBBXS-3020
@@ -99,6 +100,7 @@ class NekoController extends CrudBaseController{
 				'fieldData'=>$fieldData,
 				'model_name_c'=>'Neko', // モデル名（キャメル記法）
 				'model_name_s'=>'neko', // モデル名（スネーク記法）
+				'def_per_page'=>$def_per_page, // デフォルト制限行数
 				'this_page_version'=>$this->this_page_version,
 				'new_version' => $new_version,
 				
@@ -584,7 +586,7 @@ class NekoController extends CrudBaseController{
 		$searches = session('neko_searches_key');// セッションからセッション検索データを受け取る
 
 		$model = new Neko();
-		$data = $model->getData($searches, 'csv');
+		$data = $model->getData($searches, ['use_type'=>'csv'] );
 		
 		// データ件数が0件ならCSVダウンロードを中断し、一覧画面にリダイレクトする。
 		$count = count($data);

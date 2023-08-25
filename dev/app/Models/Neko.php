@@ -92,12 +92,17 @@ class Neko extends CrudBase
 	
 	
 	/**
-	 *
+	 * DBから一覧データを取得する
 	 * @param [] $searches 検索データ
-	 * @param int $use_type 用途タイプ 　index:一覧データ用（デフォルト）, csv:CSVダウンロード用
+	 * @param [] $param
+	 *     - string use_type 用途タイプ 　index:一覧データ用（デフォルト）, csv:CSVダウンロード用
+	 *     - int def_per_page  デフォルト制限行数
 	 * @return [] 一覧データ
 	 */
-	public function getData($searches, $use_type='index'){
+	public function getData($searches, $param=[]){
+		
+		$use_type = $param['use_type'] ?? 'index';
+		$def_per_page = $param['def_per_page'] ?? 50;
 		
 		// 一覧データを取得するSQLの組立。
 		$query = DB::table('nekos')->
@@ -143,7 +148,7 @@ class Neko extends CrudBase
 		// 一覧用のデータ取得。ページネーションを考慮している。
 		if($use_type == 'index'){
 			
-			$per_page = $searches['per_page'] ?? 50; // 行制限数(一覧の最大行数) デフォルトは50行まで。
+			$per_page = $searches['per_page'] ?? $def_per_page; // 行制限数(一覧の最大行数) デフォルトは50行まで。
 			$data = $query->paginate($per_page);
 			
 			return $data;

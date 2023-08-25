@@ -35,7 +35,7 @@ class CrudBaseHelper
      * ソート機能付きのth要素を作成する
      * @return string
      */
-    public static function sortLink(&$searches, $table_name, $field, $wamei)
+    public function sortLink(&$searches, $table_name, $field, $wamei)
     {
         
         $now_sort_field = $searches['sort'] ?? ''; // 現在のソートフィールドを取得
@@ -79,7 +79,7 @@ class CrudBaseHelper
      * @param int $value
      * @param string $width 横幅（省略可）
      */
-    public static function tdId($value, $width='80px'){
+    public function tdId($value, $width='80px'){
     	
     	$html = "
 			<div style='width:{$width}'>
@@ -100,7 +100,7 @@ class CrudBaseHelper
      * @param int $flg フラグ
      * @return string
      */
-    public static function tdDate($value){
+    public function tdDate($value){
         
         if(empty($value)) $value = '';
         if($value == '0000-00-00') $value = '';
@@ -115,7 +115,7 @@ class CrudBaseHelper
      * @param int $flg フラグ
      * @return string
      */
-    public static function tdFlg($flg){
+    public function tdFlg($flg){
         $notation = "<span class='text-success js_display_value'>ON</span>";
         if(empty($flg)){
             $notation = "<span class='text-secondary js_display_value'>OFF</span>";
@@ -131,7 +131,7 @@ class CrudBaseHelper
      * @param int $delete_flg 無効フラグ
      * @return string
      */
-    public static function tdDeleteFlg($delete_flg){
+    public function tdDeleteFlg($delete_flg){
         $notation = "<span class='js_display_value text-success'>有効</span>";
         if(!empty($delete_flg)){
             $notation = "<span class='js_display_value text-secondary'>無効</span>";
@@ -149,7 +149,7 @@ class CrudBaseHelper
      * @param string $field フィールド名
      * @param int $strLen 表示文字数（バイト）(省略時は無制限に文字表示）
      */
-    public static function tdNote($v, $field,$str_len = null){
+    public function tdNote($v, $field,$str_len = null){
         
         $v2="";
         $long_over_flg = 0; // 制限文字数オーバーフラグ
@@ -191,7 +191,7 @@ class CrudBaseHelper
      * @param string $field
      * @return string html
      */
-    public static function tdImg($ent, $field){
+    public function tdImg($ent, $field){
 
         $fp = $ent->$field ?? null;
         
@@ -227,7 +227,7 @@ class CrudBaseHelper
      * リスト系の表示
      *
      */
-    public static function tdList($value, &$list){
+    public function tdList($value, &$list){
     	
     	$text = $list[$value] ?? '';
     	$value2 = h($value);
@@ -242,7 +242,7 @@ class CrudBaseHelper
      * 行入替ボタンを表示する
      * @param [] $searches 検索データ
      */
-    public static function rowExchangeBtn(&$searches){
+    public function rowExchangeBtn(&$searches){
         $html = '';
 
         // ソートフィールドが「順番」もしくは空である場合のみ、行入替ボタンを表示する。他のフィールドの並びであると「順番」に関して倫理障害が発生するため。
@@ -257,7 +257,7 @@ class CrudBaseHelper
      * 削除/削除取消ボタン（無効/有効ボタン）を表示する
      * @param [] $searches 検索データ
      */
-    public static function disabledBtn(&$searches, $id){
+    public function disabledBtn(&$searches, $id){
         $html = '';
         
         if(empty($searches['delete_flg'])){
@@ -275,7 +275,7 @@ class CrudBaseHelper
      * 抹消ボタン
      * @param [] $searches 検索データ
      */
-    public static function destroyBtn(&$searches, $id){
+    public function destroyBtn(&$searches, $id){
         $html = '';
         
         // 削除フラグONの時のみ、抹消ボタンを表示する
@@ -291,7 +291,7 @@ class CrudBaseHelper
      * JSONに変換して埋め込み
      * @param [] $data
      */
-    public static function embedJson($xid, $data){
+    public function embedJson($xid, $data){
         
         $jData = [];
         if(gettype($data) == 'object'){
@@ -317,7 +317,7 @@ class CrudBaseHelper
      * @throws Exception
      * @return string 3桁区切り表記文字列
      */
-    public static function amount($number){
+    public function amount($number){
         if($number === '' || $number === null) return null;
         if(!is_numeric($number)) throw new Exception('220711A CrudBaseHelper:amount:');
         return number_format($number);
@@ -633,7 +633,6 @@ class CrudBaseHelper
      * @param int $width 入力フォームの横幅（省略可）
      * @param string $title ツールチップメッセージ（省略可）
      * @param [] option
-     *  - string model_name_c モデル名（キャメル記法）■■■□□□■■■□□□
      */
     public function inputKjDateTimeA($field, $wamei, $list=[], $width=200 ,$title=null, $option = []){
     	
@@ -641,11 +640,7 @@ class CrudBaseHelper
     	if(!empty($width)) $width_style="width:{$width}px;";
     	
     	if($title===null) $title = $wamei . "で検索";
-    	
-//     	// モデル名を取得■■■□□□■■■□□□
-//     	$model_name_c = $this->crudBaseData['model_name_c'];
-//     	if(!empty($option['model_name_c'])) $model_name_c = $option['model_name_c'];
-    	
+
     	if(empty($list)) $list = $this->getDateTimeList();
     	
     	$searches = $this->crudBaseData['searches'];
@@ -666,28 +661,12 @@ class CrudBaseHelper
     		$name = h($name); // XSSサニタイズ
     		$options_str .= "<option value='{$d2}' $selected>{$name}</option>";
     	}
-    	
-//     	$sub_info_str = '';■■■□□□■■■□□□
-//     	if(!empty($d1)) $sub_info_str = "<div class='text-danger'>検索対象 ～{$d1}</div>";
 
 		$msg = '';
 		if(!empty($d1)){
 			$msg = "検索対象 ～{$d1}";
 		}
-    	
-		//     	$html = "■■■□□□■■■□□□
-// 			<div class='kj_div kj_wrap' data-field='{$field}'>
-// 				<div class='input select'>
-// 					<select name='{$field}' id='{$field}' style='{$width_style}' class='kjs_inp form-control' title='{$title}'>
-// 						<option value=''>-- {$wamei} --</option>
-// 						{$options_str}
-// 					</select>
-// 				</div>
-// 				{$sub_info_str}
-// 			</div>
-// 		";
 				
-		
 		$parent_element_selector = "sdg_{$field}";
 				
 		$html = "
@@ -803,6 +782,48 @@ class CrudBaseHelper
     }
     
     
+    /**
+     * 検索用の表示件数セレクトを作成
+     */
+    public function inputKjLimit(){
+
+    	$list = [
+    			'5' =>"5件表示",
+    			'10' =>"10件表示",
+    			'20' =>"20件表示",
+    			'50' =>"50件表示",
+    			'100' =>"100件表示",
+    			'200' =>"200件表示",
+    			'500' =>"500件表示",
+    	];
+    	
+    	// SELECT選択肢の組み立て
+    	$exist_value = $this->crudBaseData['searches']['per_page'];
+    	if(empty($exist_value)){
+    		$exist_value = $this->crudBaseData['def_per_page'];
+    	}
+    	$option_html = '';
+    	foreach($list as $key => $value){
+    		$selected = '';
+    		if($key == $exist_value) $selected = " selected='selected'";
+    		$option_html .= "<option value='{$key}' {$selected}>{$value}</option>";
+    	}
+    	
+    	$html = "
+			<div class='kj_div kj_wrap' data-field='row_limit'>
+				<div class='input select'>
+					<select name='per_page' id='row_limit'  class='kjs_inp form-control'>
+						{$option_html}
+					</select>
+				</div>
+			</div>
+		";
+						
+		return $html;
+						
+    }
+    
+    
     
     
     
@@ -835,7 +856,7 @@ if (!function_exists('h')) {
 			return $text;
 		}
 		
-		static $defaultCharset = 'UTF-8';
+		$defaultCharset = 'UTF-8';
 		
 		if (is_string($double)) {
 			$charset = $double;
