@@ -142,17 +142,17 @@ $cbh = new CrudBaseHelper($crudBaseData);
 		<tr>
 			<!-- CBBXS-3035 -->
 			<th data-field='id'>{!! $cbh->sortLink($searches, 'neko', 'id', 'id') !!}</th>
-			<th data-field='neko_val'>{!! $cbh->sortLink($searches, 'neko', 'neko_val', 'neko_val') !!}</th>
-			<th data-field='neko_name'>{!! $cbh->sortLink($searches, 'neko', 'neko_name', 'neko_name') !!}</th>
-			<th data-field='neko_date'>{!! $cbh->sortLink($searches, 'neko', 'neko_date', 'neko_date') !!}</th>
+			<th data-field='neko_val'>{!! $cbh->sortLink($searches, 'neko', 'neko_val', 'ネコ数値') !!}</th>
+			<th data-field='neko_name'>{!! $cbh->sortLink($searches, 'neko', 'neko_name', 'ネコ名') !!}</th>
+			<th data-field='neko_date'>{!! $cbh->sortLink($searches, 'neko', 'neko_date', 'ネコ日付') !!}</th>
 			<th data-field='neko_type'>{!! $cbh->sortLink($searches, 'neko', 'neko_type', '猫種別') !!}</th>
-			<th data-field='neko_dt'>{!! $cbh->sortLink($searches, 'neko', 'neko_dt', 'neko_dt') !!}</th>
+			<th data-field='neko_dt'>{!! $cbh->sortLink($searches, 'neko', 'neko_dt', 'ネコ日時') !!}</th>
 			<th data-field='neko_flg'>{!! $cbh->sortLink($searches, 'neko', 'neko_flg', 'ネコフラグ') !!}</th>
 			<th data-field='img_fn'>{!! $cbh->sortLink($searches, 'neko', 'img_fn', '画像ファイル名') !!}</th>
 			<th data-field='note'>{!! $cbh->sortLink($searches, 'neko', 'note', '備考') !!}</th>
 			<th data-field='sort_no'>{!! $cbh->sortLink($searches, 'neko', 'sort_no', '順番') !!}</th>
 			<th data-field='delete_flg'>{!! $cbh->sortLink($searches, 'neko', 'delete_flg', '無効フラグ') !!}</th>
-			<th data-field='update_user_id'>{!! $cbh->sortLink($searches, 'neko', 'update_user_id', '更新者') !!}</th>
+			<th data-field='update_user'>{!! $cbh->sortLink($searches, 'neko', 'update_user', '更新者') !!}</th>
 			<th data-field='ip_addr'>{!! $cbh->sortLink($searches, 'neko', 'ip_addr', 'IPアドレス') !!}</th>
 			<th data-field='created_at'>{!! $cbh->sortLink($searches, 'neko', 'created_at', '生成日時') !!}</th>
 			<th data-field='updated_at'>{!! $cbh->sortLink($searches, 'neko', 'updated_at', '更新日') !!}</th>
@@ -176,7 +176,7 @@ $cbh = new CrudBaseHelper($crudBaseData);
 				<td>{!! $cbh->tdNote($ent->note, 'note', 30) !!}</td>
 				<td>{{$ent->sort_no}}</td>
 				<td>{!! $cbh->tdDeleteFlg($ent->delete_flg) !!}</td>
-				<td>{{$ent->update_user_id}}</td>
+				<td>{{$ent->update_user}}</td>
 				<td>{{$ent->ip_addr}}</td>
 				<td>{{$ent->created_at}}</td>
 				<td>{{$ent->updated_at}}</td>
