@@ -29,7 +29,7 @@
 	margin-top:100px;
 }
 
-/*　画像モーダル表示の不具合対策。ページネーションのpage-linkの競合が不具合を起こす　*/
+/*　画像モーダル表示の不具合対策。ページネーションのpage-linkの競合が不具合を起こす | js_show_modal_big_img　*/
 .page-link{
 	position:static;
 }

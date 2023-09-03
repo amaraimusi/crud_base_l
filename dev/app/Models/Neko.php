@@ -208,13 +208,6 @@ class Neko extends CrudBase
 			$query = $query->where('nekos.neko_dt',$searches['neko_dt']);
 		}
 
-		// 無効フラグ
-		if(!empty($searches['delete_flg'])){
-			$query = $query->where('nekos.delete_flg',$searches['delete_flg']);
-		}else{
-			$query = $query->where('nekos.delete_flg', 0);
-		}
-
 		// 画像ファイル名
 		if(!empty($searches['img_fn'])){
 			$query = $query->where('nekos.img_fn', 'LIKE', "%{$searches['img_fn']}%");
