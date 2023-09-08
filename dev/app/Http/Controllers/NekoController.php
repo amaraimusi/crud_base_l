@@ -80,7 +80,6 @@ class NekoController extends CrudBaseController{
 
 		$userInfo = $this->getUserInfo(); // ログインユーザーのユーザー情報を取得する
 		$paths = $this->getPaths(); // パス情報を取得する
-		dump($paths);//■■■□□□■■■□□□)
 		$def_per_page = 20; // デフォルト制限行数
 		
 		$model = new Neko();

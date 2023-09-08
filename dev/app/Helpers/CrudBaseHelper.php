@@ -237,6 +237,37 @@ class CrudBaseHelper
     }
     
     
+    /**
+     * 単位付の表示
+     * @param string $value 値
+     * @param string $field フィールド
+     * @param string $unit_f 単位（前）
+     * @param string $unit_b 単位（後）
+     * @param array $option オプション
+     *     - boolean no_comma 3桁区切りなし
+     * @return string
+     */
+    public function tdUnit($value, $field, $unit_f='', $unit_b='', $option=[]){
+    	
+    	if(is_numeric($value)){
+    		if(empty($option['comma'])){
+    			$value = number_format($value);
+    		}
+    	}else{
+    		$value = h($value);
+    	}
+    	
+    	$html = "
+			<span>{$unit_f}</span>
+			<span class='js_display_value'>{$value}</span>
+			<span>{$unit_b}</span>
+			<span class='js_original_value' style='display:none'>{$value}</span>
+		";
+    	
+    	return $html;
+    }
+    
+    
     
     /**
      * 行入替ボタンを表示する
