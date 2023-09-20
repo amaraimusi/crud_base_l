@@ -105,12 +105,12 @@ class RangeYm{
 		let field_to = this.param.field_to; // 終わり日付のフィールド名
 		
 		let html = `
-	<input type="month" id="${field}_ym" class="range_ym_tb kjs_inp form-control"  placeholder="「${wamei}」の年月" title="年月を選択すると「>」ボタンの先にその月の日付範囲が入力されます。" style='display:inline-block;width:200px' />	
+	<input type="month" id="${field}_ym" name="${field}_ym" class="range_ym_tb kjs_inp form-control js_search_inp"  placeholder="「${wamei}」の年月" title="年月を選択すると「>」ボタンの先にその月の日付範囲が入力されます。" style='display:inline-block;width:200px' />	
 	<button type="button" class="range_ym_dtl_btn btn btn-secondary btn-secondary btn-sm" title="日付を範囲入力する部分を表示します。">
 		<span class='oi' data-glyph='arrow-thick-right'> </span>範囲</button>
 	<div class="range_ym_range_div" style="display:inline-block">
-		<input type="date" id="${field_from}" class="${field_from} kjs_inp range_ym_date_from form-control"  placeholder="「${wamei}」の範囲【始め】" title="「${wamei}」範囲の始め日付です。" style='display:inline-block;width:200px' />	
-		<input type="date" id="${field_to}" class="${field_to} kjs_inp range_ym_date_to form-control"  placeholder="「${wamei}」の範囲【終わり】" title="「${wamei}」範囲の終わり日付です。" style='display:inline-block;width:200px' />	
+		<input type="date" id="${field_from}" name="${field_from}" class="${field_from} kjs_inp range_ym_date_from form-control js_search_inp"  placeholder="「${wamei}」の範囲【始め】" title="「${wamei}」範囲の始め日付です。" style='display:inline-block;width:200px' />	
+		<input type="date" id="${field_to}" name="${field_to}" class="${field_to} kjs_inp range_ym_date_to form-control js_search_inp"  placeholder="「${wamei}」の範囲【終わり】" title="「${wamei}」範囲の終わり日付です。" style='display:inline-block;width:200px' />	
 		<div class="range_ym_err text-danger"></div>
 	</div>
 		`;
