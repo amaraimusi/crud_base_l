@@ -8,8 +8,8 @@
  * 他のJavaScriptライブラリとの競合問題を考え、ベースとなるライブラリはVue.jsではなくjQueryを採用しています。
  * 
  * @license MIT
- * @since 2016-9-21 | 2023-9-12
- * @version 4.0.3
+ * @since 2016-9-21 | 2023-9-27
+ * @version 4.0.4
  * @histroy
  * 2024-4-17 v4.0.0 保守性の問題解決のため、大幅なリニューアルをする。
  * 2019-6-28 v2.8.3 CSVフィールドデータ補助クラス | CsvFieldDataSupport.js
@@ -190,7 +190,7 @@ class CrudBase4{
 	* @return {} エンティティ
 	*/
 	getEntityByRowIndex(row_index){
-		
+
 		// メイン一覧テーブルの行インデックスに紐づく行からエンティティを取得する。
 		let rowEnt = this._getEntityByRowIndex(row_index);
 		
@@ -204,7 +204,7 @@ class CrudBase4{
 		
 		// CrudBaseDataへエンティティをセットする。
 		this.setEntityToCrudBaseData(ent);
-		
+
 		return ent;
 
 	}
@@ -285,13 +285,16 @@ class CrudBase4{
 	* @param {} pEnt エンティティ
 	*/
 	setEntityToCrudBaseData(pEnt){
+		
 		let data = this._getData();
 
 		for(let i in data){
 			let ent = data[i];
 			if(ent.id == pEnt.id){
-				data[i] = pEnt;
-				break;
+				for(let field in pEnt){
+					ent[field] = pEnt[field];
+				}
+				return;
 			}
 		}
 	}
@@ -340,11 +343,16 @@ class CrudBase4{
 	* @param string inp_mode 入力モード: create:新規入力モード, edit:編集モード, copy:複製モード
 	*/
 	setEntToForm(ent, row_index, inp_mode){
-		
-		if(inp_mode == 'create' || inp_mode == 'copy') ent['id'] = null;
-		
+
 		for(let field in ent){
 			let value = ent[field];
+			
+			if(field == 'id'){
+				if(inp_mode == 'create' || inp_mode == 'copy'){
+					value = null;
+				}
+			}
+			
 			let jqInp = this._getInpFromForm(field); // フォームから入力要素を取得する
 			if(jqInp[0] != null){
 				this.setValueToElement(jqInp, field, value); // 様々なタイプの要素へ値をセットする
@@ -1197,8 +1205,175 @@ class CrudBase4{
 		let tr = this.jqMainTbl.find('tbody tr').eq(row_index);
 		return tr;
 	}
+
+
+	/**
+	 * 検索実行
+	 * @param {} params 
+	 *    - string form_slt 検索フォームのセレクタ
+	 *    - string inp_slt 検索入力要素のセレクタ
+	 *    - string page_no_field ページ番号フィールド
+	 */
+	searchAction(params){
+		if(params==null) params = {};
+		let form_slt = params.form_slt ?? '#searchForm';
+		let inp_slt = params.inp_slt ?? '.js_search_inp';
+		let page_no_field = params.page_no_field ?? 'page';
+		
+		// 検索フォーム要素を取得する
+		let jqForm = jQuery(form_slt);
+		if(jqForm[0] == null) throw Error('システムエラー20230918A');
+		
+		let jqInps = jqForm.find(inp_slt); // 検索フォームから入力要素群を取得する
+		
+		// バリデーションによる入力チェックを行う。
+		let errs_flg = this._validationForForm(jqInps);
+
+		// バリデーションによる入力エラーなっていれば、処理を中断する。
+		if(errs_flg == true) return;
+
+		// URLからWEBクエリリストを取得する
+		let webQuerys = this._getUrlQuery();
+
+		// form要素内の入力要素群をループする。
+		let searchList = {}; // 検索条件情報
+		let removes = ['clear']; // 除去リスト→入力が空の要素のフィールド。「clear」も不要なので除去対象。
+		
+		jqInps.each((i,elm)=>{
+
+			// 要素から選択値を取得する
+			let inpElm = jQuery(elm);
+			
+			let type = inpElm.attr('type');
+			
+			let val = '';
+			if(type == 'checkbox'){
+				if(inpElm.prop('checked')){
+					val = 1;
+				}else{
+					val = 0;
+				}
+			}else{
+				 val = inpElm.val();
+			}
+
+			// 選択値が空でない場合（0も空ではない扱い）
+			let field = inpElm.attr('name'); // 要素のID属性から検索条件フィールドを取得する
+			if(!this._emptyNotZero(val)){ // 空判定 | ただし「0」はfalseを返す
+				val = encodeURIComponent(val); // 要素の値をURLエンコードする
+				searchList[field] = val; // 検索条件情報にセットする
+			}else{
+				removes.push(field);
+			}
+		});
+
+		// WEBクエリに検索条件情報をマージする
+		for(let field in searchList){
+			let value = searchList[field];
+			webQuerys[field] = value;
+		}
+
+		// パラメータから除去リストのフィールドを削除する。
+		for(let i in removes){
+			let rem_field = removes[i];
+			delete webQuerys[rem_field];
+		}
+
+		webQuerys[page_no_field] = 1; // 1ページ目をセットする
+
+		// パラメータからURLクエリを組み立てる
+		let query = '';
+		for(let field in webQuerys){
+			let val = webQuerys[field];
+			query += field + '=' + val + '&';
+		}
+
+		// URLの組み立て
+		let url;
+		if(query != ''){
+			query = query.substr(0,query.length-1); // 末尾の一文字を除去する
+			url = '?' + query;
+		}
+
+		window.location.href = url; // URLへ遷移
+	}
 	
 	
+	/**
+	 * バリデーションによる入力チェックを行う
+	 * @param jQuery jqInps 入力要素群
+	 * @return boolean errs_flg
+	 */
+	_validationForForm(jqInps){
+		
+		let errs_flg = false;
+		
+		// 検索入力のバリデーション
+		jqInps.each((i,elm)=>{
+			
+			let inpElm = jQuery(elm); // 入力要素
+
+			// 入力要素に付属する入力エラー要素を非表示にする。
+			let parElm = inpElm.parent(); // 親要素を取得
+			let errElm = parElm.find('.searche_err');
+			errElm.hide();
+				
+			// バリデーションチェックを行う。
+			let valid=inpElm[0].checkValidity(); // バリデーション検知
+			
+			// バリデーションにひっかかる、すなわり入力エラーになっている場合。
+			if(valid == false){
+				errs_flg = true;
+				errElm.show(); // 入力エラー要素を表示する。
+			}
+
+		});
+		
+		return errs_flg;
+	}
+		
+		
+	
+	/**
+	 * 空判定 | ただし「0」はfalseを返す
+	 * @param v
+	 */
+	_emptyNotZero(v){
+		var res = this._empty(v);
+		if(res){
+			if(v===0 || v==='0'){
+				res = false;
+			}
+		}
+		return res;
+	}
+	
+	
+	/**
+	 * URLクエリデータを取得する
+	 * 
+	 * @return object URLクエリデータ
+	 */
+	_getUrlQuery(){
+		query = window.location.search;
+
+		if(query =='' || query==null){
+			return {};
+		}
+		var query = query.substring(1,query.length);
+		var ary = query.split('&');
+		var data = {};
+		for(var i=0 ; i<ary.length ; i++){
+			var s = ary[i];
+			var prop = s.split('=');
+
+			data[prop[0]]=prop[1];
+
+		}	
+		return data;
+	}
+	
+
 	
 
 	
