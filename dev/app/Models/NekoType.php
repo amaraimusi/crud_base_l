@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Models\CrudBase;
 
+
 class NekoType extends CrudBase
 {
-	protected $table = 'neko_types'; // 紐づけるテーブル名
+	protected $table = 'neko_type_types'; // 紐づけるテーブル名
 	
 	const CREATED_AT = 'created_at';
 	const UPDATED_AT = 'updated_at';
@@ -21,7 +22,7 @@ class NekoType extends CrudBase
 	 * @var array<int, string>
 	 */
 	protected $fillable = [
-		// CBBXS-3009
+			// CBBXS-3009
 		'id',
 		'neko_type_name',
 		'sort_no',
@@ -31,7 +32,7 @@ class NekoType extends CrudBase
 		'created_at',
 		'updated_at',
 
-		// CBBXE
+			// CBBXE
 	];
 	
 	
@@ -40,20 +41,68 @@ class NekoType extends CrudBase
 		
 	}
 	
+	
 	/**
-	 *
+	 * フィールドデータを取得する
+	 * @return [] $fieldData フィールドデータ
+	 */
+	public function getFieldData(){
+		$fieldData = [
+				'id' => [], // ID
+				'neko_type_val' => [], // ネコ種別数値
+				'neko_type_name' => [], // ネコ種別名
+				'neko_type_date' => [], // ネコ種別日付
+				'neko_type_type' => [ // 猫種別
+					'outer_table' => 'neko_type_types',
+					'outer_field' => 'neko_type_type_name', 
+					'outer_list'=>'neko_typeTypeList',
+				],
+				'neko_type_dt' => [], // ネコ種別日時
+				'neko_type_flg' => [
+						'value_type'=>'flg',
+				], // ネコ種別フラグ
+				'img_fn' => [], // 画像ファイル名
+				'note' => [], // 備考
+				'sort_no' => [], // 順番
+				'delete_flg' => [
+						'value_type'=>'delete_flg',
+				], // 無効フラグ
+				'update_user_id' => [], // 更新ユーザーID
+				'ip_addr' => [], // IPアドレス
+				'created_at' => [], // 生成日時
+				'updated_at' => [], // 更新日
+				'update_user' => [], // 更新者
+		];
+		
+		// フィールドデータへＤＢからのフィールド詳細情報を追加
+		$fieldData = $this->addFieldDetailsFromDB($fieldData, 'neko_type_types');
+		
+		// フィールドデータに登録対象フラグを追加します。
+		$fieldData = $this->addRegFlgToFieldData($fieldData, $this->fillable);
+
+		return $fieldData;
+	}
+	
+	
+	/**
+	 * DBから一覧データを取得する
 	 * @param [] $searches 検索データ
-	 * @param int $use_type 用途タイプ 　index:一覧データ用（デフォルト）, csv:CSVダウンロード用
+	 * @param [] $param
+	 *     - string use_type 用途タイプ 　index:一覧データ用（デフォルト）, csv:CSVダウンロード用
+	 *     - int def_per_page  デフォルト制限行数
 	 * @return [] 一覧データ
 	 */
-	public function getData($searches, $use_type='index'){
+	public function getData($searches, $param=[]){
+		
+		$use_type = $param['use_type'] ?? 'index';
+		$def_per_page = $param['def_per_page'] ?? 50;
 		
 		// 一覧データを取得するSQLの組立。
-		$query = DB::table('neko_types')->
-			leftJoin('users', 'neko_types.update_user_id', '=', 'users.id');
+		$query = DB::table('neko_type_types')->
+			leftJoin('users', 'neko_type_types.update_user_id', '=', 'users.id');
 		
 		$query = $query->select(
-		    // CBBXS-3034
+			// CBBXS-3034
 			'neko_types.id as id',
 			'neko_types.neko_type_name as neko_type_name',
 			'neko_types.sort_no as sort_no',
@@ -64,12 +113,12 @@ class NekoType extends CrudBase
 			'neko_types.created_at as created_at',
 			'neko_types.updated_at as updated_at',
 
-		    // CBBXE
+			// CBBXE
 			);
 		
 		// メイン検索
 		if(!empty($searches['main_search'])){
-			$concat = DB::raw("CONCAT( IFNULL(neko_types.neko_type_name, '') ,IFNULL(neko_types.tell, '') ,IFNULL(neko_types.address, '') ,IFNULL(neko_types.note, '') ) ");
+			$concat = DB::raw("CONCAT( IFNULL(neko_type_types.neko_type_name, '') , IFNULL(neko_type_types.note, '') ) ");
 			$query = $query->where($concat, 'LIKE', "%{$searches['main_search']}%");
 		}
 		
@@ -85,8 +134,9 @@ class NekoType extends CrudBase
 		// 一覧用のデータ取得。ページネーションを考慮している。
 		if($use_type == 'index'){
 			
-			$per_page = $searches['per_page'] ?? 20; // 行制限数(一覧の最大行数) デフォルトは50行まで。
+			$per_page = $searches['per_page'] ?? $def_per_page; // 行制限数(一覧の最大行数) デフォルトは50行まで。
 			$data = $query->paginate($per_page);
+			
 			return $data;
 			
 		}
@@ -112,7 +162,7 @@ class NekoType extends CrudBase
 	 */
 	private function addWheres($query, $searches){
 		
-	    // CBBXS-3003
+		// CBBXS-3003
 
 	    // id
 	    if(!empty($searches['id'])){
@@ -167,7 +217,7 @@ class NekoType extends CrudBase
 	 * @return int 順番
 	 */
 	public function nextSortNo(){
-		$query = DB::table('neko_types')->selectRaw('MAX(sort_no) AS max_sort_no');
+		$query = DB::table('neko_type_types')->selectRaw('MAX(sort_no) AS max_sort_no');
 		$res = $query->first();
 		$sort_no = $res->max_sort_no ?? 0;
 		$sort_no++;
@@ -218,5 +268,41 @@ class NekoType extends CrudBase
 	}
 	
 	
+	/**
+	 * 削除フラグを切り替える
+	 * @param array $ids IDリスト
+	 * @param int $delete_flg 削除フラグ   0:有効  , 1:削除
+	 * @param [] $userInfo ユーザー情報
+	 */
+	public function switchDeleteFlg($ids, $delete_flg, $userInfo){
+		
+		// IDリストと削除フラグからデータを作成する
+		$data = [];
+		foreach($ids as $id){
+			$ent = [
+					'id' => $id,
+					'delete_flg' => $delete_flg,
+			];
+			$data[] = $ent;
+			
+		}
+		
+		// 更新ユーザーなど共通フィールドをデータにセットする。
+		$data = $this->setCommonToData($data, $userInfo);
+
+		// データを更新する
+		$rs = $this->saveAll($data);
+		
+		return $rs;
+		
+	}
+	
+	
+	// CBBXS-3021
+
+	// CBBXE
+	
+	
+
 }
 
