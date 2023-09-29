@@ -18,7 +18,7 @@ use App\Consts\ConstCrudBase;
 class NekoController extends CrudBaseController{
 	
 	// 画面のバージョン → 開発者はこの画面を修正したらバージョンを変更すること。バージョンを変更するとキャッシュやセッションのクリアが自動的に行われます。
-	public $this_page_version = '1.0.0';
+	public $this_page_version = '1.0.1';
 	
 	/**
 	 * indexページのアクション
@@ -52,9 +52,12 @@ class NekoController extends CrudBaseController{
 					'id' => $request->id, // id
 					
 					// CBBXS-6000
-					'neko_val' => $request->neko_val, // neko_val
-					'neko_name' => $request->neko_name, // neko_name
-					'neko_date' => $request->neko_date, // neko_date
+					'neko_val1' => $request->neko_val1, // ネコ数値・範囲1
+					'neko_val2' => $request->neko_val2, // ネコ数値・範囲2
+					'neko_name' => $request->neko_name, // ネコメイ
+					'neko_date_ym' => $request->neko_date_ym, // ネコ日付・年月
+					'neko_date1' => $request->neko_date1, // ネコ日付・範囲1
+					'neko_date2' => $request->neko_date2, // ネコ日付・範囲2
 					'neko_type' => $request->neko_type, // 猫種別
 					'neko_dt' => $request->neko_dt, // neko_dt
 					'neko_flg' => $request->neko_flg, // ネコフラグ
@@ -94,7 +97,7 @@ class NekoController extends CrudBaseController{
 		$data = $model->getData($searches, ['def_per_page' => $def_per_page]);
 		$data_count = $data->total(); //　LIMIT制限を受けていないデータ件数
 		
-		// CBBXS-3020
+		// CBBXS-6001
 		$nekoTypeList = $model->getNekoTypeList(); // ネコ種別リスト
         // CBBXE
         
@@ -111,7 +114,7 @@ class NekoController extends CrudBaseController{
 				'this_page_version'=>$this->this_page_version,
 				'new_version' => $new_version,
 				
-				// CBBXS-3020B
+				// CBBXS-6002
 				'nekoTypeList'=>$nekoTypeList,
 				// CBBXE
 		];
@@ -124,7 +127,7 @@ class NekoController extends CrudBaseController{
 				'this_page_version'=>$this->this_page_version,
 				'crudBaseData'=>$crudBaseData,
 			    
-			    // CBBXS-3020B
+			    // CBBXS-6003
 			    'nekoTypeList'=>$nekoTypeList,
 			    // CBBXE
 		    
@@ -191,6 +194,7 @@ class NekoController extends CrudBaseController{
 			$model->update(); // DB更新
 		}
 		
+		// CBBXS-6005
 		// ▼ ファイルアップロード関連
 		$fileUploadK = CrudBase::factoryFileUploadK();
 		$front_img_fn = $ent['img_fn'];
@@ -200,7 +204,8 @@ class NekoController extends CrudBaseController{
 			$model->img_fn = $fRes['reg_fp'];
 			$model->update(); // DB更新
 		}
-
+		// CBBXE
+		
 		$ent = $model->toArray();
 		
 		if(!empty($fRes['errs'])) $ent['errs'] = $fRes['errs'];

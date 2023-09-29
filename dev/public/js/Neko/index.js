@@ -65,6 +65,10 @@ $(()=>{
 		});
 	});
 	
+	// 年月による日付範囲入力【拡張】 | RangeYmEx.js
+	let rngYmEx = new RangeYmEx();
+	rngYmEx.init();
+	
 	// 新しいバージョンになった場合
 	if(searches.new_version == 1){
 		chs.reset(); // 列表示切替機能内のローカルストレージをクリア

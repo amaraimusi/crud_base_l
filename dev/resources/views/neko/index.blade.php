@@ -57,47 +57,32 @@ $cbh = new CrudBaseHelper($crudBaseData);
 <!-- 検索フォーム -->
 <form method="GET" action="neko">
 		
-	<input type="search" placeholder="検索" name="main_search" value="{{ old('main_search', $searches['main_search'])}}" title="ネコ名、備考を部分検索します" class="form-control search_btn_x">
+	<div><?php echo $cbh->searchFormText('main_search', '検索', ['title'=>'ネコ名、備考を部分検索します']); ?></div>
+	
 	<div style="display:inline-block;">
 		<div id="search_dtl_div" style="display:none;">
-
-			<input type="search" placeholder="ID" name="id" value="{{ old('id', $searches['id']) }}" class="form-control search_btn_x">
+		
+			<div><?php echo $cbh->searchFormId(); ?></div>
 			
-			<!-- CBBXS-3004 -->
-			<input type="search" placeholder="neko_val" name="neko_val" value="{{ old('neko_val', $searches['neko_val']) }}" class="form-control search_btn_x">
-			<input type="search" placeholder="neko_name" name="neko_name" value="{{ old('neko_name', $searches['neko_name']) }}" class="form-control search_btn_x">
-			<input type="search" placeholder="neko_date" name="neko_date" value="{{ old('neko_date', $searches['neko_date']) }}" class="form-control search_btn_x">
-			<select name="neko_type" class="form-control search_btn_x">
-				<option value=""> - 猫種別 - </option>
-				@foreach ($nekoTypeList as $neko_type => $neko_type_name)
-					<option value="{{ $neko_type }}" @selected(old('neko_type', $searches['neko_type']) == $neko_type)>
-						{{ $neko_type_name }}
-					</option>
-				@endforeach
-			</select>
-			<input type="search" placeholder="neko_dt" name="neko_dt" value="{{ old('neko_dt', $searches['neko_dt']) }}" class="form-control search_btn_x">
-			<input type="search" placeholder="ネコフラグ" name="neko_flg" value="{{ old('neko_flg', $searches['neko_flg']) }}" class="form-control search_btn_x">
-			<input type="search" placeholder="画像ファイル名" name="img_fn" value="{{ old('img_fn', $searches['img_fn']) }}" class="form-control search_btn_x">
-			<input type="search" placeholder="備考" name="note" value="{{ old('note', $searches['note']) }}" class="form-control search_btn_x">
-			<input type="search" placeholder="順番" name="sort_no" value="{{ old('sort_no', $searches['sort_no']) }}" class="form-control search_btn_x">
-			<input type="search" placeholder="IPアドレス" name="ip_addr" value="{{ old('ip_addr', $searches['ip_addr']) }}" class="form-control search_btn_x">
-
+			<!-- CBBXS-5030 -->
+			<div><?php echo $cbh->searchFormIntRange('neko_val', 'ネコ数値'); ?></div>
+			<div><?php echo $cbh->searchFormText('neko_name', 'ネコ名', ['pattern'=>'[\u30A1-\u30FF]+', 'err_msg'=>'👈%display_nameはカタカナのみ入力可能です。']); ?></div>
+			<div><?php echo $cbh->searchFormDateRng('neko_date', 'ネコ日付'); ?></div>
+			<div><?php echo $cbh->searchFormSelect('neko_type', 'ネコ種別', $nekoTypeList); ?></div>
+			<div><?php echo $cbh->searchFormDatetime('neko_dt', 'ネコ日時'); ?></div>
+			<div><?php echo $cbh->searchFormFlg('neko_flg', 'ネコフラグ'); ?></div>
+			<div><?php echo $cbh->searchFormText('img_fn', '画像ファイル名'); ?></div>
+			<div><?php echo $cbh->searchFormText('note', '備考'); ?></div>
 			<!-- CBBXE -->
-			
-			<select name="delete_flg" class="form-control search_btn_x">
-				<option value=""> - 有効/削除 - </option>
-				<option value="0" @selected(old('delete_flg', $searches['delete_flg']) == 0)>有効</option>
-				<option value="1" @selected(old('delete_flg', $searches['delete_flg']) == 1)>削除</option>
-			</select>
-			
-			<input type="search" placeholder="更新者" name="update_user" value="{{ old('update_user', $searches['update_user']) }}" class="form-control search_btn_x">
-			{!! $cbh->inputKjCreated(); !!}
-			{!! $cbh->inputKjModified(); !!}
-			{!! $cbh->inputKjLimit(); !!}
-		
-		
-			
-			<button type="button" class ="btn btn-outline-secondary" onclick="$('#search_dtl_div').toggle(300);">＜ 閉じる</button>
+			<div><?php echo $cbh->searchFormInt('sort_no', '順番'); ?></div>
+			<div><?php echo $cbh->searchFormText('ip_addr', 'IPアドレス'); ?></div>
+			<div><?php echo $cbh->searchFormDelete(); ?></div>
+			<div><?php echo $cbh->searchFormText('update_user', '更新者'); ?></div>
+			<div><?php echo $cbh->searchFormCreated(); ?></div>
+			<div><?php echo $cbh->searchFormUpdated(); ?></div>
+			<div><?php echo $cbh->searchFormLimit(); ?></div>
+
+			<div><button type="button" class ="btn btn-outline-secondary" onclick="$('#search_dtl_div').toggle(300);">＜ 閉じる</button></div>
 		</div>
 	</div>
 	<div style="display:inline-block;">

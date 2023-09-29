@@ -22,7 +22,7 @@ class Neko extends CrudBase
 	 * @var array<int, string>
 	 */
 	protected $fillable = [
-			// CBBXS-3009
+			// CBBXS-6009
 			'id',
 			'neko_val',
 			'neko_name',
@@ -55,6 +55,7 @@ class Neko extends CrudBase
 	 */
 	public function getFieldData(){
 		$fieldData = [
+				// CBBXS-6014
 				'id' => [], // ID
 				'neko_val' => [], // ネコ数値
 				'neko_name' => [], // ネコ名
@@ -79,6 +80,7 @@ class Neko extends CrudBase
 				'created_at' => [], // 生成日時
 				'updated_at' => [], // 更新日
 				'update_user' => [], // 更新者
+				// CBBXE
 		];
 		
 		// フィールドデータへＤＢからのフィールド詳細情報を追加
@@ -109,30 +111,38 @@ class Neko extends CrudBase
 			leftJoin('users', 'nekos.update_user_id', '=', 'users.id');
 		
 		$query = $query->select(
-			// CBBXS-3034
-			'nekos.id as id',
-			'nekos.neko_val as neko_val',
-			'nekos.neko_name as neko_name',
-			'nekos.neko_date as neko_date',
-			'nekos.neko_type as neko_type',
-			'nekos.neko_dt as neko_dt',
-			'nekos.neko_flg as neko_flg',
-			'nekos.img_fn as img_fn',
-			'nekos.note as note',
-			'nekos.sort_no as sort_no',
-			'nekos.delete_flg as delete_flg',
-			'nekos.update_user_id as update_user_id',
-			'users.nickname as update_user',
-			'nekos.ip_addr as ip_addr',
-			'nekos.created_at as created_at',
-			'nekos.updated_at as updated_at',
-
-			// CBBXE
+				'nekos.id as id',
+				// CBBXS-6019
+				'nekos.neko_val as neko_val',
+				'nekos.neko_name as neko_name',
+				'nekos.neko_date as neko_date',
+				'nekos.neko_type as neko_type',
+				'nekos.neko_dt as neko_dt',
+				'nekos.neko_flg as neko_flg',
+				'nekos.img_fn as img_fn',
+				'nekos.note as note',
+				// CBBXE
+				'nekos.sort_no as sort_no',
+				'nekos.delete_flg as delete_flg',
+				'nekos.update_user_id as update_user_id',
+				'users.nickname as update_user',
+				'nekos.ip_addr as ip_addr',
+				'nekos.created_at as created_at',
+				'nekos.updated_at as updated_at',
+	
+				// CBBXE
 			);
 		
 		// メイン検索
 		if(!empty($searches['main_search'])){
-			$concat = DB::raw("CONCAT( IFNULL(nekos.neko_name, '') , IFNULL(nekos.note, '') ) ");
+			$concat = DB::raw("
+					CONCAT( 
+					/* CBBXS-6017 */
+					IFNULL(nekos.neko_name, '') , 
+					IFNULL(nekos.note, ''),
+					/* CBBXE */
+					''
+					 ) ");
 			$query = $query->where($concat, 'LIKE', "%{$searches['main_search']}%");
 		}
 		
@@ -175,27 +185,37 @@ class Neko extends CrudBase
 	 * @return object $query クエリビルダ
 	 */
 	private function addWheres($query, $searches){
-		
-		// CBBXS-3003
 
 		// id
 		if(!empty($searches['id'])){
 			$query = $query->where('nekos.id',$searches['id']);
 		}
+		
+		// CBBXS-6024
 
-		// neko_val
-		if(!empty($searches['neko_val'])){
-			$query = $query->where('nekos.neko_val',$searches['neko_val']);
+		// ネコ数値・範囲1
+		if(!empty($searches['neko_val1'])){
+			$query = $query->where('nekos.neko_val', '>=', $searches['neko_val1']);
+		}
+		
+		// ネコ数値・範囲2
+		if(!empty($searches['neko_val2'])){
+			$query = $query->where('nekos.neko_val', '<=', $searches['neko_val2']);
 		}
 
-		// neko_name
+		// ネコ名
 		if(!empty($searches['neko_name'])){
 			$query = $query->where('nekos.neko_name', 'LIKE', "%{$searches['neko_name']}%");
 		}
 
-		// neko_date
-		if(!empty($searches['neko_date'])){
-			$query = $query->where('nekos.neko_date',$searches['neko_date']);
+		// ネコ日付・範囲1
+		if(!empty($searches['neko_date1'])){
+			$query = $query->where('nekos.neko_date', '>=', $searches['neko_date1']);
+		}
+		
+		// ネコ日付・範囲2
+		if(!empty($searches['neko_date2'])){
+			$query = $query->where('nekos.neko_date', '>=', $searches['neko_date2']);
 		}
 
 		// 猫種別
@@ -217,6 +237,8 @@ class Neko extends CrudBase
 		if(!empty($searches['note'])){
 			$query = $query->where('nekos.note', 'LIKE', "%{$searches['note']}%");
 		}
+		
+		// CBBXE
 
 		// 順番
 		if(!empty($searches['sort_no'])){
@@ -249,8 +271,6 @@ class Neko extends CrudBase
 		if(!empty($searches['updated_at'])){
 			$query = $query->where('nekos.updated_at', '>=', $searches['updated_at']);
 		}
-
-		// CBBXE
 		
 		return $query;
 	}
