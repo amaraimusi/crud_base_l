@@ -346,7 +346,6 @@ function clickCopyBtn(btn){
  */
 function _showForm(row_index, inp_mode){
 	
-	
 	let ent = {};
 	if(inp_mode == 'create'){
 		// デフォルトエンティティを取得する
@@ -354,6 +353,8 @@ function _showForm(row_index, inp_mode){
 	}else if(inp_mode == 'edit' || inp_mode == 'copy'){
 		// メイン一覧テーブルの行インデックスに紐づく行からエンティティを取得する
 		ent = crudBase.getEntityByRowIndex(row_index);
+		console.log('ent');//■■■□□□■■■□□□
+		console.log(ent);//■■■□□□■■■□□□
 		
 	}else{
 		throw new Error('システムエラー23051109A');
