@@ -69,25 +69,28 @@ $cbh = new CrudBaseHelper($crudBaseData);
 			</div>
 			
 			
-			<!-- CBBXS-3007 -->
+			<!-- CBBXS-6090 -->
 			<div class="row">
 				<label for="neko_val" class="col-12 col-md-5 col-form-label">neko_val</label>
 				<div class="col-12 col-md-7">
 					<input name="neko_val" type="number"  class="form-control form-control-lg" placeholder="neko_val" value="{{old('neko_val', $ent->neko_val)}}">
 				</div>
 			</div>
+			
 			<div class="row">
 				<label for="neko_name" class="col-12 col-md-5 col-form-label">neko_name</label>
 				<div class="col-12 col-md-7">
 					<input name="neko_name" type="text"  class="form-control form-control-lg" placeholder="neko_name" value="{{old('neko_name', $ent->neko_name)}}" required  title="猫名を入力してください。">
 				</div>
 			</div>
+			
 			<div class="row">
 				<label for="neko_date" class="col-12 col-md-5 col-form-label">neko_date</label>
 				<div class="col-12 col-md-7">
 					<input name="neko_date" type="date"  class="form-control form-control-lg" placeholder="neko_date" value="{{old('neko_date', $ent->neko_date)}}">
 				</div>
 			</div>
+			
 			<div class="row">
 				<label for="neko_type" class="col-12 col-md-5 col-form-label">猫種別</label>
 				<div class="col-12 col-md-7">
@@ -100,12 +103,14 @@ $cbh = new CrudBaseHelper($crudBaseData);
 					</select>
 				</div>
 			</div>
+			
 			<div class="row">
 				<label for="neko_dt" class="col-12 col-md-5 col-form-label">neko_dt</label>
 				<div class="col-12 col-md-7">
 					<input name="neko_dt" type="text"  class="form-control form-control-lg" placeholder="neko_dt" value="{{old('neko_dt', $ent->neko_dt)}}" pattern="[0-9]{4}(-|/)[0-9]{1,2}(-|/)[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}" title="日時（Y-m-d H:i:s)を入力してください。(例  2012-12-12 12:12:12)">
 				</div>
 			</div>
+			
 			<div class="row">
 				<label for="neko_flg" class="col-12 col-md-5 col-form-label">ネコフラグ</label>
 				<div class="col-12 col-md-7">
@@ -115,6 +120,7 @@ $cbh = new CrudBaseHelper($crudBaseData);
 					</select>
 				</div>
 			</div>
+			
 			<div class="row">
 				<label class="col-12 col-md-5 col-form-label">画像ファイル名</label>
 				<div class="col-12 col-md-7">

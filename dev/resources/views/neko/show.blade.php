@@ -60,11 +60,11 @@ $cbh = new CrudBaseHelper($crudBaseData);
 			
 			<input type="hidden" name="id" value="{{old('id', $ent->id)}}" />
 			
-			<!-- CBBXS-3008 -->
 			<div class="row">
 				<label for="id" class="col-12 col-md-5 col-form-label">id</label>
 				<div class="col-12 col-md-7">{{ $ent-> id}}</div>
 			</div>
+			<!-- CBBXS-6008 -->
 			<div class="row">
 				<label for="neko_val" class="col-12 col-md-5 col-form-label">neko_val</label>
 				<div class="col-12 col-md-7">{{ $ent-> neko_val}}</div>
@@ -99,7 +99,6 @@ $cbh = new CrudBaseHelper($crudBaseData);
 					<div style="white-space:pre-wrap; word-wrap:break-word;">{{ $ent->note }}</div>
 				</div>
 			</div>
-
 			<!-- CBBXE -->
 
 			<div class="row">

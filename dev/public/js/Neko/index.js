@@ -135,8 +135,8 @@ function initClmShowHide(){
 	// 列毎に初期の列表示状態を設定する。
 	// -1:列切替対象外,  0:初期時はこの列を非表示, 1:最初からこの列は表示
 	let iniClmData = [
-		// CBBXS-3036
 		-1, // ID
+		// CBBXS-6036
 		1, // neko_val
 		1, // neko_name
 		1, // neko_date
@@ -145,14 +145,13 @@ function initClmShowHide(){
 		1, // ネコフラグ
 		1, // 画像ファイル名
 		1, // 備考
+		// CBBXE
 		0, // 順番
 		0, // 無効フラグ
 		0, // 更新者
 		0, // IPアドレス
 		0, // 生成日時
 		0, // 更新日
-
-		// CBBXE
 		-1 // ボタン列
 	];
 	
