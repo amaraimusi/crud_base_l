@@ -20,7 +20,6 @@
 
 	<div class="err text-danger"></div>
 	
-	<!-- CBBXS-2007 -->
 	
 	<input type="hidden" name="sort_no">
 	
@@ -31,6 +30,7 @@
 		</div>
 	</div>
 	
+	<!-- CBBXS-6007 -->
 	<div class="row mt-2">
 		<div class='col-md-2 ' >ネコ名</div>
 		<div class='col-md-10'>
@@ -54,7 +54,6 @@
 			<span class="text-danger" data-valid-err="neko_date" ></span>
 		</div>
 	</div>
-	
 	
 	<div class="row mt-2">
 		<div class='col-md-2' >ネコ種別 </div>
@@ -100,6 +99,16 @@
 	</div>
 	
 	<div class="row mt-2">
+		<div class='col-md-2' >備考 </div>
+		<div class='col-md-10'>
+			<textarea name="note" class="form-control form-control-lg " maxlength="2000" title="2000文字以内で入力してください" ></textarea>
+			<div class="text-danger" data-valid-err="note"></div>
+		</div>
+	</div>
+	
+	<!-- CBBXE -->
+	
+	<div class="row mt-2">
 		<div class='col-md-2' >削除</div>
 		<div class='col-md-10'>
 			<div class="form-check">
@@ -109,15 +118,6 @@
 		</div>
 	</div>
 	
-	<div class="row mt-2">
-		<div class='col-md-2' >備考 </div>
-		<div class='col-md-10'>
-			<textarea name="note" class="form-control form-control-lg " maxlength="2000" title="2000文字以内で入力してください" ></textarea>
-			<div class="text-danger" data-valid-err="note"></div>
-		</div>
-	</div>
-	
-	<!-- CBBXE -->
 
 	<div class="row">
 		<div class="col-md-3"></div>
