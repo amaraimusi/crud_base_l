@@ -215,7 +215,7 @@ class Neko extends CrudBase
 		
 		// ネコ日付・範囲2
 		if(!empty($searches['neko_date2'])){
-			$query = $query->where('nekos.neko_date', '>=', $searches['neko_date2']);
+			$query = $query->where('nekos.neko_date', '<=', $searches['neko_date2']);
 		}
 
 		// 猫種別
@@ -223,9 +223,16 @@ class Neko extends CrudBase
 			$query = $query->where('nekos.neko_type',$searches['neko_type']);
 		}
 
-		// neko_dt
+		// ネコ日時
 		if(!empty($searches['neko_dt'])){
-			$query = $query->where('nekos.neko_dt',$searches['neko_dt']);
+			$query = $query->where('nekos.neko_dt', '>=', $searches['neko_dt']);
+		}
+		
+		// ネコフラグ
+		if(!empty($searches['neko_flg']) || $searches['neko_flg'] ==='0' || $searches['neko_flg'] ===0){
+			if($searches['neko_flg'] != -1){
+				$query = $query->where('nekos.neko_flg',$searches['neko_flg']);
+			}
 		}
 
 		// 画像ファイル名
@@ -362,7 +369,7 @@ class Neko extends CrudBase
 	}
 	
 	
-	// CBBXS-3021
+	// CBBXS-6029
 	/**
 	 *  ネコ種別リストを取得する
 	 *  @return [] ネコ種別リスト

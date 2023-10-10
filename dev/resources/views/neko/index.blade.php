@@ -64,7 +64,7 @@ $cbh = new CrudBaseHelper($crudBaseData);
 		
 			<div><?php echo $cbh->searchFormId(); ?></div>
 			
-			<!-- CBBXS-5030 -->
+			<!-- CBBXS-6030 -->
 			<div><?php echo $cbh->searchFormIntRange('neko_val', 'ネコ数値'); ?></div>
 			<div><?php echo $cbh->searchFormText('neko_name', 'ネコ名', ['pattern'=>'[\u30A1-\u30FF]+', 'err_msg'=>'👈%display_nameはカタカナのみ入力可能です。']); ?></div>
 			<div><?php echo $cbh->searchFormDateRng('neko_date', 'ネコ日付'); ?></div>
@@ -125,32 +125,32 @@ $cbh = new CrudBaseHelper($crudBaseData);
 <table id="main_tbl" class="table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
-			<!-- CBBXS-3035 -->
-			<th data-field='id'>{!! $cbh->sortLink($searches, 'neko', 'id', 'id') !!}</th>
-			<th data-field='neko_val'>{!! $cbh->sortLink($searches, 'neko', 'neko_val', 'ネコ数値') !!}</th>
-			<th data-field='neko_name'>{!! $cbh->sortLink($searches, 'neko', 'neko_name', 'ネコ名') !!}</th>
-			<th data-field='neko_date'>{!! $cbh->sortLink($searches, 'neko', 'neko_date', 'ネコ日付') !!}</th>
-			<th data-field='neko_type'>{!! $cbh->sortLink($searches, 'neko', 'neko_type', '猫種別') !!}</th>
-			<th data-field='neko_dt'>{!! $cbh->sortLink($searches, 'neko', 'neko_dt', 'ネコ日時') !!}</th>
-			<th data-field='neko_flg'>{!! $cbh->sortLink($searches, 'neko', 'neko_flg', 'ネコフラグ') !!}</th>
-			<th data-field='img_fn'>{!! $cbh->sortLink($searches, 'neko', 'img_fn', '画像ファイル名') !!}</th>
-			<th data-field='note'>{!! $cbh->sortLink($searches, 'neko', 'note', '備考') !!}</th>
-			<th data-field='sort_no'>{!! $cbh->sortLink($searches, 'neko', 'sort_no', '順番') !!}</th>
-			<th data-field='delete_flg'>{!! $cbh->sortLink($searches, 'neko', 'delete_flg', '無効フラグ') !!}</th>
-			<th data-field='update_user'>{!! $cbh->sortLink($searches, 'neko', 'update_user', '更新者') !!}</th>
-			<th data-field='ip_addr'>{!! $cbh->sortLink($searches, 'neko', 'ip_addr', 'IPアドレス') !!}</th>
-			<th data-field='created_at'>{!! $cbh->sortLink($searches, 'neko', 'created_at', '生成日時') !!}</th>
-			<th data-field='updated_at'>{!! $cbh->sortLink($searches, 'neko', 'updated_at', '更新日') !!}</th>
-
+			<th data-field='id'><?php echo $cbh->sortLink($searches, 'neko', 'id', 'ID'); ?></th>
+			<!-- CBBXS-6035 -->
+			<th data-field='neko_val'><?php echo $cbh->sortLink($searches, 'neko', 'neko_val', 'ネコ数値'); ?></th>
+			<th data-field='neko_name'><?php echo $cbh->sortLink($searches, 'neko', 'neko_name', 'ネコ名'); ?></th>
+			<th data-field='neko_date'><?php echo $cbh->sortLink($searches, 'neko', 'neko_date', 'ネコ日付'); ?></th>
+			<th data-field='neko_type'><?php echo $cbh->sortLink($searches, 'neko', 'neko_type', '猫種別'); ?></th>
+			<th data-field='neko_dt'><?php echo $cbh->sortLink($searches, 'neko', 'neko_dt', 'ネコ日時'); ?></th>
+			<th data-field='neko_flg'><?php echo $cbh->sortLink($searches, 'neko', 'neko_flg', 'ネコフラグ'); ?></th>
+			<th data-field='img_fn'><?php echo $cbh->sortLink($searches, 'neko', 'img_fn', '画像ファイル名'); ?></th>
+			<th data-field='note'><?php echo $cbh->sortLink($searches, 'neko', 'note', '備考'); ?></th>
 			<!-- CBBXE -->
+			<th data-field='sort_no'><?php echo $cbh->sortLink($searches, 'neko', 'sort_no', '順番'); ?></th>
+			<th data-field='delete_flg'><?php echo $cbh->sortLink($searches, 'neko', 'delete_flg', '無効フラグ'); ?></th>
+			<th data-field='update_user_id'><?php echo $cbh->sortLink($searches, 'neko', 'update_user_id', '更新者'); ?></th>
+			<th data-field='ip_addr'><?php echo $cbh->sortLink($searches, 'neko', 'ip_addr', 'IPアドレス'); ?></th>
+			<th data-field='created_at'><?php echo $cbh->sortLink($searches, 'neko', 'created_at', '生成日時'); ?></th>
+			<th data-field='updated_at'><?php echo $cbh->sortLink($searches, 'neko', 'updated_at', '更新日'); ?></th>
+
 			<th class='js_btns' 'style="width:280px"></th>
 		</tr>
 	</thead>
 	<tbody>
 		@foreach ($data as $ent)
 			<tr>
-				<!-- CBBXS-3005 -->
 				<td>{!! $cbh->tdId($ent->id) !!}</td>
+				<!-- CBBXS-6040 -->
 				<td>{!! $cbh->tdUnit($ent->neko_val, 'neko_val', null, 'cm') !!}</td>
 				<td>{{$ent->neko_name}}</td>
 				<td>{!! $cbh->tdDate($ent->neko_date) !!}</td>
@@ -159,6 +159,7 @@ $cbh = new CrudBaseHelper($crudBaseData);
 				<td>{!! $cbh->tdFlg($ent->neko_flg) !!}</td>
 				<td>{!! $cbh->tdImg($ent, 'img_fn') !!}</td>
 				<td>{!! $cbh->tdNote($ent->note, 'note', 30) !!}</td>
+				<!-- CBBXE -->
 				<td>{{$ent->sort_no}}</td>
 				<td>{!! $cbh->tdDeleteFlg($ent->delete_flg) !!}</td>
 				<td>{{$ent->update_user}}</td>
@@ -166,7 +167,6 @@ $cbh = new CrudBaseHelper($crudBaseData);
 				<td>{{$ent->created_at}}</td>
 				<td>{{$ent->updated_at}}</td>
 
-				<!-- CBBXE -->
 				<td>
 
 					{!! $cbh->rowExchangeBtn($searches) !!}<!-- 行入替ボタン -->
