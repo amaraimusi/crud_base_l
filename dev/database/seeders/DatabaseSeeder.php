@@ -12,11 +12,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+    	// 各シーダークラスを実行する順序で呼び出す
+    	$this->call([
+    			RichmenusTableSeeder::class,
+    			RichmenuAreasTableSeeder::class,
+    	]);
     }
 }
