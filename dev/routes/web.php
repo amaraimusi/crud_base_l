@@ -104,3 +104,6 @@ Route::post('user_mng/disabled', 'App\Http\Controllers\UserMngController@disable
 Route::post('user_mng/destroy', 'App\Http\Controllers\UserMngController@destroy');
 Route::get('user_mng/csv_download', 'App\Http\Controllers\UserMngController@csv_download');
 
+Route::get('demo', 'App\Http\Controllers\DemoController@index');
+Route::post('demo/spa_demo', 'App\Http\Controllers\DemoController@spa_demo');
+
