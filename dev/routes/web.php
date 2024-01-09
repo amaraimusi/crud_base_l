@@ -104,6 +104,11 @@ Route::post('user_mng/disabled', 'App\Http\Controllers\UserMngController@disable
 Route::post('user_mng/destroy', 'App\Http\Controllers\UserMngController@destroy');
 Route::get('user_mng/csv_download', 'App\Http\Controllers\UserMngController@csv_download');
 
+// AWSテスト
+Route::get('aws', 'App\Http\Controllers\AwsController@index');
+Route::post('aws_post', 'App\Http\Controllers\AwsController@index');
+Route::get('aws/test2', 'App\Http\Controllers\AwsController@test2');
+
 Route::get('demo', 'App\Http\Controllers\DemoController@index');
 Route::post('demo/spa_demo', 'App\Http\Controllers\DemoController@spa_demo');
 
