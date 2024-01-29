@@ -140,6 +140,13 @@
 
 		</div><!--  row -->
 		
+		
+		<div class="row" style="margin-top:20px;">
+			<ol>
+				<li><a href="line_demo">LINE デモ</a></li>
+			</ol>
+		</div>
+		
 	</div>
 
 </div><!-- container-fluid -->

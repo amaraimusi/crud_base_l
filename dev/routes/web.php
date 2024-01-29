@@ -91,6 +91,10 @@ Route::post('big_cat/ajax_pwms', 'App\Http\Controllers\BigCatController@ajax_pwm
 Route::get('big_cat/csv_download', 'App\Http\Controllers\BigCatController@csv_download');
 Route::post('big_cat/bulk_reg', 'App\Http\Controllers\BigCatController@bulk_reg');
 
+// LINEデモ
+Route::get('line_demo', 'App\Http\Controllers\LineDemoController@index');
+Route::get('line_demo/audience', 'App\Http\Controllers\LineDemoController@audience');
+
 
 // ユーザー管理画面
 Route::get('user_mng', 'App\Http\Controllers\UserMngController@index');
