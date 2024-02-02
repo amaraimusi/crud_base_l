@@ -94,6 +94,8 @@ Route::post('big_cat/bulk_reg', 'App\Http\Controllers\BigCatController@bulk_reg'
 // LINEデモ
 Route::get('line_demo', 'App\Http\Controllers\LineDemoController@index');
 Route::get('line_demo/audience', 'App\Http\Controllers\LineDemoController@audience');
+Route::post('line_demo/audience_reg', 'App\Http\Controllers\LineDemoController@audience_reg');
+Route::post('line_demo/audience_list', 'App\Http\Controllers\LineDemoController@audience_list');
 
 
 // ユーザー管理画面

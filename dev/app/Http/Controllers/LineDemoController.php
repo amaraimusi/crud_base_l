@@ -51,21 +51,80 @@ class LineDemoController extends CrudBaseController{
 		
 	}
 	
-	/**
-	 * SPA型・入力フォームの登録アクション | 新規入力アクション、編集更新アクション、複製入力アクションに対応しています。
-	 * @return string
-	 */
-	public function regAction(){
+	
+	public function audience_list(){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
 		if(\Auth::id() == null) return redirect('login');
 		
 		$json=$_POST['key1'];
+		$param = json_decode($json, true);
 		
-		$res = json_decode($json,true);
+		$accessToken = $param['access_token']; // LINEのアクセストークン
+		$url = 'https://api.line.me/v2/bot/audienceGroup/list';
+		
+		$headers = [
+				'Authorization: Bearer ' . $accessToken,
+				'Content-Type: application/json'
+		];
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		
+		$response = curl_exec($ch);
+		curl_close($ch);
+		
+		dump($response);//■■■□□□■■■□□□)
+		
+		$json = json_encode($response, JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS);
+		$param = json_decode($json, true);
+		
+	}
+	
+
+	public function audience_reg(){
+
+		// ログアウトになっていたらログイン画面にリダイレクト
+		if(\Auth::id() == null) return redirect('login');
+
+		$json=$_POST['key1'];
+		
+		$param = json_decode($json, true);
 		
 		
-		$json = json_encode($res, JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS);
+		$accessToken = $param['access_token']; // LINEのアクセストークン
+		$url = 'https://api.line.me/v2/bot/audienceGroup/upload';
+		
+		$headers = [
+				'Authorization: Bearer ' . $accessToken,
+				'Content-Type: application/json'
+		];
+		
+		$data = [
+				'description' => 'Test02',
+				'isIfaAudience' => false,
+				'audiences' => [
+// 						['id' => 'USER_ID_1'],
+// 						['id' => 'USER_ID_2'],
+// 						// 他のユーザーIDを追加...
+				],
+		];
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		
+		$response = curl_exec($ch);
+		curl_close($ch);
+		
+		dump($response);//■■■□□□■■■□□□)
+
+		$json = json_encode($response, JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS);
 		
 		return $json;
 	}

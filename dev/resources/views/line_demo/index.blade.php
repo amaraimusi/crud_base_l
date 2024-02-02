@@ -12,7 +12,7 @@
 
 		<div>
 			<ol>
-				<li><a href="audience">オーディエンス一覧/登録</a></li>
+				<li><a href="line_demo/audience">オーディエンス一覧/登録</a></li>
 			</ol>
 		</div>
     	
