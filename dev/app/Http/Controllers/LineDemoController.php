@@ -94,6 +94,13 @@ class LineDemoController extends CrudBaseController{
 		
 		$param = json_decode($json, true);
 		
+
+		$description = $param['description']; // オーディエンス名
+		$isIfaAudience = $param['isIfaAudience']; // IFAフラグ
+		$uploadDescription = $param['uploadDescription']; // ジョブ説明
+		$audiences = $param['audiences']; // ユーザー名リスト
+
+		
 		
 		$accessToken = $param['access_token']; // LINEのアクセストークン
 		$url = 'https://api.line.me/v2/bot/audienceGroup/upload';
@@ -104,8 +111,8 @@ class LineDemoController extends CrudBaseController{
 		];
 		
 		$data = [
-				'description' => 'Test02',
-				'isIfaAudience' => false,
+				'description' => $description,
+				'isIfaAudience' => $isIfaAudience,
 				'audiences' => [
 // 						['id' => 'USER_ID_1'],
 // 						['id' => 'USER_ID_2'],

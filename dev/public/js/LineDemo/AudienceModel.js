@@ -134,7 +134,10 @@ class AudienceModel{
 				return;
 			}
 				
-			console.log(res);
+			let data = res.audienceData.audienceGroups;
+			console.log(data);
+			
+			this._showAudienceList(data);
 
 		}).fail((xhr, status, errorThrown) => {
 		
@@ -146,6 +149,49 @@ class AudienceModel{
 			$('#err').html(xhr.responseText);
 			
 		});
+		
+	}
+	
+	
+	_showAudienceList(data){
+		if(!data) return;
+		
+		let html = this._createHtmlTable(data);
+		$('#audience_list').html(html);
+		
+	}
+	
+	_createHtmlTable(data){
+		
+		if(data.length==0){
+			return "";
+		}
+		
+		var html = "<table class='table'>";
+		
+		// 0件目のエンティティからtheadを作成
+		html += "<thead><tr>";
+	
+		var ent0 = data[0];
+		for(var field in ent0){
+			html += "<th>" + field + "</th>";
+		}
+		html += "</tr></thead>";
+		
+		// tbodyの部分を作成
+		for(var i in data){
+			var ent = data[i];
+			html += "<tr>";
+			for(var f in ent){
+				html += "<td>" + ent[f] + "</td>"
+			}
+			html += "</tr>";
+			
+		}
+		
+		html+= "</table>";
+	
+		return html;
 		
 	}
 	
