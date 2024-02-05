@@ -76,10 +76,11 @@ class LineDemoController extends CrudBaseController{
 		$response = curl_exec($ch);
 		curl_close($ch);
 		
-		dump($response);//■■■□□□■■■□□□)
-		
-		$json = json_encode($response, JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS);
-		$param = json_decode($json, true);
+		$audienceData=json_decode($response, true);//JSONデコード
+		$res = ['audienceData' => $audienceData];
+
+		$json = json_encode($res, JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS);
+		return $json;
 		
 	}
 	

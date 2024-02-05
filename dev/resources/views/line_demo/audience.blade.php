@@ -31,10 +31,8 @@ $ver_str = '?=1.0.0';
 		
 		<div>
 			<div><button type="button" onclick="audience_list()" class="btn btn-primary">一覧</button></div>
-			<table id="tbl_list">
-				<thead><tr><th>xxx</th></tr></thead>
-				<tbody></tbody>
-			</table>
+			<div id="audience_list"></div>
+
 		</div>
 		
 		<div>
