@@ -13,6 +13,7 @@
 		<div>
 			<ol>
 				<li><a href="line_demo/audience">オーディエンス一覧/登録</a></li>
+				<li><a href="line_demo/friends_list">友だちユーザー一覧</a></li>
 			</ol>
 		</div>
     	

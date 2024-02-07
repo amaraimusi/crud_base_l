@@ -96,6 +96,8 @@ Route::get('line_demo', 'App\Http\Controllers\LineDemoController@index');
 Route::get('line_demo/audience', 'App\Http\Controllers\LineDemoController@audience');
 Route::post('line_demo/audience_reg', 'App\Http\Controllers\LineDemoController@audience_reg');
 Route::post('line_demo/audience_list', 'App\Http\Controllers\LineDemoController@audience_list');
+Route::get('line_demo/friends_list', 'App\Http\Controllers\LineDemoController@friends_list');
+Route::post('line_demo/get_friends_list', 'App\Http\Controllers\LineDemoController@get_friends_list');
 
 
 // ユーザー管理画面
