@@ -168,7 +168,7 @@ class NekoController extends CrudBaseController{
 		
 		
 
-		// CBBXS-XXXX
+		// CBBXS-6004
 		$model->neko_val = $ent['neko_val']; // neko_val
 		$model->neko_name = $ent['neko_name']; // neko_name
 		$model->neko_date = $ent['neko_date']; // neko_date
