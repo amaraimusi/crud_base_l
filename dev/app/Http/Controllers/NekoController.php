@@ -20,6 +20,9 @@ class NekoController extends CrudBaseController{
 	// 画面のバージョン → 開発者はこの画面を修正したらバージョンを変更すること。バージョンを変更するとキャッシュやセッションのクリアが自動的に行われます。
 	public $this_page_version = '1.0.1';
 	
+	private $def_sort = 'sort_no'; // デフォルトソートフィールド
+	private $def_desc = 0; // デフォールトソート向き 0:昇順, 1:降順
+	
 	/**
 	 * indexページのアクション
 	 *
@@ -83,6 +86,10 @@ class NekoController extends CrudBaseController{
 			// リクエストのパラメータが空かつ新バージョンフラグがOFFである場合、セッション検索データを検索データにセットする
 			$searches = $sesSearches;
 		}
+		
+		// デフォルトソート情報をセットする
+		if($searches['sort'] === null) $searches['sort'] = $this->def_sort;
+		if($searches['desc'] === null) $searches['desc'] = $this->def_desc;
 
 		$searches['this_page_version'] = $this->this_page_version; // 画面バージョン
 		$searches['new_version'] = $new_version; // 新バージョンフラグ
