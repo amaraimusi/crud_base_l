@@ -1,4 +1,4 @@
-<?php
+.;,/<?php
 
 namespace App\Http\Controllers;
 
@@ -15,7 +15,11 @@ use App\Consts\ConstCrudBase;
  * @author amaraimusi
  *
  */
-class NekoController extends CrudBaseController{
+ 
+ 
+ 
+ 
+class NekoController extends CrudBaseController{1111
 	
 	// 画面のバージョン → 開発者はこの画面を修正したらバージョンを変更すること。バージョンを変更するとキャッシュやセッションのクリアが自動的に行われます。
 	public $this_page_version = '1.0.1';
