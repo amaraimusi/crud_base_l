@@ -21,8 +21,8 @@ backupディレクトリにsqlファイルがいくつかあるので最新のsq
 
 ```
 ssh -l amaraimusi amaraimusi.sakura.ne.jp
-cd www/crud_base_l
-ln -s  /home/amaraimusi/www/mng/crud_base_l/dev/public
+cd www
+ln -s  /home/amaraimusi/www/mng/crud_base_l/dev/public crud_base_l
 ```
 
 ⑤ 確認

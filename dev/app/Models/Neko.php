@@ -378,7 +378,8 @@ class Neko extends CrudBase
 		
 		$query = DB::table('neko_types')->
 		   select(['id', 'neko_type_name'])->
-		   where('delete_flg',0);
+		   where('delete_flg',0)->
+		   orderBy('sort_no', 'asc');
 		
 		$res = $query->get();
 		$list = [];

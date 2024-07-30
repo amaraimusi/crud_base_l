@@ -1,4 +1,4 @@
-.;,/<?php
+<?php
 
 namespace App\Http\Controllers;
 
@@ -19,7 +19,7 @@ use App\Consts\ConstCrudBase;
  
  
  
-class NekoController extends CrudBaseController{1111
+class NekoController extends CrudBaseController{
 	
 	// 画面のバージョン → 開発者はこの画面を修正したらバージョンを変更すること。バージョンを変更するとキャッシュやセッションのクリアが自動的に行われます。
 	public $this_page_version = '1.0.1';
@@ -247,7 +247,7 @@ class NekoController extends CrudBaseController{1111
 		// 複製元のエンティティが空であれば、通常の新規入力になる。新規入力のデフォルト値をセットする。
 		if($ent==null){
 			$ent = $model->get();
-			// CBBXS-4002
+			// CBBXS-6006
 			$ent->neko_val= '';
 			$ent->neko_name= '';
 			$ent->neko_date= '';
@@ -284,7 +284,7 @@ class NekoController extends CrudBaseController{1111
 				'this_page_version'=>$this->this_page_version,
 				'crudBaseData' => $crudBaseData,
 				
-		    	// CBBXS-3037B
+		    	// CBBXS-6010
 		    	'nekoTypeList'=>$nekoTypeList,
 		    	// CBBXE
 			
@@ -321,7 +321,7 @@ class NekoController extends CrudBaseController{1111
 		
 		
 		$model = new Neko();
-		// CBBXS-3032
+		// CBBXS-6032
 		$model->neko_val = $request->neko_val; // neko_val
 		$model->neko_name = $request->neko_name; // neko_name
 		$model->neko_date = $request->neko_date; // neko_date
@@ -376,7 +376,7 @@ class NekoController extends CrudBaseController{1111
 		
 		$ent = Neko::find($id);
 		
-		// CBBXS-3037
+		// CBBXS-6037
 		$nekoTypeList = $model->getNekoTypeList(); // ネコ種別リスト
 		// CBBXE
 		
@@ -423,7 +423,7 @@ class NekoController extends CrudBaseController{1111
 	
 		$ent = Neko::find($id);
 		
-		// CBBXS-3038
+		// CBBXS-6068
 		$nekoTypeList = $model->getNekoTypeList(); // ネコ種別リスト
 		// CBBXE
 		
@@ -441,7 +441,7 @@ class NekoController extends CrudBaseController{1111
 				'this_page_version'=>$this->this_page_version,
 				'crudBaseData'=>$crudBaseData,
 				
-			    // CBBXS-3038B
+			    // CBBXS-6039
 			    'nekoTypeList'=>$nekoTypeList,
 				// CBBXE
 			
@@ -480,7 +480,7 @@ class NekoController extends CrudBaseController{1111
 
 		$model->id = $request->id;
 		
-		// CBBXS-3033
+		// CBBXS-6033
 		$model->neko_val = $request->neko_val; // neko_val
 		$model->neko_name = $request->neko_name; // neko_name
 		$model->neko_date = $request->neko_date; // neko_date
