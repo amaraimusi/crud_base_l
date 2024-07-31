@@ -513,7 +513,7 @@ class NekoController extends CrudBaseController{
 	 * 削除/削除取消アクション(無効/有効アクション）
 	 */
 	public function disabled(){
-		
+
 		// ログアウトになっていたらログイン画面にリダイレクト
 		if(\Auth::id() == null) return redirect('login');
 		
@@ -522,6 +522,7 @@ class NekoController extends CrudBaseController{
 		$json=$_POST['key1'];
 		
 		$param = json_decode($json,true);//JSON文字を配列に戻す
+
 		$id = $param['id'];
 		$action_flg =  $param['action_flg'];
 
