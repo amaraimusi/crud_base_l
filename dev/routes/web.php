@@ -120,3 +120,17 @@ Route::get('aws/test2', 'App\Http\Controllers\AwsController@test2');
 Route::get('demo', 'App\Http\Controllers\DemoController@index');
 Route::post('demo/spa_demo', 'App\Http\Controllers\DemoController@spa_demo');
 
+// 有名猫管理画面
+Route::get('famous_cat', 'App\Http\Controllers\FamousCatController@index');
+Route::post('famous_cat/reg_action', 'App\Http\Controllers\FamousCatController@regAction');
+Route::get('famous_cat/create', 'App\Http\Controllers\FamousCatController@create');
+Route::post('famous_cat/store', 'App\Http\Controllers\FamousCatController@store');
+Route::get('famous_cat/show', 'App\Http\Controllers\FamousCatController@show');
+Route::get('famous_cat/edit', 'App\Http\Controllers\FamousCatController@edit');
+Route::post('famous_cat/update', 'App\Http\Controllers\FamousCatController@update');
+Route::post('famous_cat/auto_save', 'App\Http\Controllers\FamousCatController@auto_save');
+Route::post('famous_cat/disabled', 'App\Http\Controllers\FamousCatController@disabled');
+Route::post('famous_cat/destroy', 'App\Http\Controllers\FamousCatController@destroy');
+Route::get('famous_cat/csv_download', 'App\Http\Controllers\FamousCatController@csv_download');
+Route::post('famous_cat/ajax_pwms', 'App\Http\Controllers\FamousCatController@ajax_pwms');
+
