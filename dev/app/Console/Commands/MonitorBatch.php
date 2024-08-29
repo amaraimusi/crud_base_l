@@ -66,14 +66,14 @@ class MonitorBatch extends Command
 			// 「storage/famous_cat」を中身のファイルごと削除する
 			$rm_dir = public_path('storage/famous_cat');
 			if (is_dir($rm_dir)) {
-				$this->rmdirEx($rm_dir);
+				CrudBase::rmdirEx($rm_dir);
 				$this->info("リソースの画像を一旦削除しました");
 			}
 			
 			// 「rsc/repare/famous_cat」ディレクトリを「storage」ディレクトリにコピーする
 			$source_dir = public_path('rsc/repare/famous_cat');
 			$dest_dir = public_path('storage/famous_cat');
-			$this->copyDirEx($source_dir, $dest_dir);
+			CrudBase::copyDirEx($source_dir, $dest_dir);
 			$this->info("リソースの画像を復元しました。");
 			
 			$newCatCount = DB::table('famous_cats')->count();
@@ -149,107 +149,6 @@ class MonitorBatch extends Command
 	}
 	
 	
-    /**
-     * 指定したディレクトリを再帰的に削除するメソッド
-     * 
-     * @param string $dir 削除対象のディレクトリのパス
-     * @throws InvalidArgumentException
-     */
-    public function rmdirEx($dir)
-    {
-        if (!is_dir($dir)) {
-            return;
-        }
-
-        $this->deleteDirectoryContents($dir);
-
-        // 最後にディレクトリ自体を削除
-        rmdir($dir);
-    }
-
-    /**
-     * ディレクトリの中身を再帰的に削除する
-     * 
-     * @param string $dir
-     */
-    private function deleteDirectoryContents($dir)
-    {
-        $items = scandir($dir);
-
-        foreach ($items as $item) {
-            if ($item === '.' || $item === '..') {
-                continue;
-            }
-
-            $path = $dir . DIRECTORY_SEPARATOR . $item;
-
-            if (is_dir($path)) {
-                // サブディレクトリの場合、再帰的に削除
-                $this->rmdirEx($path);
-            } else {
-                // パーミッションを変更してファイルを削除
-                if (!is_writable($path)) {
-                    chmod($path, 0666);
-                }
-                unlink($path);
-            }
-        }
-    }
-	
-	
-	 /**
-     * 再帰的にディレクトリをコピーするメソッド
-     *
-     * @param string $sourceDir コピー元のディレクトリパス
-     * @param string $destDir コピー先のディレクトリパス
-     * @return bool コピーが成功した場合は true、失敗した場合は false
-     */
-    public function copyDirEx(string $sourceDir, string $destDir): bool
-    {
-        // コピー元のディレクトリが存在しない場合、falseを返す
-        if (!is_dir($sourceDir)) {
-            return false;
-        }
-
-        // コピー先のディレクトリが存在しない場合、作成する
-        if (!is_dir($destDir)) {
-            mkdir($destDir, 0755, true);
-        }
-
-        // ディレクトリハンドルを開く
-        $dirHandle = opendir($sourceDir);
-        if ($dirHandle === false) {
-            return false;
-        }
-
-        // ディレクトリ内のファイルやフォルダをループ
-        while (($file = readdir($dirHandle)) !== false) {
-            if ($file === '.' || $file === '..') {
-                continue;
-            }
-
-            $sourcePath = $sourceDir . DIRECTORY_SEPARATOR . $file;
-            $destPath = $destDir . DIRECTORY_SEPARATOR . $file;
-
-            if (is_dir($sourcePath)) {
-                // 再帰的にディレクトリをコピー
-                if (!$this->copyDirEx($sourcePath, $destPath)) {
-                    closedir($dirHandle);
-                    return false;
-                }
-            } else {
-                // ファイルをコピー
-                if (!copy($sourcePath, $destPath)) {
-                    closedir($dirHandle);
-                    return false;
-                }
-            }
-        }
-
-        // ディレクトリハンドルを閉じる
-        closedir($dirHandle);
-        return true;
-    }
 		
 		
 		
