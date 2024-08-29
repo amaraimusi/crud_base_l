@@ -87,7 +87,7 @@
 						<div class="card_msg">
 							<p class="card-text" style="height:120px">SPA型管理画面の見本です。</p>
 						</div>
-						<a href="{{url('big_cat')}}" class="btn btn-primary">ページへ移動</a>
+						<a href="{{url('famous_cat')}}" class="btn btn-primary">ページへ移動</a>
 					</div>
 				</div>
 			</div>

@@ -1321,7 +1321,7 @@ class FileUploadK{
 		}
 		
 		else if(valid_ext == 'image'){
-			validExts = ['jpg','jpeg','png','gif','bpg','svg','pdf'];
+			validExts = ['jpg','jpeg','png','gif','bpg','svg','pdf','jfif','webp'];
 		}
 		
 		else if(valid_ext == 'audio'){
@@ -1335,7 +1335,7 @@ class FileUploadK{
 		else if(valid_ext == 'often_use'){
 			validExts = [
 				'pdf',
-				'jpg','jpeg','png','gif','bpg', 'tif', 'tiff','svg',
+				'jpg','jpeg','png','gif','bpg', 'tif', 'tiff','svg','jfif','webp',
 				'zip','lzh', 'tar',
 				'xls', 'xlsx', 'doc', 'docx',
 				'txt', 'csv', 'xml', 
@@ -1489,6 +1489,8 @@ class FileUploadK{
 		map['jar'] = 'application/java-archive';
 		map['jpeg'] = 'image/jpeg';
 		map['jpg'] = 'image/jpeg';
+		map['jfif'] = 'image/jpeg';
+		map['webp'] = 'image/webp';
 		map['js'] = 'application/javascript';
 		map['json'] = 'application/json';
 		map['mid'] = 'audio/midi audio/x-midi';

@@ -210,8 +210,8 @@ class FamousCatController extends CrudBaseController{
 		$exist_img_fn = $existEnt['img_fn'] ?? '';
 		$fRes = $fileUploadK->uploadForSpa('famous_cat', $_FILES, $ent, 'img_fn', $front_img_fn, $exist_img_fn);
 		if($fRes['db_reg_flg']){
-			$ent['img_fn'] = $fRes['reg_fp'];
-			$ent = $model->save('famous_cats', $ent); // DBへ登録（INSERT、UPDATE兼用）
+			$model->img_fn = $fRes['reg_fp'];
+			$model->save();
 		}
 
 		// CBBXE
