@@ -50,7 +50,25 @@ php composer.phar require laravel/ui
 04_upload_env.sh
 ```
 
+## CRON用のバッチコマンド
 
+有名猫画面のデータを復元するコマンド
+
+```
+php artisan app:monitor-batch
+```
+
+上記のコマンドをさくらサーバーに設定する場合
+
+```
+cd www/mng/crud_base_l/dev; php artisan app:monitor-batch
+```
+
+### venderのCrudBaseを更新するコマンド
+
+```
+php composer.phar update amaraimusi/CrudBase
+```
 
 
 
