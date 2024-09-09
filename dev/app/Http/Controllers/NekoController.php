@@ -105,15 +105,20 @@ class NekoController extends CrudBaseController{
 		
 		$model = new Neko();
 		$fieldData = $model->getFieldData();
-		$data = $model->getData($searches, ['def_per_page' => $def_per_page]);
-		$data_count = $data->total(); //　LIMIT制限を受けていないデータ件数
+		$listData = $model->getData($searches, ['def_per_page' => $def_per_page]);
+		$data_count = $listData->total(); //　LIMIT制限を受けていないデータ件数
+		
+		$data = [];
+		foreach($listData as $rEnt){
+			$data[] = (array)$rEnt;
+		}
 		
 		// CBBXS-6001
 		$nekoTypeList = $model->getNekoTypeList(); // ネコ種別リスト
         // CBBXE
         
 		$crudBaseData = [
-				'list_data'=>$data,
+				'data' => $data,
 				'data_count'=>$data_count,
 				'searches'=>$searches,
 				'userInfo'=>$userInfo,
@@ -131,7 +136,7 @@ class NekoController extends CrudBaseController{
 		];
         
 		return view('neko.index', [
-			    'data'=>$data,
+			    'listData'=>$listData,
 			    'searches'=>$searches,
 				'userInfo'=>$userInfo,
 				'fieldData'=>$fieldData,
@@ -586,7 +591,7 @@ class NekoController extends CrudBaseController{
 		$json=$_POST['key1'];
 		
 		$data = json_decode($json,true);//JSON文字を配列に戻す
-		
+
 		$model = new Neko();
 		$model->saveAll($data);
 

@@ -30,7 +30,7 @@ class RowExchange{
 		if(this.tbl == null){
 			this.tbl = jQuery('#' + tbl_xid);
 		}
-		
+
 		this.data = data;
 		
 		// テーブルセレクタからフォームセレクタを作成する
@@ -204,6 +204,7 @@ class RowExchange{
 		
 		// 順番を入れ替える
 		let sort_no1 = this.data[from_index]['sort_no'];
+		// 順番を入れ替える
 		let sort_no2 = this.data[to_index]['sort_no'];
 		this.data[from_index]['sort_no'] = sort_no2;
 		this.data[to_index]['sort_no'] = sort_no1;

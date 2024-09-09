@@ -27,7 +27,7 @@ $(()=>{
     crudBaseData = JSON.parse(crud_base_json);
     data = crudBaseData.data;
     searches = crudBaseData.searches;
-    
+
 	// CRUD支援オブジェクト
 	crudBase = new CrudBase4(crudBaseData,{
 		'main_tbl_slt': '#main_tbl', // メイン一覧テーブル ←メイン一覧である<table>のセレクタ。

@@ -115,14 +115,13 @@ $cbh = new CrudBaseHelper($crudBaseData);
 	</div>
 	
 	<div class="tool_btn_w">
-		<a href="famous_cat/create" class="btn btn-success">新規登録・MPA型</a>
-		<button type="button" class="btn btn-success" onclick="clickCreateBtn();">新規登録・SPA型</button>
+		<button type="button" class="btn btn-success" onclick="clickCreateBtn();">新規登録</button>
 	</div>
 </div>
 
 <div id="auto_save" class="text-success"></div><!-- 自動保存のメッセージ表示区分 -->
 
-<div class="d-flex" style="margin-top:12px;">{{$data->appends(request()->query())->links('layouts.pagenatoin_b5')}} </div><!-- ページネーション -->
+<div class="d-flex" style="margin-top:12px;">{{$listData->appends(request()->query())->links('layouts.pagenatoin_b5')}} </div><!-- ページネーション -->
 
 <table id="main_tbl" class="table table-striped table-bordered table-condensed">
 	<thead>
@@ -150,7 +149,7 @@ $cbh = new CrudBaseHelper($crudBaseData);
 		</tr>
 	</thead>
 	<tbody>
-		@foreach ($data as $ent)
+		@foreach ($listData as $ent)
 			<tr>
 				<td>{!! $cbh->tdId($ent->id) !!}</td>
 				<!-- CBBXS-6040 -->
@@ -177,8 +176,6 @@ $cbh = new CrudBaseHelper($crudBaseData);
 					<a href="famous_cat/show?id={{$ent->id}}" class="row_detail_btn btn btn-info btn-sm text-light ">詳細</a>
 					<button type="button" class="row_edit_btn btn btn-primary btn-sm" onclick="clickEditBtn(this)">編集</button>
 					<button type="button" class="row_copy_btn btn btn-success btn-sm" onclick="clickCopyBtn(this)">複製</button>
-					<a href="famous_cat/edit?id={{$ent->id}}" class="row_edit_btn btn btn-primary btn-sm">編集・MPA型</a>
-					<a href="famous_cat/create?id={{$ent->id}}" class="row_copy_btn btn btn-success btn-sm">複製・MPA型</a>
 					{!! $cbh->disabledBtn($searches, $ent->id) !!}<!-- 削除/削除取消ボタン（無効/有効ボタン） -->
 					{!! $cbh->destroyBtn($searches, $ent->id) !!}<!-- 抹消ボタン -->
 					
@@ -189,7 +186,7 @@ $cbh = new CrudBaseHelper($crudBaseData);
 	</tbody>
 </table>
 
-<div class="d-flex" style="margin-top:12px;">{{$data->appends(request()->query())->links('layouts.pagenatoin_b5')}} </div><!-- ページネーション -->
+<div class="d-flex" style="margin-top:12px;">{{$listData->appends(request()->query())->links('layouts.pagenatoin_b5')}} </div><!-- ページネーション -->
 
 <?php $cbh->divPwms($searches['delete_flg']); // 複数有効/削除の区分を表示する ?>
 
