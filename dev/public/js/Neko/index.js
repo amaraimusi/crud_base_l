@@ -17,6 +17,7 @@ let jqValidErrMsg; // バリデーションエラーメッセージ表示要素
 let jqRegistMsg; // 登録成功メッセージ要素	←「登録中」、「登録しました」などのメッセージを表示する。
 let jqCreateMode; // 新規入力モード ←新規入力モードのみ表示するセレクタ
 let jqEditMode; // 編集モード ←編集モードのみ表示するセレクタ
+let modalCat; // モーダル化ライブラリ
 
 $(()=>{
     
@@ -122,7 +123,9 @@ $(()=>{
 	jqRegistMsg = $('.js_registering_msg'); // 登録成功メッセージ要素	←「登録中」、「登録しました」などのメッセージを表示する。
 	jqCreateMode = $('.js_create_mode'); // 新規入力モードのみ表示する要素
 	jqEditMode = $('.js_edit_mode'); // 編集モードのみ表示する要素
-
+	modalCat = new ModalCat();
+	modalCat.modalize('form_spa');
+	
     
 });
 
@@ -341,8 +344,8 @@ function clickCopyBtn(btn){
 /**
  * SPA型・入力フォーム画面を開く
  * @note フォーム画面はSPA型であり、新規入力と編集に対応する
- * @param int row_index 行インデックス ← メイン一覧テーブルの行番　← 未セットなら新規入力、セットすれば編集という扱いになる。
- * @param string inp_mode 入力モード　create:新規入力モード, edit:編集モード, copy:複製モード
+ * @param int row_index 行インデックス ← メイン一覧テーブルの行番 ← 未セットなら新規入力、セットすれば編集という扱いになる。
+ * @param string inp_mode 入力モード create:新規入力モード, edit:編集モード, copy:複製モード
  */
 function _showForm(row_index, inp_mode){
 	
@@ -353,8 +356,7 @@ function _showForm(row_index, inp_mode){
 	}else if(inp_mode == 'edit' || inp_mode == 'copy'){
 		// メイン一覧テーブルの行インデックスに紐づく行からエンティティを取得する
 		ent = crudBase.getEntityByRowIndex(row_index);
-		console.log('ent');//■■■□□□■■■□□□
-		console.log(ent);//■■■□□□■■■□□□
+
 		
 	}else{
 		throw new Error('システムエラー23051109A');
@@ -375,8 +377,7 @@ function _showForm(row_index, inp_mode){
 	jqValidErrMsg .html(''); // エラーメッセージをクリア
 	jqRegistMsg.html(''); // 登録中のメッセージをクリア
 
-	jqMain.hide(); // メイン一覧テーブルを隠す
-	jqForm.show(); // 入力フォームを表示する
+	modalCat.open(); // 入力フォームをモーダル表示する
 	
 }
 
@@ -384,8 +385,8 @@ function _showForm(row_index, inp_mode){
  * SPA型・入力フォーム画面を閉じる
  */
 function closeForm(){
-	jqMain.show();
-	jqForm.hide();
+
+	modalCat.close();// 入力フォームを閉じる
 }
 
 /**
