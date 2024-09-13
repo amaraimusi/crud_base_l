@@ -21,7 +21,6 @@ let modalCat; // モーダル化ライブラリ
 
 $(()=>{
     
-	
 	baseXHelper = new BaseXHelper();
     
     let crud_base_json = $('#crud_base_json').val();
@@ -376,10 +375,14 @@ function _showForm(row_index, inp_mode){
 	
 	jqValidErrMsg .html(''); // エラーメッセージをクリア
 	jqRegistMsg.html(''); // 登録中のメッセージをクリア
+	
 
 	modalCat.open(); // 入力フォームをモーダル表示する
 	
+	crudBase.fitTextareaHeightForInpForm(); //  入力フォーム内のテキストエリアの高さを文字に合わせてフィットさせる
+	
 }
+
 
 /**
  * SPA型・入力フォーム画面を閉じる

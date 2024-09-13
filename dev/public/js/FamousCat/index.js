@@ -380,6 +380,8 @@ function _showForm(row_index, inp_mode){
 
 	modalCat.open(); // 入力フォームをモーダル表示する
 	
+	crudBase.fitTextareaHeightForInpForm(); //  入力フォーム内のテキストエリアの高さを文字に合わせてフィットさせる
+	
 }
 
 /**
