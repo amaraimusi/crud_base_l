@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Consts\crud_base_function;
 use Illuminate\Http\Request;
-use App\Models\Neko;
 use CrudBase\CrudBase;
+use App\Models\Neko;
 use App\Consts\ConstCrudBase;
 
 /**
@@ -15,14 +15,10 @@ use App\Consts\ConstCrudBase;
  * @author amaraimusi
  *
  */
- 
- 
- 
- 
 class NekoController extends CrudBaseController{
 	
 	// 画面のバージョン → 開発者はこの画面を修正したらバージョンを変更すること。バージョンを変更するとキャッシュやセッションのクリアが自動的に行われます。
-	public $this_page_version = '1.0.1';
+	public $this_page_version = '1.0.0';
 	
 	private $def_sort = 'sort_no'; // デフォルトソートフィールド
 	private $def_desc = 0; // デフォールトソート向き 0:昇順, 1:降順
@@ -36,7 +32,7 @@ class NekoController extends CrudBaseController{
 	public function index(Request $request){
 
 		// ログアウトになっていたらログイン画面にリダイレクト
-		if(\Auth::id() == null) return redirect('login');
+		// if(\Auth::id() == null) return redirect('login');
 		
 		// 検索データのバリデーション
 		$validated = $request->validate([
@@ -160,7 +156,7 @@ class NekoController extends CrudBaseController{
 	public function regAction(){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		if(\Auth::id() == null) return redirect('login');
+		// if(\Auth::id() == null) return redirect('login');
 		
 		$json=$_POST['key1'];
 		
@@ -241,7 +237,7 @@ class NekoController extends CrudBaseController{
 	public function create(Request $request){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		if(\Auth::id() == null) return redirect('login');
+		// if(\Auth::id() == null) return redirect('login');
 		
 		$model = new Neko();
 		
@@ -367,7 +363,7 @@ class NekoController extends CrudBaseController{
 	public function show(Request $request){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		if(\Auth::id() == null) return redirect('login');
+		// if(\Auth::id() == null) return redirect('login');
 		
 		$model = new Neko();
 		$userInfo = $this->getUserInfo(); // ログインユーザーのユーザー情報を取得する
@@ -414,7 +410,7 @@ class NekoController extends CrudBaseController{
 	public function edit(Request $request){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		if(\Auth::id() == null) return redirect('login');
+		// if(\Auth::id() == null) return redirect('login');
 
 		$model = new Neko();
 		$userInfo = $this->getUserInfo(); // ログインユーザーのユーザー情報を取得する
@@ -520,7 +516,7 @@ class NekoController extends CrudBaseController{
 	public function disabled(){
 
 		// ログアウトになっていたらログイン画面にリダイレクト
-		if(\Auth::id() == null) return redirect('login');
+		// if(\Auth::id() == null) return redirect('login');
 		
 		$userInfo = $this->getUserInfo(); // ログインユーザーのユーザー情報を取得する
 		
@@ -557,7 +553,7 @@ class NekoController extends CrudBaseController{
 	public function destroy(){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		if(\Auth::id() == null) return redirect('login');
+		// if(\Auth::id() == null) return redirect('login');
 		
 		$userInfo = $this->getUserInfo(); // ログインユーザーのユーザー情報を取得する
 		
@@ -610,7 +606,7 @@ class NekoController extends CrudBaseController{
 	public function csv_download(){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		if(\Auth::id() == null) return redirect('login');
+		// if(\Auth::id() == null) return redirect('login');
 
 		$searches = session('neko_searches_key');// セッションからセッション検索データを受け取る
 
@@ -659,7 +655,7 @@ class NekoController extends CrudBaseController{
 	public function ajax_pwms(){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		if(\Auth::id() == null) return redirect('login');
+		// if(\Auth::id() == null) return redirect('login');
 		
 		$json_param=$_POST['key1'];
 		

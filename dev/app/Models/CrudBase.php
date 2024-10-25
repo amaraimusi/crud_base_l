@@ -3,6 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Consts;
 
 /**
  * モデルクラスのベースクラス
@@ -204,6 +205,17 @@ class CrudBase extends Model{
     	return $data;
     	
     }
+    
+    
+    /**
+     * 権限情報を取得する
+     * @return [] 権限情報
+     */
+    public function getAuthorityInfo(){
+    	return \App\Consts\ConstCrudBase::AUTHORITY_INFO;
+    }
+    
+    
     
 
 }

@@ -1,5 +1,9 @@
-<?php 
+<?php
+use App\Helpers\CrudBaseHelper;
+
 $ver_str = '?v=' . $this_page_version;
+
+$cbh = new CrudBaseHelper($crudBaseData);
 ?>
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -9,15 +13,16 @@ $ver_str = '?v=' . $this_page_version;
 	
 	<script src="{{ asset('/js/app.js') }}" defer></script>
 	<script src="{{ asset('/js/common/jquery-3.6.0.min.js') }}" defer></script>
+	{!! $cbh->crudBaseJs(1, $this_page_version) !!}
 	<script src="{{ asset('/js/UserMng/create.js')  . $ver_str}} }}" defer></script>
 	
 	<link href="{{ asset('/css/app.css')  . $ver_str}}" rel="stylesheet">
 	<link href="{{ asset('/js/font/css/open-iconic.min.css') }}" rel="stylesheet">
 	<link href="{{ asset('/css/common/common.css')  . $ver_str}}" rel="stylesheet">
-	<link href="{{ asset('/css/common/style.css')  . $ver_str }}" rel="stylesheet">
+	{!! $cbh->crudBaseCss(0, $this_page_version) !!}
 	<link href="{{ asset('/css/UserMng/create.css')  . $ver_str}}" rel="stylesheet">
 	
-	<title>ユーザー管理・新規登録フォーム</title>
+	<title>ユーザー管理管理・新規登録フォーム</title>
 	
 </head>
 
@@ -28,13 +33,14 @@ $ver_str = '?v=' . $this_page_version;
 <div id="app"><!-- vue.jsの場所・未使用 --></div>
 
 <div class="d-flex flex-row m-1 m-sm-4 px-sm-5 px-1">
+
 <main class="flex-fill mx-sm-2 px-sm-5 mx-1 px-1 w-100">
 
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
 	<li class="breadcrumb-item"><a href="{{ url('/') }}">ホーム</a></li>
-	<li class="breadcrumb-item"><a href="{{ url('user_mng') }}">ユーザー管理・一覧</a></li>
-	<li class="breadcrumb-item active" aria-current="page">ユーザー管理・新規登録フォーム</li>
+	<li class="breadcrumb-item"><a href="{{ url('user_mng') }}">ユーザー管理管理・一覧</a></li>
+	<li class="breadcrumb-item active" aria-current="page">ユーザー管理管理・新規登録フォーム</li>
   </ol>
 </nav>
 
@@ -51,27 +57,58 @@ $ver_str = '?v=' . $this_page_version;
 
 <div>
 	<div class="form_w" >
-		<form method="POST" action="{{ url('user_mng/store') }}" onsubmit="return checkDoublePress()">
+		<form id="form1" method="POST" action="{{ url('user_mng/store') }}" onsubmit="return checkDoublePress()" enctype="multipart/form-data">
 			@csrf
 			
 			<div class="row">
-				<label for="name" class="col-12 col-md-5 col-form-label">ユーザー名</label>
+				<div class="col-12" style="text-align:right">
+					<button  class="btn btn-success btn-lg js_submit_btn" onclick="return onSubmit1()">登録</button>
+					<div class="text-danger js_valid_err_msg"></div>
+					<div class="text-success js_submit_msg" style="display:none" >データベースに登録中です...</div>
+				</div>
+			</div>
+			
+			
+			<!-- CBBXS-6090 -->
+			<div class="row">
+				<label for="name" class="col-12 col-md-5 col-form-label">ユーザー/アカウント名</label>
 				<div class="col-12 col-md-7">
-					<input name="name" type="text"  class="form-control form-control-lg" placeholder="ユーザー名" value="{{old('name')}}">
+					<input name="name" type="date"  class="form-control form-control-lg" placeholder="name" value="{{old('name', $ent->name)}}">
 				</div>
 			</div>
 			
 			<div class="row">
 				<label for="email" class="col-12 col-md-5 col-form-label">メールアドレス</label>
 				<div class="col-12 col-md-7">
-					<input name="email" type="text"  class="form-control form-control-lg" placeholder="メールアドレス" value="{{old('email')}}">
+					<input name="email" type="date"  class="form-control form-control-lg" placeholder="email" value="{{old('email', $ent->email)}}">
+				</div>
+			</div>
+			
+			<div class="row">
+				<label for="email_verified_at" class="col-12 col-md-5 col-form-label">Eメール検証済時刻(Laravel内部処理用)</label>
+				<div class="col-12 col-md-7">
+					<input name="email_verified_at" type="date"  class="form-control form-control-lg" placeholder="email_verified_at" value="{{old('email_verified_at', $ent->email_verified_at)}}">
 				</div>
 			</div>
 			
 			<div class="row">
 				<label for="nickname" class="col-12 col-md-5 col-form-label">名前</label>
 				<div class="col-12 col-md-7">
-					<input name="nickname" type="text"  class="form-control form-control-lg" placeholder="名前" value="{{old('nickname')}}">
+					<input name="nickname" type="date"  class="form-control form-control-lg" placeholder="nickname" value="{{old('nickname', $ent->nickname)}}">
+				</div>
+			</div>
+			
+			<div class="row">
+				<label for="password" class="col-12 col-md-5 col-form-label">パスワード</label>
+				<div class="col-12 col-md-7">
+					<input name="password" type="date"  class="form-control form-control-lg" placeholder="password" value="{{old('password', $ent->password)}}">
+				</div>
+			</div>
+			
+			<div class="row">
+				<label for="remember_token" class="col-12 col-md-5 col-form-label">維持用トークン(Laravel内部処理用)</label>
+				<div class="col-12 col-md-7">
+					<input name="remember_token" type="date"  class="form-control form-control-lg" placeholder="remember_token" value="{{old('remember_token', $ent->remember_token)}}">
 				</div>
 			</div>
 			
@@ -80,7 +117,7 @@ $ver_str = '?v=' . $this_page_version;
 				<div class="col-12 col-md-7">
 					<select name="role" class="form-control form-control-lg">
 						@foreach ($roleList as $role => $role_name)
-							<option value="{{ $role }}" @selected(old('role') == $role)>
+							<option value="{{ $role }}" @selected(old('role', $ent->role) == $role)>
 								{{ $role_name }}
 							</option>
 						@endforeach
@@ -89,19 +126,29 @@ $ver_str = '?v=' . $this_page_version;
 			</div>
 			
 			<div class="row">
-				<label for="password" class="col-12 col-md-5 col-form-label">パスワード</label>
+				<label for="temp_hash" class="col-12 col-md-5 col-form-label">仮登録ハッシュコード(Laravel内部処理用)</label>
 				<div class="col-12 col-md-7">
-					<input name="password" type="text"  class="form-control form-control-lg" placeholder="パスワード" value="{{old('password')}}">
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-12" style="text-align:right">
-					<button id="submit_btn" class="btn btn-warning btn-lg">登録</button>
-					<div id="submit_msg" class="text-success" style="display:none" >データベースに登録中です...</div>
+					<input name="temp_hash" type="date"  class="form-control form-control-lg" placeholder="temp_hash" value="{{old('temp_hash', $ent->temp_hash)}}">
 				</div>
 			</div>
 			
+			<div class="row">
+				<label for="temp_datetime" class="col-12 col-md-5 col-form-label">仮登録制限時刻(Laravel内部処理用)</label>
+				<div class="col-12 col-md-7">
+					<input name="temp_datetime" type="text"  class="form-control form-control-lg" placeholder="temp_datetime" value="{{old('temp_datetime', $ent->temp_datetime)}}" pattern="[0-9]{4}(-|/)[0-9]{1,2}(-|/)[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}" title="日時（Y-m-d H:i:s)を入力してください。(例  2012-12-12 12:12:12)">
+				</div>
+			</div>
+			
+
+			<!-- CBBXE -->
+
+			<div class="row">
+				<div class="col-12" style="text-align:right">
+					<button  class="btn btn-success btn-lg js_submit_btn" onclick="return onSubmit1()">登録</button>
+					<div class="text-danger js_valid_err_msg"></div>
+					<div class="text-success js_submit_msg" style="display:none" >データベースに登録中です...</div>
+				</div>
+			</div>
 			
 		</form>
 		
@@ -114,5 +161,10 @@ $ver_str = '?v=' . $this_page_version;
 </div><!-- container-fluid -->
 
 @include('layouts.common_footer')
+
+<!-- JSON埋め込み -->
+<input type="hidden" id="csrf_token" value="{{ csrf_token() }}" >
+{!! $cbh->embedJson('crud_base_json', $crudBaseData) !!}
+
 </body>
 </html>

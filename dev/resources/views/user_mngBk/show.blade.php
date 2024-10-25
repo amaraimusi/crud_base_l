@@ -1,9 +1,5 @@
-<?php
-use App\Helpers\CrudBaseHelper;
-
+<?php 
 $ver_str = '?v=' . $this_page_version;
-
-$cbh = new CrudBaseHelper($crudBaseData);
 ?>
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -18,10 +14,10 @@ $cbh = new CrudBaseHelper($crudBaseData);
 	<link href="{{ asset('/css/app.css')  . $ver_str}}" rel="stylesheet">
 	<link href="{{ asset('/js/font/css/open-iconic.min.css') }}" rel="stylesheet">
 	<link href="{{ asset('/css/common/common.css')  . $ver_str}}" rel="stylesheet">
-	<link href="{{ asset('/css/common/style.css') }}" rel="stylesheet">
+	<link href="{{ asset('/css/common/style.css')  . $ver_str }}" rel="stylesheet">
 	<link href="{{ asset('/css/Sales/show.css')  . $ver_str}}" rel="stylesheet">
 	
-	<title>ユーザー管理管理・詳細表示</title>
+	<title>ユーザー管理・詳細表示</title>
 	
 </head>
 
@@ -37,8 +33,8 @@ $cbh = new CrudBaseHelper($crudBaseData);
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
 	<li class="breadcrumb-item"><a href="{{ url('/') }}">ホーム</a></li>
-	<li class="breadcrumb-item"><a href="{{ url('user_mng') }}">ユーザー管理管理・一覧</a></li>
-	<li class="breadcrumb-item active" aria-current="page">ユーザー管理管理・詳細フォーム</li>
+	<li class="breadcrumb-item"><a href="{{ url('user_mng') }}">ユーザー管理・一覧</a></li>
+	<li class="breadcrumb-item active" aria-current="page">ユーザー管理・詳細フォーム</li>
   </ol>
 </nav>
 
@@ -60,13 +56,14 @@ $cbh = new CrudBaseHelper($crudBaseData);
 			
 			<input type="hidden" name="id" value="{{old('id', $ent->id)}}" />
 			
+			
 			<div class="row">
-				<label for="id" class="col-12 col-md-5 col-form-label">id</label>
-				<div class="col-12 col-md-7">{{ $ent-> id}}</div>
+				<label for="user_mng_name" class="col-12 col-md-5 col-form-label">ID</label>
+				<div class="col-12 col-md-7">{{ $ent->id }}</div>
 			</div>
-			<!-- CBBXS-6008 -->
+			
 			<div class="row">
-				<label for="name" class="col-12 col-md-5 col-form-label">ユーザー名/アカウント名</label>
+				<label for="name" class="col-12 col-md-5 col-form-label">ユーザー名</label>
 				<div class="col-12 col-md-7">{{ $ent-> name}}</div>
 			</div>
 
@@ -76,42 +73,21 @@ $cbh = new CrudBaseHelper($crudBaseData);
 			</div>
 
 			<div class="row">
-				<label for="email_verified_at" class="col-12 col-md-5 col-form-label">Eメール検証済時刻(Laravel内部処理用)</label>
-				<div class="col-12 col-md-7">{{ $ent-> email_verified_at}}</div>
-			</div>
-
-			<div class="row">
 				<label for="nickname" class="col-12 col-md-5 col-form-label">名前</label>
 				<div class="col-12 col-md-7">{{ $ent-> nickname}}</div>
 			</div>
 
 			<div class="row">
-				<label for="password" class="col-12 col-md-5 col-form-label">パスワード</label>
-				<div class="col-12 col-md-7">{{ $ent-> password}}</div>
+				<label for="role" class="col-12 col-md-5 col-form-label">権限</label>
+				<div class="col-12 col-md-7">{{$roleList[$ent->role] ?? '' }}</div>
 			</div>
-
+			
 			<div class="row">
-				<label for="remember_token" class="col-12 col-md-5 col-form-label">維持用トークン(Laravel内部処理用)</label>
-				<div class="col-12 col-md-7">{{ $ent-> remember_token}}</div>
+				<label for="note" class="col-12 col-md-5 col-form-label">備考</label>
+				<div class="col-12 col-md-7">
+					<div style="white-space:pre-wrap; word-wrap:break-word;">{{ $ent->note }}</div>
 			</div>
-
-			<div class="row">
-				<label for="neko_type" class="col-12 col-md-5 col-form-label">権限</label>
-				<div class="col-12 col-md-7">{{ $roleList[$ent->neko_type] ?? '' }}</div>
 			</div>
-
-			<div class="row">
-				<label for="temp_hash" class="col-12 col-md-5 col-form-label">仮登録ハッシュコード(Laravel内部処理用)</label>
-				<div class="col-12 col-md-7">{{ $ent-> temp_hash}}</div>
-			</div>
-
-			<div class="row">
-				<label for="temp_datetime" class="col-12 col-md-5 col-form-label">仮登録制限時刻(Laravel内部処理用)</label>
-				<div class="col-12 col-md-7">{{ $ent-> temp_datetime}}</div>
-			</div>
-
-
-			<!-- CBBXE -->
 
 			<div class="row">
 				<div class="col-12" style="text-align:center">
@@ -134,7 +110,6 @@ $cbh = new CrudBaseHelper($crudBaseData);
 
 <!-- JSON埋め込み -->
 <input type="hidden" id="csrf_token" value="{{ csrf_token() }}" >
-{!! $cbh->embedJson('crud_base_json', $crudBaseData) !!}
 
 </body>
 </html>

@@ -6,225 +6,425 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Models\CrudBase;
 
+
 class UserMng extends CrudBase
 {
-    protected $table = 'users'; // 紐づけるテーブル名
-    
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
+	protected $table = 'users'; // 紐づけるテーブル名
+	
+	const CREATED_AT = 'created_at';
+	const UPDATED_AT = 'updated_at';
+	
+	/**
+	 * The attributes that are mass assignable.
+	 * DB保存時、ここで定義してあるDBフィールドのみ保存対象にします。
+	 * ここの存在しないDBフィールドは保存対象外になりますのでご注意ください。
+	 *
+	 * @var array<int, string>
+	 */
+	protected $fillable = [
+			// CBBXS-6009
+			'id',
+			'name',
+			'email',
+			'email_verified_at',
+			'nickname',
+			'password',
+			'remember_token',
+			'role',
+			'temp_hash',
+			'temp_datetime',
+			'sort_no',
+			'delete_flg',
+			'update_user_id',
+			'ip_addr',
+			'created_at',
+			'updated_at',
 
-    
-    /**
-     * The attributes that are mass assignable.
-     * DB保存時、ここで定義してあるDBフィールドのみ保存対象にします。
-     * ここの存在しないDBフィールドは保存対象外になりますのでご注意ください。
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'id',
-        'name',
-        'email',
-        'nickname',
-        'role',
-        'password',
-        'sort_no',
-        'delete_flg',
-        'update_user_id',
-        'ip_addr',
-        'created_at',
-        'updated_at',
-    ];
-    
-    
-    public function __construct(){
-        parent::__construct();
-        
-    }
-    
-    /**
-     *一覧データを取得する
-     * @param [] $searches 検索データ
-     * @param [] $roleList 権限リスト
-     * @param int $use_type 用途タイプ 　index:一覧データ用（デフォルト）, csv:CSVダウンロード用
-     * @return [] 一覧データ
-     */
-    public function getData($searches, $roleList, $use_type='index'){
-        
-        // 一覧データを取得するSQLの組立。
-        $query = DB::table('users')->
-            leftJoin('users as LoginUser', 'users.update_user_id', '=', 'LoginUser.id');
-        
-        $query = $query->select(
-            'users.id as id',
-            'users.name as name',
-            'users.email as email',
-            'users.nickname as nickname',
-            'users.role as role',
-            'users.sort_no as sort_no',
-            'users.delete_flg as delete_flg',
-            'users.update_user_id as update_user_id',
-            'users.ip_addr as ip_addr',
-            'users.created_at as created_at',
-            'users.updated_at as updated_at',
-            'LoginUser.nickname as update_user',
-            );
-        
-        // 下位権限のデータのみ取得するよう絞り込む
-        $role_in_str = $this->getRoleInStr($roleList);
-        $query = $query->whereRaw("users.role IN {$role_in_str}");
-        
-        // メイン検索
-        if(!empty($searches['main_search'])){
-            $concat = DB::raw("CONCAT( IFNULL(users.name, '') ,IFNULL(users.email, '') ,IFNULL(users.nickname, '')  ) ");
-            $query = $query->where($concat, 'LIKE', "%{$searches['main_search']}%");
-        }
-        
-        $query = $this->addWheres($query, $searches); // 詳細検索情報をクエリビルダにセットする
-        
-        $sort_field = $searches['sort'] ?? 'sort_no'; // 並びフィールド
-        $dire = 'asc'; // 並び向き
-        if(!empty($searches['desc'])){
-            $dire = 'desc';
-        }
-        $query = $query->orderBy($sort_field, $dire);
+			// CBBXE
+	];
+	
+	
+	public function __construct(){
+		parent::__construct();
+		
+	}
+	
+	
+	/**
+	 * フィールドデータを取得する
+	 * @return [] $fieldData フィールドデータ
+	 */
+	public function getFieldData(){
+		$fieldData = [
+				// CBBXS-6014
+				'id' => [], // id
+				'name' => [], // ユーザー/アカウント名
+				'email' => [], // メールアドレス
+				'email_verified_at' => [], // Eメール検証済時刻(Laravel内部処理用)
+				'nickname' => [], // 名前
+				'password' => [], // パスワード
+				'remember_token' => [], // 維持用トークン(Laravel内部処理用)
+				'role' => [ // 猫種別
+					'outer_table' => 'roles',
+					'outer_field' => 'role_name', 
+					'outer_list'=>'roleList',
+				],
+				'temp_hash' => [], // 仮登録ハッシュコード(Laravel内部処理用)
+				'temp_datetime' => [], // 仮登録制限時刻(Laravel内部処理用)
+				'sort_no' => [], // 順番
+				'delete_flg' => [
+						'value_type'=>'delete_flg',
+				], // 削除フラグ
+				'update_user_id' => [], // 更新ユーザーID
+				'ip_addr' => [], // 更新IPアドレス
+				'created_at' => [], // 生成日時B
+				'updated_at' => [], // 更新日時B
 
-        // 一覧用のデータ取得。ページネーションを考慮している。
-        if($use_type == 'index'){
-            
-            $per_page = $searches['per_page'] ?? 20; // 行制限数(一覧の最大行数) デフォルトは50行まで。
-            $data = $query->paginate($per_page);
-            return $data;
-            
-        }
-        
-        // CSV用の出力。Limitなし
-        elseif($use_type == 'csv'){
-            $data = $query->get();
-            $data2 = [];
-            foreach($data as $ent){
-                $data2[] = (array)$ent;
-            }
-            return $data2;
-        }
-        
-        
-    }
-    
-    /**
-     * 下位権限のデータのみ取得するSQLのIN句を作成する
-     * @param [] $roleList 権限リスト
-     */
-    private function getRoleInStr($roleList){
-        $keys = array_keys($roleList);
-        $role_in_str = "('" . implode("','", $keys) . "')";
-        return $role_in_str;
-        
-    }
-    
-    /**
-     * 詳細検索情報をクエリビルダにセットする
-     * @param object $query クエリビルダ
-     * @param [] $searches　検索データ
-     * @return object $query クエリビルダ
-     */
-    private function addWheres($query, $searches){
-        
-        if(!empty($searches['id'])){
-            $query = $query->where('users.id',  $searches['id']);
-        }
-        
-        if(!empty($searches['name'])){
-            $query = $query->where('users.name', $searches['name']);
-        }
-        
-        if(!empty($searches['email'])){
-            $query = $query->where('users.email', $searches['email']);
-        }
-        
-        if(!empty($searches['nickname'])){
-            $query = $query->where('users.nickname', $searches['nickname']);
-        }
-        
-        if(!empty($searches['role'])){
-            $query = $query->where('users.role', $searches['role']);
-        }
-        
-        // 無効フラグ
-        if(!empty($searches['delete_flg'])){
-            $query = $query->where('users.delete_flg',$searches['delete_flg']);
-        }else{
-            $query = $query->where('users.delete_flg', 0);
-        }
-        
-        // 更新者
-        if(!empty($searches['update_user'])){
-            $query = $query->where('users.nickname',$searches['update_user']);
-        }
-        
-        return $query;
-    }
-    
-    
-    /**
-     * 次の順番を取得する
-     * @return int 順番
-     */
-    public function nextSortNo(){
-        $query = DB::table('users')->selectRaw('MAX(sort_no) AS max_sort_no');
-        $res = $query->first();
-        $sort_no = $res->max_sort_no ?? 0;
-        $sort_no++;
-        
-        return $sort_no;
-    }
+				// CBBXE
+		];
+		
+		// フィールドデータへＤＢからのフィールド詳細情報を追加
+		$fieldData = $this->addFieldDetailsFromDB($fieldData, 'users');
+		
+		// フィールドデータに登録対象フラグを追加します。
+		$fieldData = $this->addRegFlgToFieldData($fieldData, $this->fillable);
 
-    
-    /**
-     * エンティティのDB保存
-     * @note エンティティのidが空ならINSERT, 空でないならUPDATEになる。
-     * @param [] $ent エンティティ
-     * @return [] エンティティ(insertされた場合、新idがセットされている）
-     */
-    public function saveEntity(&$ent){
-        
-        foreach($ent as $field => $value){
-            if($ent[$field] === '') $ent[$field] = null;
-        }
-        
-        if(empty($ent['id'])){
-            
-            // ▽ idが空であればINSERTをする。
-            $ent = array_intersect_key($ent, array_flip($this->fillable)); // ホワイトリストによるフィルタリング
-            $id = $this->insertGetId($ent); // INSERT
-            $ent['id'] = $id;
-        }else{
-            
-            // ▽ idが空でなければUPDATEする。
-            $ent = array_intersect_key($ent, array_flip($this->fillable)); // ホワイトリストによるフィルタリング
-            $this->updateOrCreate(['id'=>$ent['id']], $ent); // UPDATE
-        }
-        
-        return $ent;
-    }
-    
-    
-    /**
-     * データのDB保存
-     * @param [] $data データ（エンティティの配列）
-     * @return [] データ(insertされた場合、新idがセットされている）
-     */
-    public function saveAll(&$data){
-        
-        $data2 = [];
-        foreach($data as &$ent){
-            $data2[] = $this->saveEntity($ent);
-            
-        }
-        unset($ent);
-        return $data2;
-    }
-    
-    
+		return $fieldData;
+	}
+	
+	
+	/**
+	 * DBから一覧データを取得する
+	 * @param [] $searches 検索データ
+	 * @param [] $param
+	 *     - string use_type 用途タイプ 　index:一覧データ用（デフォルト）, csv:CSVダウンロード用
+	 *     - int def_per_page  デフォルト制限行数
+	 * @return [] 一覧データ
+	 */
+	public function getData($searches, $param=[]){
+		
+		$use_type = $param['use_type'] ?? 'index';
+		$def_per_page = $param['def_per_page'] ?? 50;
+		
+		$query = DB::table('users')
+			->leftJoin('users as updater', 'users.update_user_id', '=', 'updater.id'); // エイリアスを 'updater' と指定
+		
+		$query = $query->select(
+				'users.id as id',
+				'users.name as name',
+				'users.email as email',
+				'users.email_verified_at as email_verified_at',
+				'users.nickname as nickname',
+				'users.password as password',
+				'users.remember_token as remember_token',
+				'users.role as role',
+				'users.temp_hash as temp_hash',
+				'users.temp_datetime as temp_datetime',
+				'users.sort_no as sort_no',
+				'users.delete_flg as delete_flg',
+				'users.update_user_id as update_user_id',
+				'updater.nickname as update_user', // エイリアス'd updater'の列を指定
+				'users.ip_addr as ip_addr',
+				'users.created_at as created_at',
+				'users.updated_at as updated_at'
+				);
+		
+		// メイン検索
+		if(!empty($searches['main_search'])){
+			$concat = DB::raw("
+					CONCAT( 
+					/* CBBXS-6017 */
+					IFNULL(users.name, '') , 
+					IFNULL(users.email, '') , 
+					IFNULL(users.email_verified_at, '') , 
+					IFNULL(users.nickname, '') , 
+					IFNULL(users.password, '') , 
+					IFNULL(users.remember_token, '') , 
+					IFNULL(users.temp_hash, '') , 
+					IFNULL(users.ip_addr, '') , 
+
+					/* CBBXE */
+					''
+					 ) ");
+			$query = $query->where($concat, 'LIKE', "%{$searches['main_search']}%");
+		}
+		
+		$query = $this->addWheres($query, $searches); // 詳細検索情報をクエリビルダにセットする
+		
+		$sort_field = $searches['sort'] ?? 'sort_no'; // 並びフィールド
+		$dire = 'asc'; // 並び向き
+		if(!empty($searches['desc'])){
+			$dire = 'desc';
+		}
+		$query = $query->orderBy($sort_field, $dire);
+		
+		// 一覧用のデータ取得。ページネーションを考慮している。
+		if($use_type == 'index'){
+			
+			$per_page = $searches['per_page'] ?? $def_per_page; // 行制限数(一覧の最大行数) デフォルトは50行まで。
+			$data = $query->paginate($per_page);
+			
+			return $data;
+			
+		}
+		
+		// CSV用の出力。Limitなし
+		elseif($use_type == 'csv'){
+			$data = $query->get();
+			$data2 = [];
+			foreach($data as $ent){
+				$data2[] = (array)$ent;
+			}
+			return $data2;
+		}
+		
+		
+	}
+	
+	/**
+	 * 詳細検索情報をクエリビルダにセットする
+	 * @param object $query クエリビルダ
+	 * @param [] $searches　検索データ
+	 * @return object $query クエリビルダ
+	 */
+	private function addWheres($query, $searches){
+
+		// id
+		if(!empty($searches['id'])){
+			$query = $query->where('users.id',$searches['id']);
+		}
+		
+		// CBBXS-6024
+		// id
+		if(!empty($searches['id'])){
+			$query = $query->where('id.id',$searches['id']);
+		}
+
+		// ユーザー/アカウント名
+		if(!empty($searches['name'])){
+			$query = $query->where('users.name', 'LIKE', "%{$searches['name']}%");
+		}
+
+		// メールアドレス
+		if(!empty($searches['email'])){
+			$query = $query->where('users.email', 'LIKE', "%{$searches['email']}%");
+		}
+
+		// Eメール検証済時刻(Laravel内部処理用)
+		if(!empty($searches['email_verified_at'])){
+			$query = $query->where('users.email_verified_at', 'LIKE', "%{$searches['email_verified_at']}%");
+		}
+
+		// 名前
+		if(!empty($searches['nickname'])){
+			$query = $query->where('users.nickname', 'LIKE', "%{$searches['nickname']}%");
+		}
+
+		// パスワード
+		if(!empty($searches['password'])){
+			$query = $query->where('users.password', 'LIKE', "%{$searches['password']}%");
+		}
+
+		// 維持用トークン(Laravel内部処理用)
+		if(!empty($searches['remember_token'])){
+			$query = $query->where('users.remember_token', 'LIKE', "%{$searches['remember_token']}%");
+		}
+
+		// 権限
+		if(!empty($searches['role'])){
+			$query = $query->where('role.role',$searches['role']);
+		}
+
+		// 仮登録ハッシュコード(Laravel内部処理用)
+		if(!empty($searches['temp_hash'])){
+			$query = $query->where('users.temp_hash', 'LIKE', "%{$searches['temp_hash']}%");
+		}
+
+		// 仮登録制限時刻(Laravel内部処理用)
+		if(!empty($searches['temp_datetime'])){
+			$query = $query->where('users.temp_datetime', '>=', $searches['temp_datetime']);
+		}
+
+		// 順番
+		if(!empty($searches['sort_no'])){
+			$query = $query->where('sort_no.sort_no',$searches['sort_no']);
+		}
+
+		// 削除フラグ
+		if(!empty($searches['delete_flg']) || $searches['delete_flg'] ==='0' || $searches['delete_flg'] ===0){
+			if($searches['delete_flg'] != -1){
+				$query = $query->where('users.delete_flg',$searches['delete_flg']);
+			}
+		}
+
+		// 更新ユーザーID
+		if(!empty($searches['update_user_id'])){
+			$query = $query->where('update_user_id.update_user_id',$searches['update_user_id']);
+		}
+
+		// 更新IPアドレス
+		if(!empty($searches['ip_addr'])){
+			$query = $query->where('users.ip_addr', 'LIKE', "%{$searches['ip_addr']}%");
+		}
+
+		// 生成日時B
+		if(!empty($searches['created_at'])){
+			$query = $query->where('users.created_at', '>=', $searches['created_at']);
+		}
+
+		// 更新日時B
+		if(!empty($searches['updated_at'])){
+			$query = $query->where('users.updated_at', '>=', $searches['updated_at']);
+		}
+
+
+		// CBBXE
+
+		// 順番
+		if(!empty($searches['sort_no'])){
+			$query = $query->where('users.sort_no',$searches['sort_no']);
+		}
+
+		// 無効フラグ
+		if(!empty($searches['delete_flg'])){
+			$query = $query->where('users.delete_flg',$searches['delete_flg']);
+		}else{
+			$query = $query->where('users.delete_flg', 0);
+		}
+
+		// 更新者
+		if(!empty($searches['update_user'])){
+			$query = $query->where('users.nickname',$searches['update_user']);
+		}
+
+		// IPアドレス
+		if(!empty($searches['ip_addr'])){
+			$query = $query->where('users.ip_addr', 'LIKE', "%{$searches['ip_addr']}%");
+		}
+
+		// 生成日時
+		if(!empty($searches['created_at'])){
+			$query = $query->where('users.created_at', '>=', $searches['created_at']);
+		}
+
+		// 更新日
+		if(!empty($searches['updated_at'])){
+			$query = $query->where('users.updated_at', '>=', $searches['updated_at']);
+		}
+		
+		return $query;
+	}
+	
+	
+	/**
+	 * 次の順番を取得する
+	 * @return int 順番
+	 */
+	public function nextSortNo(){
+		$query = DB::table('users')->selectRaw('MAX(sort_no) AS max_sort_no');
+		$res = $query->first();
+		$sort_no = $res->max_sort_no ?? 0;
+		$sort_no++;
+		
+		return $sort_no;
+	}
+	
+	
+	/**
+	 * エンティティのDB保存
+	 * @note エンティティのidが空ならINSERT, 空でないならUPDATEになる。
+	 * @param [] $ent エンティティ
+	 * @return [] エンティティ(insertされた場合、新idがセットされている）
+	 */
+	public function saveEntity(&$ent){
+		
+		if(empty($ent['id'])){
+			
+			// ▽ idが空であればINSERTをする。
+			$ent = array_intersect_key($ent, array_flip($this->fillable)); // ホワイトリストによるフィルタリング
+			$id = $this->insertGetId($ent); // INSERT
+			$ent['id'] = $id;
+		}else{
+			
+			// ▽ idが空でなければUPDATEする。
+			$ent = array_intersect_key($ent, array_flip($this->fillable)); // ホワイトリストによるフィルタリング
+			$this->updateOrCreate(['id'=>$ent['id']], $ent); // UPDATE
+		}
+		
+		return $ent;
+	}
+	
+	
+	/**
+	 * データのDB保存
+	 * @param [] $data データ（エンティティの配列）
+	 * @return [] データ(insertされた場合、新idがセットされている）
+	 */
+	public function saveAll(&$data){
+		
+		$data2 = [];
+		foreach($data as &$ent){
+			$data2[] = $this->saveEntity($ent);
+			
+		}
+		unset($ent);
+		return $data2;
+	}
+	
+	
+	/**
+	 * 削除フラグを切り替える
+	 * @param array $ids IDリスト
+	 * @param int $delete_flg 削除フラグ   0:有効  , 1:削除
+	 * @param [] $userInfo ユーザー情報
+	 */
+	public function switchDeleteFlg($ids, $delete_flg, $userInfo){
+		
+		// IDリストと削除フラグからデータを作成する
+		$data = [];
+		foreach($ids as $id){
+			$ent = [
+					'id' => $id,
+					'delete_flg' => $delete_flg,
+			];
+			$data[] = $ent;
+			
+		}
+		
+		// 更新ユーザーなど共通フィールドをデータにセットする。
+		$data = $this->setCommonToData($data, $userInfo);
+
+		// データを更新する
+		$rs = $this->saveAll($data);
+		
+		return $rs;
+		
+	}
+	
+	
+	// CBBXS-6029
+	
+	/**
+	 *  権限リストを取得する
+	 *  @return [] 権限リスト
+	 */
+	public function getRoleList(){
+
+		// 権限情報を取得する
+		$info =  $this->getAuthorityInfo();
+		
+		$list = [];
+		foreach($info as $key=>$ent){
+			$list[$key] = $ent['wamei'];
+		}
+		
+		return $list;
+		
+	}
+
+	// CBBXE
+	
+	
+
 }
 
