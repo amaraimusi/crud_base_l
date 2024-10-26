@@ -34,7 +34,10 @@ class UserMngController extends CrudBaseController{
 
 		// ログアウトになっていたらログイン画面にリダイレクト
 		 if(\Auth::id() == null) return redirect('login');
-		
+		 
+		 $userInfo = \Auth::user();
+		 $role = $userInfo->role; // ログインユーザーの権限
+
 		// 検索データのバリデーション
 		$validated = $request->validate([
 			'id' => 'nullable|numeric',
@@ -96,8 +99,9 @@ class UserMngController extends CrudBaseController{
 		$def_per_page = 20; // デフォルト制限行数
 		
 		$model = new UserMng();
+		$roleList = $model->getRoleList($role); // 権限リスト
 		$fieldData = $model->getFieldData();
-		$listData = $model->getData($searches, ['def_per_page' => $def_per_page]);
+		$listData = $model->getData($searches, ['def_per_page' => $def_per_page, 'roleList' => $roleList]);
 		$data_count = $listData->total(); //　LIMIT制限を受けていないデータ件数
 		
 		// パスワードは空にしておく。
@@ -110,8 +114,6 @@ class UserMngController extends CrudBaseController{
 			$data[] = (array)$rEnt;
 		}
 
-		$model = new UserMng() ;
-		$roleList = $model->getRoleList(); // 権限リスト
 		
 		$crudBaseData = [
 				'data' => $data,

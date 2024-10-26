@@ -97,6 +97,7 @@ class UserMng extends CrudBase
 		
 		$use_type = $param['use_type'] ?? 'index';
 		$def_per_page = $param['def_per_page'] ?? 50;
+		$roleList = $param['roleList'] ?? [];
 		
 		$query = DB::table('users')
 			->leftJoin('users as updater', 'users.update_user_id', '=', 'updater.id'); // エイリアスを 'updater' と指定
@@ -116,6 +117,10 @@ class UserMng extends CrudBase
 				'users.created_at as created_at',
 				'users.updated_at as updated_at'
 				);
+		
+		// 下位権限のデータのみ取得するよう絞り込む
+		$role_in_str = $this->getRoleInStr($roleList);
+		$query = $query->whereRaw("users.role IN {$role_in_str}");
 		
 		// メイン検索
 		if(!empty($searches['main_search'])){
@@ -163,6 +168,17 @@ class UserMng extends CrudBase
 			return $data2;
 		}
 		
+		
+	}
+	
+	/**
+	 * 下位権限のデータのみ取得するSQLのIN句を作成する
+	 * @param [] $roleList 権限リスト
+	 */
+	private function getRoleInStr($roleList){
+		$keys = array_keys($roleList);
+		$role_in_str = "('" . implode("','", $keys) . "')";
+		return $role_in_str;
 		
 	}
 	
@@ -371,16 +387,25 @@ class UserMng extends CrudBase
 	
 	/**
 	 *  権限リストを取得する
+	 *  @param string $role ログインユーザーの権限
 	 *  @return [] 権限リスト
 	 */
-	public function getRoleList(){
+	public function getRoleList($role){
 
 		// 権限情報を取得する
 		$info =  $this->getAuthorityInfo();
+
+		$thisUserRoleInfo = $info[$role];
+		$this_level = $thisUserRoleInfo['level']; // 権限レベル
+		
+		if ($role == 'master') $this_level ++;
 		
 		$list = [];
 		foreach($info as $key=>$ent){
-			$list[$key] = $ent['wamei'];
+			// ログインユーザーの権限より下位の権限のみリストに加える。
+			if($this_level > $ent['level']){
+				$list[$key] = $ent['wamei'];
+			}
 		}
 		
 		return $list;
