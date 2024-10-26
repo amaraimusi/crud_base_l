@@ -83,14 +83,7 @@ $cbh = new CrudBaseHelper($crudBaseData);
 					<input name="email" type="text"  class="form-control form-control-lg" placeholder="email" value="{{old('email', $ent->email)}}" required  title="メールアドレスを入力してください。">
 				</div>
 			</div>
-			
-			<div class="row">
-				<label for="email_verified_at" class="col-12 col-md-5 col-form-label">Eメール検証済時刻(Laravel内部処理用)</label>
-				<div class="col-12 col-md-7">
-					<input name="email_verified_at" type="text"  class="form-control form-control-lg" placeholder="email_verified_at" value="{{old('email_verified_at', $ent->email_verified_at)}}" required  title="Eメール検証済時刻(Laravel内部処理用)を入力してください。">
-				</div>
-			</div>
-			
+
 			<div class="row">
 				<label for="nickname" class="col-12 col-md-5 col-form-label">名前</label>
 				<div class="col-12 col-md-7">
@@ -104,14 +97,7 @@ $cbh = new CrudBaseHelper($crudBaseData);
 					<input name="password" type="text"  class="form-control form-control-lg" placeholder="password" value="{{old('password', $ent->password)}}" required  title="パスワードを入力してください。">
 				</div>
 			</div>
-			
-			<div class="row">
-				<label for="remember_token" class="col-12 col-md-5 col-form-label">維持用トークン(Laravel内部処理用)</label>
-				<div class="col-12 col-md-7">
-					<input name="remember_token" type="text"  class="form-control form-control-lg" placeholder="remember_token" value="{{old('remember_token', $ent->remember_token)}}" required  title="維持用トークン(Laravel内部処理用)を入力してください。">
-				</div>
-			</div>
-			
+
 			<div class="row">
 				<label for="role" class="col-12 col-md-5 col-form-label">権限</label>
 				<div class="col-12 col-md-7">
@@ -124,21 +110,6 @@ $cbh = new CrudBaseHelper($crudBaseData);
 					</select>
 				</div>
 			</div>
-			
-			<div class="row">
-				<label for="temp_hash" class="col-12 col-md-5 col-form-label">仮登録ハッシュコード(Laravel内部処理用)</label>
-				<div class="col-12 col-md-7">
-					<input name="temp_hash" type="text"  class="form-control form-control-lg" placeholder="temp_hash" value="{{old('temp_hash', $ent->temp_hash)}}" required  title="仮登録ハッシュコード(Laravel内部処理用)を入力してください。">
-				</div>
-			</div>
-			
-			<div class="row">
-				<label for="temp_datetime" class="col-12 col-md-5 col-form-label">仮登録制限時刻(Laravel内部処理用)</label>
-				<div class="col-12 col-md-7">
-					<input name="temp_datetime" type="text"  class="form-control form-control-lg" placeholder="temp_datetime" value="{{old('temp_datetime', $ent->temp_datetime)}}" pattern="[0-9]{4}(-|/)[0-9]{1,2}(-|/)[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}" title="日時（Y-m-d H:i:s)を入力してください。(例  2012-12-12 12:12:12)">
-				</div>
-			</div>
-			
 
 			<!-- CBBXE -->
 

@@ -48,14 +48,6 @@
 	</div>
 
 	<div class="row mt-2">
-		<div class='col-md-2 ' >Eメール検証済時刻(Laravel内部処理用)</div>
-		<div class='col-md-10'>
-			<input type="text" name="email_verified_at" class="form-control form-control-lg " value=""  maxlength="imestam"  required title="Eメール検証済時刻(Laravel内部処理用)はimestam文字以内で入力してください" />
-			<span class="text-danger" data-valid-err='email_verified_at'></span>
-		</div>
-	</div>
-
-	<div class="row mt-2">
 		<div class='col-md-2 ' >名前</div>
 		<div class='col-md-10'>
 			<input type="text" name="nickname" class="form-control form-control-lg " value=""  maxlength="50"  required title="名前は50文字以内で入力してください" />
@@ -66,16 +58,11 @@
 	<div class="row mt-2">
 		<div class='col-md-2 ' >パスワード</div>
 		<div class='col-md-10'>
-			<input type="text" name="password" class="form-control form-control-lg " value=""  maxlength="255"  required title="パスワードは255文字以内で入力してください" />
-			<span class="text-danger" data-valid-err='password'></span>
-		</div>
-	</div>
-
-	<div class="row mt-2">
-		<div class='col-md-2 ' >維持用トークン(Laravel内部処理用)</div>
-		<div class='col-md-10'>
-			<input type="text" name="remember_token" class="form-control form-control-lg " value=""  maxlength="100"  required title="維持用トークン(Laravel内部処理用)は100文字以内で入力してください" />
-			<span class="text-danger" data-valid-err='remember_token'></span>
+			<button id="pw_change_btn" class="btn btn-warning btn-sm" onclick="clickPwChangeBtn()">パスワードを変更する</button>
+			<div id="pw_div" style="display:none">
+				<input type="text" name="password" class="form-control form-control-lg " value=""  maxlength="255"  required title="パスワードは255文字以内で入力してください" />
+				<span class="text-danger" data-valid-err='password'></span>
+			</div>
 		</div>
 	</div>
 
@@ -91,24 +78,6 @@
 			</select>
 		</div>
 	</div>
-
-	<div class="row mt-2">
-		<div class='col-md-2 ' >仮登録ハッシュコード(Laravel内部処理用)</div>
-		<div class='col-md-10'>
-			<input type="text" name="temp_hash" class="form-control form-control-lg " value=""  maxlength="50"  required title="仮登録ハッシュコード(Laravel内部処理用)は50文字以内で入力してください" />
-			<span class="text-danger" data-valid-err='temp_hash'></span>
-		</div>
-	</div>
-
-	<div class="row mt-2">
-		<div class='col-md-2' >仮登録制限時刻(Laravel内部処理用)</div>
-		<div class='col-md-10'>
-			<!-- datetime-local要素はpattern属性を指定できないので注意。強制的にバリデーションが発動してまう。秒単位の入力にするにはstep="1"を追記 -->
-			<input type="datetime-local" name="temp_datetime" class="form-control form-control-lg " value="" step="1" title="日時形式（Y-m-d H:i:s）で入力してください(例：2012-12-12 01:02:03)" />
-			<span class="text-danger" data-valid-err="temp_datetime" ></span>
-		</div>
-	</div>
-	
 
 	<!-- CBBXE -->
 	

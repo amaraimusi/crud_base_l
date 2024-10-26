@@ -76,11 +76,6 @@ $cbh = new CrudBaseHelper($crudBaseData);
 			</div>
 
 			<div class="row">
-				<label for="email_verified_at" class="col-12 col-md-5 col-form-label">Eメール検証済時刻(Laravel内部処理用)</label>
-				<div class="col-12 col-md-7">{{ $ent-> email_verified_at}}</div>
-			</div>
-
-			<div class="row">
 				<label for="nickname" class="col-12 col-md-5 col-form-label">名前</label>
 				<div class="col-12 col-md-7">{{ $ent-> nickname}}</div>
 			</div>
@@ -91,25 +86,9 @@ $cbh = new CrudBaseHelper($crudBaseData);
 			</div>
 
 			<div class="row">
-				<label for="remember_token" class="col-12 col-md-5 col-form-label">維持用トークン(Laravel内部処理用)</label>
-				<div class="col-12 col-md-7">{{ $ent-> remember_token}}</div>
-			</div>
-
-			<div class="row">
 				<label for="neko_type" class="col-12 col-md-5 col-form-label">権限</label>
 				<div class="col-12 col-md-7">{{ $roleList[$ent->neko_type] ?? '' }}</div>
 			</div>
-
-			<div class="row">
-				<label for="temp_hash" class="col-12 col-md-5 col-form-label">仮登録ハッシュコード(Laravel内部処理用)</label>
-				<div class="col-12 col-md-7">{{ $ent-> temp_hash}}</div>
-			</div>
-
-			<div class="row">
-				<label for="temp_datetime" class="col-12 col-md-5 col-form-label">仮登録制限時刻(Laravel内部処理用)</label>
-				<div class="col-12 col-md-7">{{ $ent-> temp_datetime}}</div>
-			</div>
-
 
 			<!-- CBBXE -->
 

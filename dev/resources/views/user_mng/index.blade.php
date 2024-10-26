@@ -68,13 +68,9 @@ $cbh = new CrudBaseHelper($crudBaseData);
 			<!-- CBBXS-6030 -->
 			<div><?php echo $cbh->searchFormText('name', 'ユーザー/アカウント名'); ?></div>
 			<div><?php echo $cbh->searchFormText('email', 'メールアドレス'); ?></div>
-			<div><?php echo $cbh->searchFormText('email_verified_at', 'Eメール検証済時刻(Laravel内部処理用)'); ?></div>
 			<div><?php echo $cbh->searchFormText('nickname', '名前'); ?></div>
 			<div><?php echo $cbh->searchFormText('password', 'パスワード'); ?></div>
-			<div><?php echo $cbh->searchFormText('remember_token', '維持用トークン(Laravel内部処理用)'); ?></div>
 			<div><?php echo $cbh->searchFormSelect('role', '権限', $roleList); ?></div>
-			<div><?php echo $cbh->searchFormText('temp_hash', '仮登録ハッシュコード(Laravel内部処理用)'); ?></div>
-			<div><?php echo $cbh->searchFormDatetime('temp_datetime', '仮登録制限時刻(Laravel内部処理用)'); ?></div>
 
 			<!-- CBBXE -->
 			<div><?php echo $cbh->searchFormInt('sort_no', '順番'); ?></div>
@@ -116,8 +112,7 @@ $cbh = new CrudBaseHelper($crudBaseData);
 	</div>
 	
 	<div class="tool_btn_w">
-		<a href="user_mng/create" class="btn btn-success">新規登録・MPA型</a>
-		<button type="button" class="btn btn-success" onclick="clickCreateBtn();">新規登録・SPA型</button>
+		<button type="button" class="btn btn-success" onclick="clickCreateBtn();">新規登録</button>
 	</div>
 </div>
 
@@ -132,13 +127,9 @@ $cbh = new CrudBaseHelper($crudBaseData);
 			<!-- CBBXS-6035 -->
 			<th data-field='name'><?php echo $cbh->sortLink($searches, 'user_mng', 'name', 'ユーザー/アカウント名'); ?></th>
 			<th data-field='email'><?php echo $cbh->sortLink($searches, 'user_mng', 'email', 'メールアドレス'); ?></th>
-			<th data-field='email_verified_at'><?php echo $cbh->sortLink($searches, 'user_mng', 'email_verified_at', 'Eメール検証済時刻(Laravel内部処理用)'); ?></th>
 			<th data-field='nickname'><?php echo $cbh->sortLink($searches, 'user_mng', 'nickname', '名前'); ?></th>
 			<th data-field='password'><?php echo $cbh->sortLink($searches, 'user_mng', 'password', 'パスワード'); ?></th>
-			<th data-field='remember_token'><?php echo $cbh->sortLink($searches, 'user_mng', 'remember_token', '維持用トークン(Laravel内部処理用)'); ?></th>
 			<th data-field='role'><?php echo $cbh->sortLink($searches, 'user_mng', 'role', '権限'); ?></th>
-			<th data-field='temp_hash'><?php echo $cbh->sortLink($searches, 'user_mng', 'temp_hash', '仮登録ハッシュコード(Laravel内部処理用)'); ?></th>
-			<th data-field='temp_datetime'><?php echo $cbh->sortLink($searches, 'user_mng', 'temp_datetime', '仮登録制限時刻(Laravel内部処理用)'); ?></th>
 
 			<!-- CBBXE -->
 			<th data-field='sort_no'><?php echo $cbh->sortLink($searches, 'user_mng', 'sort_no', '順番'); ?></th>
@@ -158,13 +149,9 @@ $cbh = new CrudBaseHelper($crudBaseData);
 				<!-- CBBXS-6040 -->
 				<td>{{$ent->name}}</td>
 				<td>{{$ent->email}}</td>
-				<td>{{$ent->email_verified_at}}</td>
 				<td>{{$ent->nickname}}</td>
 				<td>{{$ent->password}}</td>
-				<td>{{$ent->remember_token}}</td>
 				<td>{!! $cbh->tdList($ent->role, $roleList) !!}</td>
-				<td>{{$ent->temp_hash}}</td>
-				<td>{{$ent->temp_datetime}}</td>
 
 				<!-- CBBXE -->
 				<td>{{$ent->sort_no}}</td>
@@ -180,8 +167,6 @@ $cbh = new CrudBaseHelper($crudBaseData);
 					<a href="user_mng/show?id={{$ent->id}}" class="row_detail_btn btn btn-info btn-sm text-light ">詳細</a>
 					<button type="button" class="row_edit_btn btn btn-primary btn-sm" onclick="clickEditBtn(this)">編集</button>
 					<button type="button" class="row_copy_btn btn btn-success btn-sm" onclick="clickCopyBtn(this)">複製</button>
-					<a href="user_mng/edit?id={{$ent->id}}" class="row_edit_btn btn btn-primary btn-sm">編集・MPA型</a>
-					<a href="user_mng/create?id={{$ent->id}}" class="row_copy_btn btn btn-success btn-sm">複製・MPA型</a>
 					{!! $cbh->disabledBtn($searches, $ent->id) !!}<!-- 削除/削除取消ボタン（無効/有効ボタン） -->
 					{!! $cbh->destroyBtn($searches, $ent->id) !!}<!-- 抹消ボタン -->
 					

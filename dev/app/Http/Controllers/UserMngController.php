@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Consts\crud_base_function;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Password;
 use CrudBase\CrudBase;
 use App\Models\UserMng;
 use App\Consts\ConstCrudBase;
@@ -32,7 +33,7 @@ class UserMngController extends CrudBaseController{
 	public function index(Request $request){
 
 		// ログアウトになっていたらログイン画面にリダイレクト
-		// if(\Auth::id() == null) return redirect('login');
+		 if(\Auth::id() == null) return redirect('login');
 		
 		// 検索データのバリデーション
 		$validated = $request->validate([
@@ -57,13 +58,9 @@ class UserMngController extends CrudBaseController{
 					// CBBXS-6000
 					'name' => $request->name, // ユーザー/アカウント名
 					'email' => $request->email, // メールアドレス
-					'email_verified_at' => $request->email_verified_at, // Eメール検証済時刻(Laravel内部処理用)
 					'nickname' => $request->nickname, // 名前
 					'password' => $request->password, // パスワード
-					'remember_token' => $request->remember_token, // 維持用トークン(Laravel内部処理用)
 					'role' => $request->role, // 権限
-					'temp_hash' => $request->temp_hash, // 仮登録ハッシュコード(Laravel内部処理用)
-					'temp_datetime' => $request->temp_datetime, // 仮登録制限時刻(Laravel内部処理用)
 
 					// CBBXE
 					
@@ -102,6 +99,11 @@ class UserMngController extends CrudBaseController{
 		$fieldData = $model->getFieldData();
 		$listData = $model->getData($searches, ['def_per_page' => $def_per_page]);
 		$data_count = $listData->total(); //　LIMIT制限を受けていないデータ件数
+		
+		// パスワードは空にしておく。
+		foreach($listData as &$rEnt){
+			$rEnt->password = '';
+		}
 		
 		$data = [];
 		foreach($listData as $rEnt){
@@ -156,7 +158,7 @@ class UserMngController extends CrudBaseController{
 	public function regAction(){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		// if(\Auth::id() == null) return redirect('login');
+		 if(\Auth::id() == null) return redirect('login');
 		
 		$json=$_POST['key1'];
 		
@@ -183,13 +185,8 @@ class UserMngController extends CrudBaseController{
 		// CBBXS-6004
 		$model->name = $ent['name']; // ユーザー/アカウント名
 		$model->email = $ent['email']; // メールアドレス
-		$model->email_verified_at = $ent['email_verified_at']; // Eメール検証済時刻(Laravel内部処理用)
 		$model->nickname = $ent['nickname']; // 名前
-		$model->password = $ent['password']; // パスワード
-		$model->remember_token = $ent['remember_token']; // 維持用トークン(Laravel内部処理用)
 		$model->role = $ent['role']; // 権限
-		$model->temp_hash = $ent['temp_hash']; // 仮登録ハッシュコード(Laravel内部処理用)
-		$model->temp_datetime = $ent['temp_datetime']; // 仮登録制限時刻(Laravel内部処理用)
 
 		// CBBXE
 		
@@ -198,12 +195,22 @@ class UserMngController extends CrudBaseController{
 		$model->ip_addr = $userInfo['ip_addr'];
 		$model->updated_at = date('Y-m-d H:i:s');
 		
+		if(!empty($request->password)){
+			$user_mng->password = \Hash::make($request->password); // パスワードをハッシュ化する。
+		}
 		
 		if(empty($id)){
 			$model->sort_no =$this->getNextSortNo('users', 'asc');
+			$model->password = \Hash::make($ent['password']); // パスワードをハッシュ化する。
+			
 			$model->save(); // DBへ新規追加: 同時に$modelに新規追加した行のidがセットされる。
 			$ent['id'] = $model->id;
 		}else{
+			
+			if(!empty($ent['password'])){
+				$model->password = \Hash::make($ent['password']); // パスワードをハッシュ化する。
+			}
+			
 			$model->update(); // DB更新
 		}
 		
@@ -230,7 +237,7 @@ class UserMngController extends CrudBaseController{
 	public function create(Request $request){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		// if(\Auth::id() == null) return redirect('login');
+		 if(\Auth::id() == null) return redirect('login');
 		
 		$model = new UserMng();
 		
@@ -244,13 +251,9 @@ class UserMngController extends CrudBaseController{
 			// CBBXS-6006
 			$ent->name= '';
 			$ent->email= '';
-			$ent->email_verified_at= '';
 			$ent->nickname= '';
 			$ent->password= '';
-			$ent->remember_token= '';
 			$ent->role= '';
-			$ent->temp_hash= '';
-			$ent->temp_datetime= '';
 			$ent->sort_no= '';
 			$ent->delete_flg= '0';
 			$ent->update_user_id= '';
@@ -312,11 +315,8 @@ class UserMngController extends CrudBaseController{
 			'id' => 'nullable|numeric',
 	        'name' => 'nullable|max:255',
 	        'email' => 'nullable|max:255',
-	        'email_verified_at' => 'nullable|max:imestam',
 	        'nickname' => 'nullable|max:50',
 			'password' =>['required', Password::min(8)],
-	        'remember_token' => 'nullable|max:100',
-	        'temp_hash' => 'nullable|max:50',
 			'sort_no' => 'nullable|numeric',
 			'update_user_id' => 'nullable|numeric',
 	        'ip_addr' => 'nullable|max:40',
@@ -329,13 +329,9 @@ class UserMngController extends CrudBaseController{
 		// CBBXS-6032
 		$model->name = $request->name; // ユーザー/アカウント名
 		$model->email = $request->email; // メールアドレス
-		$model->email_verified_at = $request->email_verified_at; // Eメール検証済時刻(Laravel内部処理用)
 		$model->nickname = $request->nickname; // 名前
 		$model->password = $request->password; // パスワード
-		$model->remember_token = $request->remember_token; // 維持用トークン(Laravel内部処理用)
 		$model->role = $request->role; // 権限
-		$model->temp_hash = $request->temp_hash; // 仮登録ハッシュコード(Laravel内部処理用)
-		$model->temp_datetime = $request->temp_datetime; // 仮登録制限時刻(Laravel内部処理用)
 
 		// CBBXE
 		
@@ -343,6 +339,8 @@ class UserMngController extends CrudBaseController{
 		$model->delete_flg = 0;
 		$model->update_user_id = $userInfo['id'];
 		$model->ip_addr = $userInfo['ip_addr'];
+		
+		$user_mng->password = \Hash::make($user_mng->password); // パスワードをハッシュ化する。
 		
 		$model->save(); // DBへ新規追加と同時に$modelに新規追加した行のidがセットされる。
 
@@ -368,7 +366,7 @@ class UserMngController extends CrudBaseController{
 	public function show(Request $request){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		// if(\Auth::id() == null) return redirect('login');
+		 if(\Auth::id() == null) return redirect('login');
 		
 		$model = new UserMng();
 		$userInfo = $this->getUserInfo(); // ログインユーザーのユーザー情報を取得する
@@ -416,7 +414,7 @@ class UserMngController extends CrudBaseController{
 	public function edit(Request $request){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		// if(\Auth::id() == null) return redirect('login');
+		 if(\Auth::id() == null) return redirect('login');
 
 		$model = new UserMng();
 		$userInfo = $this->getUserInfo(); // ログインユーザーのユーザー情報を取得する
@@ -475,11 +473,8 @@ class UserMngController extends CrudBaseController{
 			'id' => 'nullable|numeric',
 	        'name' => 'nullable|max:255',
 	        'email' => 'nullable|max:255',
-	        'email_verified_at' => 'nullable|max:imestam',
 	        'nickname' => 'nullable|max:50',
 			'password' =>['required', Password::min(8)],
-	        'remember_token' => 'nullable|max:100',
-	        'temp_hash' => 'nullable|max:50',
 			'sort_no' => 'nullable|numeric',
 			'update_user_id' => 'nullable|numeric',
 	        'ip_addr' => 'nullable|max:40',
@@ -494,14 +489,9 @@ class UserMngController extends CrudBaseController{
 		// CBBXS-6033
 		$model->name = $request->name; // ユーザー/アカウント名
 		$model->email = $request->email; // メールアドレス
-		$model->email_verified_at = $request->email_verified_at; // Eメール検証済時刻(Laravel内部処理用)
 		$model->nickname = $request->nickname; // 名前
 		$model->password = $request->password; // パスワード
-		$model->remember_token = $request->remember_token; // 維持用トークン(Laravel内部処理用)
 		$model->role = $request->role; // 権限
-		$model->temp_hash = $request->temp_hash; // 仮登録ハッシュコード(Laravel内部処理用)
-		$model->temp_datetime = $request->temp_datetime; // 仮登録制限時刻(Laravel内部処理用)
-
 		// CBBXE
 		
 		$model->delete_flg = 0;
@@ -527,7 +517,7 @@ class UserMngController extends CrudBaseController{
 	public function disabled(){
 
 		// ログアウトになっていたらログイン画面にリダイレクト
-		// if(\Auth::id() == null) return redirect('login');
+		 if(\Auth::id() == null) return redirect('login');
 		
 		$userInfo = $this->getUserInfo(); // ログインユーザーのユーザー情報を取得する
 		
@@ -564,7 +554,7 @@ class UserMngController extends CrudBaseController{
 	public function destroy(){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		// if(\Auth::id() == null) return redirect('login');
+		 if(\Auth::id() == null) return redirect('login');
 		
 		$userInfo = $this->getUserInfo(); // ログインユーザーのユーザー情報を取得する
 		
@@ -617,7 +607,7 @@ class UserMngController extends CrudBaseController{
 	public function csv_download(){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		// if(\Auth::id() == null) return redirect('login');
+		 if(\Auth::id() == null) return redirect('login');
 
 		$searches = session('user_mng_searches_key');// セッションからセッション検索データを受け取る
 
@@ -666,7 +656,9 @@ class UserMngController extends CrudBaseController{
 	public function ajax_pwms(){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		// if(\Auth::id() == null) return redirect('login');
+		 if(\Auth::id() == null) return redirect('login');
+		 
+		
 		
 		$json_param=$_POST['key1'];
 		

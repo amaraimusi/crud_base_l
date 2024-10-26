@@ -26,13 +26,9 @@ class UserMng extends CrudBase
 			'id',
 			'name',
 			'email',
-			'email_verified_at',
 			'nickname',
 			'password',
-			'remember_token',
 			'role',
-			'temp_hash',
-			'temp_datetime',
 			'sort_no',
 			'delete_flg',
 			'update_user_id',
@@ -60,17 +56,13 @@ class UserMng extends CrudBase
 				'id' => [], // id
 				'name' => [], // ユーザー/アカウント名
 				'email' => [], // メールアドレス
-				'email_verified_at' => [], // Eメール検証済時刻(Laravel内部処理用)
 				'nickname' => [], // 名前
 				'password' => [], // パスワード
-				'remember_token' => [], // 維持用トークン(Laravel内部処理用)
 				'role' => [ // 猫種別
 					'outer_table' => 'roles',
 					'outer_field' => 'role_name', 
 					'outer_list'=>'roleList',
 				],
-				'temp_hash' => [], // 仮登録ハッシュコード(Laravel内部処理用)
-				'temp_datetime' => [], // 仮登録制限時刻(Laravel内部処理用)
 				'sort_no' => [], // 順番
 				'delete_flg' => [
 						'value_type'=>'delete_flg',
@@ -113,13 +105,9 @@ class UserMng extends CrudBase
 				'users.id as id',
 				'users.name as name',
 				'users.email as email',
-				'users.email_verified_at as email_verified_at',
 				'users.nickname as nickname',
 				'users.password as password',
-				'users.remember_token as remember_token',
 				'users.role as role',
-				'users.temp_hash as temp_hash',
-				'users.temp_datetime as temp_datetime',
 				'users.sort_no as sort_no',
 				'users.delete_flg as delete_flg',
 				'users.update_user_id as update_user_id',
@@ -136,11 +124,8 @@ class UserMng extends CrudBase
 					/* CBBXS-6017 */
 					IFNULL(users.name, '') , 
 					IFNULL(users.email, '') , 
-					IFNULL(users.email_verified_at, '') , 
 					IFNULL(users.nickname, '') , 
 					IFNULL(users.password, '') , 
-					IFNULL(users.remember_token, '') , 
-					IFNULL(users.temp_hash, '') , 
 					IFNULL(users.ip_addr, '') , 
 
 					/* CBBXE */
@@ -210,11 +195,6 @@ class UserMng extends CrudBase
 			$query = $query->where('users.email', 'LIKE', "%{$searches['email']}%");
 		}
 
-		// Eメール検証済時刻(Laravel内部処理用)
-		if(!empty($searches['email_verified_at'])){
-			$query = $query->where('users.email_verified_at', 'LIKE', "%{$searches['email_verified_at']}%");
-		}
-
 		// 名前
 		if(!empty($searches['nickname'])){
 			$query = $query->where('users.nickname', 'LIKE', "%{$searches['nickname']}%");
@@ -225,24 +205,9 @@ class UserMng extends CrudBase
 			$query = $query->where('users.password', 'LIKE', "%{$searches['password']}%");
 		}
 
-		// 維持用トークン(Laravel内部処理用)
-		if(!empty($searches['remember_token'])){
-			$query = $query->where('users.remember_token', 'LIKE', "%{$searches['remember_token']}%");
-		}
-
 		// 権限
 		if(!empty($searches['role'])){
 			$query = $query->where('role.role',$searches['role']);
-		}
-
-		// 仮登録ハッシュコード(Laravel内部処理用)
-		if(!empty($searches['temp_hash'])){
-			$query = $query->where('users.temp_hash', 'LIKE', "%{$searches['temp_hash']}%");
-		}
-
-		// 仮登録制限時刻(Laravel内部処理用)
-		if(!empty($searches['temp_datetime'])){
-			$query = $query->where('users.temp_datetime', '>=', $searches['temp_datetime']);
 		}
 
 		// 順番

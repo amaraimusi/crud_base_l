@@ -93,6 +93,7 @@ Route::post('line_demo/get_friends_list', 'App\Http\Controllers\LineDemoControll
 
 // ユーザー管理画面
 Route::get('user_mng', 'App\Http\Controllers\UserMngController@index');
+Route::post('user_mng/reg_action', 'App\Http\Controllers\UserMngController@regAction');
 Route::get('user_mng/create', 'App\Http\Controllers\UserMngController@create');
 Route::post('user_mng/store', 'App\Http\Controllers\UserMngController@store');
 Route::get('user_mng/show', 'App\Http\Controllers\UserMngController@show');

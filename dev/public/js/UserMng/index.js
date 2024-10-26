@@ -19,6 +19,9 @@ let jqCreateMode; // 新規入力モード ←新規入力モードのみ表示�
 let jqEditMode; // 編集モード ←編集モードのみ表示するセレクタ
 let modalCat; // モーダル化ライブラリ
 
+let jq_pw_change_btn; // 「パスワードを変更する」ボタンのjQueryオブジェクト
+let jq_pw_div; // Form上に存在するパスワード入力区分ののjQueryオブジェクト
+		
 $(()=>{
     
 	baseXHelper = new BaseXHelper();
@@ -125,6 +128,8 @@ $(()=>{
 	modalCat = new ModalCat();
 	modalCat.modalize('form_spa');
 	
+	jq_pw_change_btn = jqForm.find("#pw_change_btn"); // 「パスワードを変更する」ボタンのjQueryオブジェクト
+	jq_pw_div = jqForm.find("#pw_div"); // Form上に存在するパスワード入力区分ののjQueryオブジェクト
     
 });
 
@@ -142,13 +147,9 @@ function initClmShowHide(){
 		// CBBXS-6036
 		1, // ユーザー/アカウント名
 		1, // メールアドレス
-		0, // Eメール検証済時刻(Laravel内部処理用)
 		1, // 名前
 		0, // パスワード
-		0, // 維持用トークン(Laravel内部処理用)
 		1, // 権限
-		0, // 仮登録ハッシュコード(Laravel内部処理用)
-		0, // 仮登録制限時刻(Laravel内部処理用)
 
 		// CBBXE
 		0, // 順番
@@ -363,6 +364,8 @@ function _showForm(row_index, inp_mode){
 		throw new Error('システムエラー23051109A');
 	}
 	
+	ent.password = ''; // 暗号化（ハッシュ化）パスワードも表示させない
+	
 	// 入力フォームにエンティティを反映する
 	crudBase.setEntToForm(ent, row_index, inp_mode); 
 	
@@ -370,9 +373,13 @@ function _showForm(row_index, inp_mode){
 	if(inp_mode=='create' || inp_mode=='copy'){
 		jqCreateMode.show();
 		jqEditMode.hide();
+		_togglePwChangeDiv(true);// パスワード入力区分の表示切替
+		
 	}else{
 		jqCreateMode.hide();
 		jqEditMode.show();
+		_togglePwChangeDiv(false);// パスワード入力区分の表示切替
+		
 	}
 	
 	jqValidErrMsg .html(''); // エラーメッセージをクリア
@@ -461,6 +468,19 @@ function pwmsSwitchAll(checkbox){
 	pwms.switchAllSelection(checkbox);
 }
 
+// 「パスワードを変更する」ボタンをクリック
+function clickPwChangeBtn(){
+	_togglePwChangeDiv(true);
+}
 
-
+// パスワード入力区分の表示切替
+function _togglePwChangeDiv(open_switch){
+	if(open_switch){
+		jq_pw_change_btn.hide();
+		jq_pw_div.show();
+	}else{
+		jq_pw_change_btn.show();
+		jq_pw_div.hide();
+	}
+}
 
