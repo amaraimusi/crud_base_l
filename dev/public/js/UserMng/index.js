@@ -90,7 +90,6 @@ $(()=>{
 	
 	// ボタン設定: 表示切替とボタンサイズ
 	cbBtnSizeChanger.setCnfData([
-			{'slt':'.row_detail_btn','wamei':'詳細ボタン','visible':true ,'def_size':'btn-sm','size':'btn-sm'},
 			{'slt':'.row_edit_btn','wamei':'編集ボタン','visible':true ,'def_size':'btn-sm','size':'btn-sm'},
 			{'slt':'.row_copy_btn','wamei':'複製ボタン','visible':true ,'def_size':'btn-sm','size':'btn-sm'},
 			{'slt':'.row_delete_btn','wamei':'削除ボタン','visible':true ,'def_size':'btn-sm','size':'btn-sm'},
@@ -148,7 +147,6 @@ function initClmShowHide(){
 		1, // ユーザー/アカウント名
 		1, // メールアドレス
 		1, // 名前
-		0, // パスワード
 		1, // 権限
 
 		// CBBXE

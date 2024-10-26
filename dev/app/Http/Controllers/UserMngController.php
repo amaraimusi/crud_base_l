@@ -590,6 +590,11 @@ class UserMngController extends CrudBaseController{
 		$json=$_POST['key1'];
 		
 		$data = json_decode($json,true);//JSON文字を配列に戻す
+		
+		foreach($data as &$ent){
+			unset($ent['password']);
+		}
+		unset($ent);
 
 		$model = new UserMng();
 		$model->saveAll($data);

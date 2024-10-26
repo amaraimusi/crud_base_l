@@ -127,11 +127,10 @@ class UserMng extends CrudBase
 			$concat = DB::raw("
 					CONCAT( 
 					/* CBBXS-6017 */
+					IFNULL(users.id, '') , 
 					IFNULL(users.name, '') , 
 					IFNULL(users.email, '') , 
 					IFNULL(users.nickname, '') , 
-					IFNULL(users.password, '') , 
-					IFNULL(users.ip_addr, '') , 
 
 					/* CBBXE */
 					''
@@ -196,11 +195,7 @@ class UserMng extends CrudBase
 		}
 		
 		// CBBXS-6024
-		// id
-		if(!empty($searches['id'])){
-			$query = $query->where('id.id',$searches['id']);
-		}
-
+		
 		// ユーザー/アカウント名
 		if(!empty($searches['name'])){
 			$query = $query->where('users.name', 'LIKE', "%{$searches['name']}%");

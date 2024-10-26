@@ -58,7 +58,7 @@ $cbh = new CrudBaseHelper($crudBaseData);
 <!-- 検索フォーム -->
 <form method="GET" action="user_mng">
 		
-	<div><?php echo $cbh->searchFormText('main_search', '検索', ['title'=>'ユーザー管理名、備考を部分検索します']); ?></div>
+	<div><?php echo $cbh->searchFormText('main_search', '検索', ['title'=>'ID, ユーザー/アカウント名, メールアドレス, 名前を部分検索します']); ?></div>
 	
 	<div style="display:inline-block;">
 		<div id="search_dtl_div" style="display:none;">
@@ -69,7 +69,6 @@ $cbh = new CrudBaseHelper($crudBaseData);
 			<div><?php echo $cbh->searchFormText('name', 'ユーザー/アカウント名'); ?></div>
 			<div><?php echo $cbh->searchFormText('email', 'メールアドレス'); ?></div>
 			<div><?php echo $cbh->searchFormText('nickname', '名前'); ?></div>
-			<div><?php echo $cbh->searchFormText('password', 'パスワード'); ?></div>
 			<div><?php echo $cbh->searchFormSelect('role', '権限', $roleList); ?></div>
 
 			<!-- CBBXE -->
@@ -128,14 +127,13 @@ $cbh = new CrudBaseHelper($crudBaseData);
 			<th data-field='name'><?php echo $cbh->sortLink($searches, 'user_mng', 'name', 'ユーザー/アカウント名'); ?></th>
 			<th data-field='email'><?php echo $cbh->sortLink($searches, 'user_mng', 'email', 'メールアドレス'); ?></th>
 			<th data-field='nickname'><?php echo $cbh->sortLink($searches, 'user_mng', 'nickname', '名前'); ?></th>
-			<th data-field='password'><?php echo $cbh->sortLink($searches, 'user_mng', 'password', 'パスワード'); ?></th>
 			<th data-field='role'><?php echo $cbh->sortLink($searches, 'user_mng', 'role', '権限'); ?></th>
 
 			<!-- CBBXE -->
 			<th data-field='sort_no'><?php echo $cbh->sortLink($searches, 'user_mng', 'sort_no', '順番'); ?></th>
 			<th data-field='delete_flg'><?php echo $cbh->sortLink($searches, 'user_mng', 'delete_flg', '無効フラグ'); ?></th>
 			<th data-field='update_user_id'><?php echo $cbh->sortLink($searches, 'user_mng', 'update_user_id', '更新者'); ?></th>
-			<th data-field='ip_addr'><?php echo $cbh->sortLink($searches, 'user_mng', 'ip_addr', 'IPアドレス'); ?></th>
+			<th data-field='ip_addr'><?php echo $cbh->sortLink($searches, 'user_mng', 'ip_addr', '更新者IPアドレス'); ?></th>
 			<th data-field='created_at'><?php echo $cbh->sortLink($searches, 'user_mng', 'created_at', '生成日時'); ?></th>
 			<th data-field='updated_at'><?php echo $cbh->sortLink($searches, 'user_mng', 'updated_at', '更新日'); ?></th>
 
@@ -150,7 +148,6 @@ $cbh = new CrudBaseHelper($crudBaseData);
 				<td>{{$ent->name}}</td>
 				<td>{{$ent->email}}</td>
 				<td>{{$ent->nickname}}</td>
-				<td>{{$ent->password}}</td>
 				<td>{!! $cbh->tdList($ent->role, $roleList) !!}</td>
 
 				<!-- CBBXE -->
@@ -164,13 +161,12 @@ $cbh = new CrudBaseHelper($crudBaseData);
 				<td>
 
 					{!! $cbh->rowExchangeBtn($searches) !!}<!-- 行入替ボタン -->
-					<a href="user_mng/show?id={{$ent->id}}" class="row_detail_btn btn btn-info btn-sm text-light ">詳細</a>
 					<button type="button" class="row_edit_btn btn btn-primary btn-sm" onclick="clickEditBtn(this)">編集</button>
 					<button type="button" class="row_copy_btn btn btn-success btn-sm" onclick="clickCopyBtn(this)">複製</button>
 					{!! $cbh->disabledBtn($searches, $ent->id) !!}<!-- 削除/削除取消ボタン（無効/有効ボタン） -->
 					{!! $cbh->destroyBtn($searches, $ent->id) !!}<!-- 抹消ボタン -->
 					
-					
+					 
 				</td>
 			</tr>
 		@endforeach
