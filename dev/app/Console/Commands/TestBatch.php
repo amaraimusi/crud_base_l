@@ -13,7 +13,7 @@ class TestBatch extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'batch:test';
+	protected $signature = 'batch:test {id}'; // コマンド実行例→ $ php artisan batch:test 77
 	
 	/**
 	 * The console command description.
@@ -29,8 +29,12 @@ class TestBatch extends Command
 	{
 		echo 'バッチ処理を開始します。';
 		
+		// 引数を取得
+		$id = $this->argument('id'); // 引数名と一致させる
+		if(empty($id)) $id = 77;
+		
 		$model = new Neko();
-		$ent = $model->find(77);
+		$ent = $model->find($id);
 		dump($ent);//■■■□□□■■■□□□)
 		
 		
