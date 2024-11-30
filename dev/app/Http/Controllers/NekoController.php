@@ -31,7 +31,6 @@ class NekoController extends CrudBaseController{
 	 */
 	public function index(Request $request){
 		
-
 		// ログアウトになっていたらログイン画面にリダイレクト
 		// if(\Auth::id() == null) return redirect('login');
 		
@@ -583,7 +582,7 @@ class NekoController extends CrudBaseController{
 	public function auto_save(){
 		
 		// ログアウトになっていたらログイン画面にリダイレクト
-		if(\Auth::id() == null) die;
+		// if(\Auth::id() == null) die;
 
 		$json=$_POST['key1'];
 		
